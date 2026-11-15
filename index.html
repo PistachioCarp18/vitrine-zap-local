@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0F766E" />
+  <title>VitrineZap Local — Catálogo, Pix QR & Orçamento PDF Zero-API</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="app-header no-print">
+    <div class="container header-inner">
+      <div>
+        <span class="badge-local" id="store-neighborhood">Jardim Martinez / Sorocaba-SP</span>
+        <h1 id="store-title">VitrineZap Local</h1>
+        <p id="store-tagline" class="tagline">Catálogo e orçamentos direto no WhatsApp sem taxa de aplicativo</p>
+      </div>
+      <div class="header-actions">
+        <label class="preset-label" for="niche-switcher">Demo por Nicho:</label>
+        <select id="niche-switcher" class="select-input" aria-label="Selecionar nicho de demonstração"></select>
+        <button id="toggle-admin-btn" class="btn btn-outline" type="button">⚙️ Painel do Dono</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <!-- Coluna Principal: Vitrine ou Painel Admin -->
+    <section id="catalog-section" class="catalog-panel no-print">
+      <div class="pitch-banner" id="pitch-banner"></div>
+      <div class="toolbar">
+        <input id="search-input" type="search" class="text-input" placeholder="Buscar produto ou serviço..." aria-label="Buscar" />
+        <div id="category-pills" class="category-pills"></div>
+      </div>
+      <div id="catalog-grid" class="catalog-grid"></div>
+    </section>
+
+    <section id="admin-section" class="admin-panel hidden no-print">
+      <div class="card">
+        <div class="admin-header">
+          <h2>⚙️ Painel do Dono (White-Label & Histórico)</h2>
+          <button id="close-admin-btn" class="btn btn-outline" type="button">← Voltar à Vitrine</button>
+        </div>
+
+        <div class="stats-bar" id="daily-stats-bar">
+          <div><small>Pedidos/Orçamentos Hoje</small><strong id="stat-today-count">0</strong></div>
+          <div><small>Total Registrado Hoje</small><strong id="stat-today-total">R$ 0,00</strong></div>
+        </div>
+
+        <form id="store-config-form" class="form-grid">
+          <label>Nome da Empresa
+            <input type="text" id="cfg-name" class="text-input" required />
+          </label>
+          <label>Bairro / Cidade
+            <input type="text" id="cfg-neighborhood" class="text-input" />
+          </label>
+          <label>WhatsApp da Loja (com DDD)
+            <input type="text" id="cfg-whatsapp" class="text-input" placeholder="(15) 99999-9999" required />
+          </label>
+          <label>Chave Pix (para QR Code & Copia-e-Cola)
+            <input type="text" id="cfg-pix" class="text-input" placeholder="CPF, CNPJ, e-mail ou telefone" />
+          </label>
+          <label>Taxa de Entrega Padrão (R$)
+            <input type="number" step="0.01" min="0" id="cfg-delivery" class="text-input" />
+          </label>
+          <label>Cor Principal da Marca
+            <input type="color" id="cfg-color" class="color-input" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">💾 Salvar Dados da Loja</button>
+            <button type="button" id="export-json-btn" class="btn btn-outline">⬇️ Exportar Backup JSON</button>
+            <label class="btn btn-outline file-btn">⬆️ Importar JSON
+              <input type="file" id="import-json-input" accept=".json" hidden />
+            </label>
+          </div>
+        </form>
+
+        <hr class="divider" />
+        <h3>➕ Adicionar Produto / Serviço</h3>
+        <form id="add-item-form" class="form-grid">
+          <label>Categoria
+            <input type="text" id="item-category" class="text-input" placeholder="Ex: Lanches, Revisão, Rações" required />
+          </label>
+          <label>Nome do Item
+            <input type="text" id="item-name" class="text-input" required />
+          </label>
+          <label>Preço (R$)
+            <input type="number" step="0.01" min="0" id="item-price" class="text-input" required />
+          </label>
+          <label>Selo / Destaque (opcional)
+            <input type="text" id="item-badge" class="text-input" placeholder="Ex: Mais Pedido" />
+          </label>
+          <label class="full-span">Descrição Curta
+            <input type="text" id="item-desc" class="text-input" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Adicionar ao Catálogo</button>
+          </div>
+        </form>
+        <div id="admin-items-list" class="admin-items-list"></div>
+
+        <hr class="divider" />
+        <div class="admin-header">
+          <h3>🧾 Histórico Local de Pedidos / Orçamentos</h3>
+          <button type="button" id="clear-history-btn" class="btn btn-outline btn-sm">Limpar Histórico</button>
+        </div>
+        <div id="order-history-list" class="admin-items-list"></div>
+      </div>
+    </section>
+
+    <!-- Coluna Lateral: Carrinho / Orçamento & Ações Zero-API -->
+    <aside id="cart-aside" class="cart-panel card">
+      <h2 id="cart-title">🛒 Seu Pedido</h2>
+      <div id="cart-items" class="cart-items"></div>
+
+      <div class="totals-box">
+        <div class="total-row"><span>Subtotal</span><strong id="subtotal-val">R$ 0,00</strong></div>
+        <div class="total-row" id="delivery-row"><span>Entrega</span><strong id="delivery-val">R$ 0,00</strong></div>
+        <div class="total-row grand-total"><span>Total</span><strong id="total-val">R$ 0,00</strong></div>
+      </div>
+
+      <div class="checkout-fields no-print">
+        <label>Seu Nome *
+          <input type="text" id="cust-name" class="text-input" placeholder="Ex: Maria Silva" />
+        </label>
+        <label>Seu WhatsApp
+          <input type="text" id="cust-phone" class="text-input" placeholder="(15) 9..." />
+        </label>
+        <label>Modalidade
+          <select id="delivery-mode" class="select-input">
+            <option value="Retirada">Retirada no Local</option>
+            <option value="Entrega">Entrega no Bairro</option>
+          </select>
+        </label>
+        <label id="address-wrap" class="hidden">Endereço Completo
+          <input type="text" id="cust-address" class="text-input" placeholder="Rua, número e bairro" />
+        </label>
+        <label>Forma de Pagamento
+          <select id="payment-method" class="select-input">
+            <option value="Pix">Pix</option>
+            <option value="Cartao na Entrega">Cartão na Entrega / Balcão</option>
+            <option value="Dinheiro">Dinheiro</option>
+          </select>
+        </label>
+        <label>Observações
+          <input type="text" id="cust-notes" class="text-input" placeholder="Ex: Sem cebola / Placa ABC-1234" />
+        </label>
+      </div>
+
+      <div class="checkout-actions no-print">
+        <button id="send-wa-btn" class="btn btn-whatsapp" type="button">📲 Enviar no WhatsApp</button>
+        <button id="gen-pix-btn" class="btn btn-outline" type="button">💠 Gerar QR Code Pix & Copia-e-Cola</button>
+        <button id="print-pdf-btn" class="btn btn-outline" type="button">🖨️ Gerar PDF / Imprimir</button>
+      </div>
+
+      <div id="pix-box" class="pix-box hidden no-print">
+        <p class="pix-label">QR Code Pix (100% Offline) & Copia-e-Cola:</p>
+        <div id="pix-qr-svg" class="pix-qr-wrap"></div>
+        <textarea id="pix-code-output" class="pix-textarea" readonly rows="3"></textarea>
+        <button id="copy-pix-btn" class="btn btn-primary btn-sm" type="button">📋 Copiar Código Pix</button>
+      </div>
+
+      <div id="print-summary" class="print-only"></div>
+    </aside>
+  </main>
+
+  <!-- Barra Flutuante Mobile (Andes Checkout Pattern) -->
+  <button id="mobile-cart-bar" class="mobile-cart-bar hidden no-print" type="button">
+    <span id="mobile-cart-label">Ver Pedido (0 itens)</span>
+    <strong id="mobile-cart-total">R$ 0,00</strong>
+  </button>
+
+  <div id="toast-container" class="toast-container no-print" aria-live="polite"></div>
+
+  <script src="./src/integrations.js"></script>
+  <script src="./src/qrcode.js"></script>
+  <script src="./src/store.js"></script>
+  <script src="./src/presets.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
