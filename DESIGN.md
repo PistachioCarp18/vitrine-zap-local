@@ -1,21 +1,34 @@
 ---
-name: VitrineZap Local Design System v2.0
-version: 2.0.0
+product: VitrineZap Local
+version: 3.0.0
+squad_owner: ux-ui-design-squad
 benchmarks:
-  - Mercado Libre Andes UI (mobile checkout density, 4/8/12/16/24px spacing, 6-12px radius, 26/16/14/13px type scale)
-  - Shopify Polaris (semantic surface tokens, merchant admin clarity)
-  - Linear / Anthropic (Segundo Cerebro DESIGN.md — high contrast, reduced-motion guardrail)
-accessibility: WCAG AA (>= 4.5:1 contrast, >= 44px touch targets, non-blocking toasts)
+  - Stripe Checkout & Dashboard (hierarquia tipografica, bordas 1px, tabulares)
+  - Shopify Polaris (tokens semanticos, KPI cards, acoes primarias)
+  - Mercado Libre Andes UI (checkout mobile 3 cliques, segmented controls, sticky bar)
+  - Linear (densidade limpa, zero emojis na UI, icones SVG uniformes, WCAG AA)
 ---
 
-# DESIGN.md — VitrineZap Local v2.0 (`ux-ui-design-squad`)
+# DESIGN.md — VitrineZap Local v3.0 (Commercial Pro Edition)
 
-## 1. Referências Aplicadas
-- **Andes UI (Mercado Pago / Mercado Livre):** Escala espacial rigorosa (`4px`, `8px`, `12px`, `16px`, `24px`), raios compactos (`6px`–`12px`) e hierarquia tipográfica de checkout (`26px` Header, `16px` Card Title, `14px` Body, `13px` CTA/Badge) para leitura rápida no celular.
-- **Shopify Polaris:** Separação entre a **Vitrine do Cliente** e o **Painel do Comerciante** (com histórico do dia e backup), usando superfícies semânticas limpas (`--canvas: #F8FAFC`, `--surface-card: #FFFFFF`, `--hairline: #E2E8F0`).
-- **Linear / Guardrails (`30-Conhecimento/Engenharia-Reversa-e-Design-Systems-DESIGN-md.md`):** Zero `alert()` bloqueante (substituído por Toast), `@media (prefers-reduced-motion: reduce)` e `@media print` dedicado para Orçamento/Recibo em PDF.
+## 1. Paleta Semântica
+- **Canvas:** `#F6F8FB` (`--canvas`)
+- **Surface Card:** `#FFFFFF` (`--surface-card`)
+- **Surface Muted:** `#F1F5F9` (`--surface-muted`)
+- **Hairline Border:** `#E2E8F0` (`--hairline`)
+- **Brand Primary (White-Label):** `#0F766E` (`--brand-primary`, customizável por loja)
+- **Text Primary:** `#0F172A` (`--text-primary`)
+- **Text Muted:** `#475569` (`--text-muted`)
+- **WhatsApp CTA:** `#16A34A` / hover `#15803D` (`--whatsapp`)
+- **Success / Warning / Danger:** `#059669`, `#D97706`, `#DC2626`
 
-## 2. Tokens Semânticos
-- `--space-xs: 4px`, `--space-sm: 8px`, `--space-md: 12px`, `--space-base: 16px`, `--space-lg: 24px`
-- `--radius-card: 10px`, `--radius-control: 8px`, `--radius-pill: 9999px`
-- `--text-header: 1.5rem` (24px–26px), `--text-card: 1rem` (16px), `--text-body: 0.875rem` (14px), `--text-cta: 0.85rem` (13.6px)
+## 2. Tipografia
+- **Display / Headings:** `'Plus Jakarta Sans', system-ui, sans-serif` (`26px` hero, `18px` section, `15px` card title)
+- **Body / UI:** `'Inter', system-ui, sans-serif` (`14px` base, `13px` secondary)
+- **Tabular / Codes / Prices:** `'JetBrains Mono', ui-monospace, monospace` com `font-variant-numeric: tabular-nums`
+
+## 3. Regras de Qualidade Visual (WCAG AA + Zero Amadorismo)
+- **Zero emojis crus** nos controles, botões ou cabeçalhos: usar ícones SVG vetoriais uniformes (`16px` / `18px`, `stroke-width: 2`).
+- **Controles segmentados** para `Retirada vs Entrega` e **pills de pagamento** (`Pix`, `Cartão`, `Dinheiro`).
+- **Stepper inline (`- 1 +`)** diretamente no card do produto quando adicionado ao carrinho.
+- **Painel do Dono em abas** (`Resumo & Pedidos`, `Catálogo`, `Configurações & QR da Loja`) com KPIs e QR Code de balcão imprimível 100% offline.

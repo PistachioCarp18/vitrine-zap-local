@@ -8,7 +8,7 @@ const {
   buildWhatsAppOrderUrl,
 } = require('../src/integrations');
 const { createMatrix, renderQrSvg } = require('../src/qrcode');
-const { createStore } = require('../src/store');
+const { createStore, encodeStoreConfig, decodeStoreConfig } = require('../src/store');
 const { NICHE_PRESETS } = require('../src/presets');
 
 test('crc16Ccitt retorna 4 caracteres hexadecimais validos para payload EMV', () => {
@@ -76,7 +76,7 @@ test('buildWhatsAppOrderUrl gera link wa.me formatado sem depender de API paga',
   assert.equal(res.totals.total, 130);
 });
 
-test('VitrineStore registra pedidos e calcula resumo diario corretamente', () => {
+test('VitrineStore registra pedidos e calcula resumo diario e ticket medio', () => {
   const mem = {};
   const fakeStorage = {
     getItem: k => mem[k] || null,
@@ -84,11 +84,20 @@ test('VitrineStore registra pedidos e calcula resumo diario corretamente', () =>
   };
   const store = createStore(fakeStorage);
   store.recordOrder({ customerName: 'Joao', channel: 'WhatsApp', total: 42.9 });
-  store.recordOrder({ customerName: 'Maria', channel: 'PDF', total: 65.0 });
+  store.recordOrder({ customerName: 'Maria', channel: 'PDF', total: 65.1 });
   const today = new Date().toISOString().slice(0, 10);
   const summary = store.getDailySummary(today);
   assert.equal(summary.count, 2);
-  assert.equal(summary.totalRevenue, 107.9);
+  assert.equal(summary.totalRevenue, 108);
+  assert.equal(summary.avgTicket, 54);
+});
+
+test('encodeStoreConfig e decodeStoreConfig preservam configuracao da loja na URL', () => {
+  const token = encodeStoreConfig(NICHE_PRESETS.lanchonete);
+  const decoded = decodeStoreConfig(token);
+  assert.equal(decoded.storeName, NICHE_PRESETS.lanchonete.storeName);
+  assert.equal(decoded.items.length, NICHE_PRESETS.lanchonete.items.length);
+  assert.equal(decodeStoreConfig('invalid@@@'), null);
 });
 
 test('NICHE_PRESETS possui os 4 nichos com itens e dicas de demonstracao', () => {

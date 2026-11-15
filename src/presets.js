@@ -8,85 +8,87 @@
   'use strict';
 
   /**
-   * Conteudos comerciais otimizados pelo research-squad para comercios do Jardim Martinez e Zona Leste (Sorocaba-SP).
+   * Presets White-Label com copy persuasiva e SLA por item (research-squad)
+   * Foco: Jardim Residencial Martinez e Sorocaba-SP
    */
   const NICHE_PRESETS = {
     lanchonete: {
       id: 'lanchonete',
-      label: 'Lanchonete / Delivery (Zero Taxa App)',
-      mode: 'pedido',
-      storeName: 'Empório do Lanche — Zona Leste',
-      tagline: 'Peça direto no WhatsApp com preço de balcão (0% taxa de aplicativo)',
-      neighborhood: 'Jardim Martinez & Região / Sorocaba-SP',
-      whatsapp: '(15) 99999-0001',
+      label: 'Lanchonete & Delivery',
+      storeName: 'Empório do Lanche Martinez',
+      neighborhood: 'Jardim Martinez • Sorocaba-SP',
+      tagline: 'Artesanais na brasa direto no WhatsApp, sem taxa de aplicativo.',
+      whatsapp: '15999990001',
       pixKey: '15999990001',
-      deliveryFee: 6.00,
-      primaryColor: '#C2410C',
-      pitchTip: 'Mostre ao dono: "Aqui o cliente escolhe o lanche em 3 cliques e cai pronto no seu WhatsApp, sem perder 27% de comissão para aplicativo."',
+      deliveryFee: 6.0,
+      primaryColor: '#0F766E',
+      mode: 'pedido',
+      pitchTip: 'Economize até 27% em comissões de apps de entrega recebendo pedidos diretos no WhatsApp com Pix instantâneo.',
       items: [
-        { id: 'l1', category: 'Combos', badge: 'Mais Pedido', name: 'Combo X-Bacon Duplo + Fritas + Refri', description: '2 hambúrgueres 160g, bacon crocante, cheddar, batata 250g e lata 350ml', price: 42.90 },
-        { id: 'l2', category: 'Lanches', badge: 'Clássico', name: 'X-Burger Artesanal da Casa', description: 'Pão brioche selado na manteiga, blend 160g, queijo prato e maionese verde', price: 25.90 },
-        { id: 'l3', category: 'Porções', badge: '', name: 'Batata Frita com Cheddar e Bacon (400g)', description: 'Porção generosa ideal para compartilhar em 2 pessoas', price: 28.00 },
-        { id: 'l4', category: 'Bebidas', badge: '', name: 'Refrigerante Lata 350ml (Gelado)', description: 'Coca-Cola, Guaraná Antarctica ou Fanta Laranja', price: 6.50 }
-      ]
+        { id: 'lan-1', category: 'Burgers', name: 'X-Martinez Bacon Artesanal', description: 'Blend bovino 160g na brasa, cheddar cremoso, bacon crocante e maionese da casa.', price: 32.9, badge: 'Mais Pedido', prepTime: '20 min' },
+        { id: 'lan-2', category: 'Combos', name: 'Combo Casal Clássico', description: '2 X-Salada artesanais + porção média de fritas + 2 refrigerantes lata 350ml.', price: 68.0, badge: 'Economia', prepTime: '25 min' },
+        { id: 'lan-3', category: 'Porções', name: 'Batata Rústica Cheddar & Bacon', description: 'Porção 400g crocante com cobertura generosa de cheddar e cubos de bacon.', price: 29.5, prepTime: '15 min' },
+        { id: 'lan-4', category: 'Bebidas', name: 'Coca-Cola Lata 350ml', description: 'Gelada, pronta para acompanhar seu pedido.', price: 6.5, prepTime: 'Imediato' },
+        { id: 'lan-5', category: 'Sobremesas', name: 'Brownie Quente com Doce de Leite', description: 'Fatia artesanal macia com cobertura cremosa.', price: 14.9, badge: 'Novidade', prepTime: '10 min' },
+      ],
     },
     padaria: {
       id: 'padaria',
-      label: 'Padaria & Encomendas',
-      mode: 'pedido',
-      storeName: 'Padaria & Confeitaria — Vila Hortência',
-      tagline: 'Encomende bolos, salgados e kits de café direto pelo celular',
-      neighborhood: 'Vila Hortência / Sorocaba-SP',
-      whatsapp: '(15) 99999-0002',
+      label: 'Padaria & Confeitaria',
+      storeName: 'Padaria & Café do Bairro',
+      neighborhood: 'Jardim Martinez • Sorocaba-SP',
+      tagline: 'Pães de fermentação natural, salgados e kits de encomenda.',
+      whatsapp: '15999990002',
       pixKey: '15999990002',
-      deliveryFee: 8.00,
-      primaryColor: '#92400E',
-      pitchTip: 'Mostre ao dono: "Seu cliente encomenda o bolo ou cento de salgado aqui, já gera o Pix de sinal e você recebe o pedido organizado."',
+      deliveryFee: 5.0,
+      primaryColor: '#B45309',
+      mode: 'pedido',
+      pitchTip: 'Ideal para encomendas de café corporativo e festas de fim de semana com sinal pago via Pix.',
       items: [
-        { id: 'p1', category: 'Bolos', badge: 'Encomenda', name: 'Bolo Brigadeiro Gourmet (1,5kg)', description: 'Massa fofinha de cacau 50% com recheio cremoso — serve até 15 fatias', price: 94.00 },
-        { id: 'p2', category: 'Salgados', badge: 'Mais Pedido', name: 'Cento de Salgados Fritos na Hora', description: 'Coxinha de frango, bolinha de queijo, risoles e kibe', price: 78.00 },
-        { id: 'p3', category: 'Kits Café', badge: 'Economia', name: 'Kit Café da Tarde Família', description: '10 pães franceses, 200g mussarela, 200g presunto e bolo caseiro de fubá', price: 44.00 },
-        { id: 'p4', category: 'Doces', badge: '', name: 'Caixa 25 Brigadeiros Tradicionais', description: 'Pronta para festas e reuniões de última hora', price: 49.00 }
-      ]
+        { id: 'pad-1', category: 'Kits Café', name: 'Kit Café da Manhã Família', description: '8 pães franceses, 200g presunto, 200g mussarela, bolo caseiro e suco 1L.', price: 54.9, badge: 'Mais Pedido', prepTime: '30 min' },
+        { id: 'pad-2', category: 'Salgados', name: 'Cento de Salgados Variados', description: 'Coxinha, bolinha de queijo, risole e kibe fritos na hora da retirada.', price: 79.0, badge: 'Encomenda', prepTime: '60 min' },
+        { id: 'pad-3', category: 'Pães', name: 'Pão Italiano Fermentação Natural', description: 'Casca crocante e miolo macio, assado no período da manhã.', price: 22.0, prepTime: 'Pronta entrega' },
+        { id: 'pad-4', category: 'Bolos', name: 'Bolo de Cenoura com Brigadeiro', description: 'Forma média (1kg) com cobertura cremosa de chocolate meio amargo.', price: 38.0, prepTime: 'Pronta entrega' },
+      ],
     },
     petshop: {
       id: 'petshop',
-      label: 'Pet Shop & Banho e Tosa',
-      mode: 'pedido',
-      storeName: 'Pet Bairro — Jardim Martinez & Zona Leste',
-      tagline: 'Rações com entrega rápida no bairro e agendamento de banho & tosa',
-      neighborhood: 'Zona Leste / Sorocaba-SP',
-      whatsapp: '(15) 99999-0003',
+      label: 'Pet Shop & Banho/Tosa',
+      storeName: 'Amigo Fiel Pet Care',
+      neighborhood: 'Zona Leste • Sorocaba-SP',
+      tagline: 'Rações premium e agendamento rápido de banho e tosa pelo WhatsApp.',
+      whatsapp: '15999990003',
       pixKey: '15999990003',
-      deliveryFee: 5.00,
-      primaryColor: '#0F766E',
-      pitchTip: 'Mostre ao dono: "O cliente pede a ração recorrente ou reserva o banho em 20 segundos, sem você parar o atendimento no balcão."',
+      deliveryFee: 7.0,
+      primaryColor: '#1D4ED8',
+      mode: 'pedido',
+      pitchTip: 'Facilite a recompra mensal de ração no bairro e preencha horários ociosos de banho e tosa.',
       items: [
-        { id: 'pt1', category: 'Banho & Tosa', badge: 'Agende Hoje', name: 'Banho + Tosa Higiênica (Porte Pequeno)', description: 'Corte de unhas, limpeza de ouvidos, hidratação e laço/gravata', price: 65.00 },
-        { id: 'pt2', category: 'Rações', badge: 'Entrega Hoje', name: 'Ração Premium Cães Adultos 15kg', description: 'Entrega expressa no Jardim Martinez, Jd. Gonçalves e Vila Hortência', price: 159.90 },
-        { id: 'pt3', category: 'Rações', badge: '', name: 'Ração Gatos Castrados Salmão 3kg', description: 'Controle urinário e pelagem saudável', price: 64.90 },
-        { id: 'pt4', category: 'Higiene', badge: '', name: 'Tapete Higiênico Super Absorção (30 un.)', description: 'Com atrativo canino e fita adesiva', price: 49.90 }
-      ]
+        { id: 'pet-1', category: 'Estética Pet', name: 'Banho & Tosa Higiênica (Porte P)', description: 'Banho morno, hidratação, corte de unhas e limpeza de ouvidos.', price: 65.0, badge: 'Mais Pedido', prepTime: 'Agenda' },
+        { id: 'pet-2', category: 'Rações', name: 'Ração Premium Cães Adultos 15kg', description: 'Sabor carne e arroz com entrega rápida no mesmo dia no bairro.', price: 169.9, badge: 'Entrega Hoje', prepTime: 'Hoje' },
+        { id: 'pet-3', category: 'Higiene', name: 'Tapete Higiênico Super Absorção (30 un.)', description: 'Fitas adesivas reforçadas e neutralizador de odores.', price: 49.9, prepTime: 'Hoje' },
+        { id: 'pet-4', category: 'Acessórios', name: 'Antipulgas & Carrapatos (até 10kg)', description: 'Comprimido palatável com proteção de 30 dias.', price: 74.0, prepTime: 'Hoje' },
+      ],
     },
     oficina: {
       id: 'oficina',
-      label: 'Oficina & Orçamento PDF',
-      mode: 'orcamento',
-      storeName: 'Auto Center — Av. São Paulo',
-      tagline: 'Monte o orçamento do veículo, envie no WhatsApp e imprima o PDF na hora',
-      neighborhood: 'Av. São Paulo / Além Ponte — Sorocaba-SP',
-      whatsapp: '(15) 99999-0004',
+      label: 'Oficina & Auto Center',
+      storeName: 'Martinez Auto Center',
+      neighborhood: 'Jardim Martinez • Sorocaba-SP',
+      tagline: 'Orçamento técnico transparente em PDF e aprovação ágil no WhatsApp.',
+      whatsapp: '15999990004',
       pixKey: '15999990004',
-      deliveryFee: 0.00,
-      primaryColor: '#1E3A8A',
-      pitchTip: 'Mostre ao mecânico: "Você seleciona os serviços no celular, gera o PDF profissional ou manda direto no WhatsApp do cliente com Pix."',
+      deliveryFee: 0.0,
+      primaryColor: '#0F172A',
+      mode: 'orcamento',
+      pitchTip: 'Gere orçamentos profissionais em PDF ou WhatsApp na frente do cliente e aumente a taxa de aprovação.',
       items: [
-        { id: 'o1', category: 'Revisão', badge: 'Preventiva', name: 'Troca de Óleo 5W30 Sintético + Filtro', description: 'Até 4L de óleo homologado + filtro de óleo + check-up de 15 itens', price: 229.00 },
-        { id: 'o2', category: 'Freios', badge: 'Segurança', name: 'Troca de Pastilhas de Freio Dianteiras', description: 'Mão de obra + jogo de pastilhas cerâmicas sem ruído', price: 245.00 },
-        { id: 'o3', category: 'Suspensão', badge: '', name: 'Alinhamento 3D + Balanceamento 4 Rodas', description: 'Relatório completo de geometria veicular', price: 135.00 },
-        { id: 'o4', category: 'Diagnóstico', badge: '', name: 'Scanner Eletrônico + Limpeza de Bicos', description: 'Leitura de códigos de falha e teste de vazão', price: 140.00 }
-      ]
-    }
+        { id: 'ofi-1', category: 'Revisão', name: 'Troca de Óleo 5W30 Sintético + Filtro', description: 'Inclui até 4L de óleo sintético homologado, filtro novo e check-up de fluidos.', price: 249.0, badge: 'Preventiva', prepTime: '45 min' },
+        { id: 'ofi-2', category: 'Suspensão', name: 'Alinhamento 3D + Balanceamento (4 rodas)', description: 'Equipamento computadorizado com laudo técnico de geometria.', price: 139.0, badge: 'Mais Pedido', prepTime: '50 min' },
+        { id: 'ofi-3', category: 'Freios', name: 'Troca de Pastilhas de Freio Dianteiras', description: 'Mão de obra completa + inspeção de discos e fluido DOT4.', price: 185.0, prepTime: '60 min' },
+        { id: 'ofi-4', category: 'Diagnóstico', name: 'Scanner Eletrônico + Laudo de Injeção', description: 'Leitura completa de códigos de falha e parâmetros em tempo real.', price: 95.0, prepTime: '30 min' },
+      ],
+    },
   };
 
   return { NICHE_PRESETS };
