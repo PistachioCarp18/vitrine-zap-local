@@ -3,12 +3,14 @@ const assert = require('node:assert/strict');
 const {
   crc16Ccitt,
   generatePixBrCode,
+  resolveCouponDiscount,
   calculateCartTotals,
   normalizeBrPhone,
+  isStoreOpenNow,
   buildWhatsAppOrderUrl,
 } = require('../src/integrations');
 const { createMatrix, renderQrSvg } = require('../src/qrcode');
-const { createStore, encodeStoreConfig, decodeStoreConfig } = require('../src/store');
+const { createStore, encodeStoreConfig, decodeStoreConfig, exportOrdersCsv } = require('../src/store');
 const { NICHE_PRESETS } = require('../src/presets');
 
 test('crc16Ccitt retorna 4 caracteres hexadecimais validos para payload EMV', () => {
@@ -46,15 +48,26 @@ test('renderQrSvg gera SVG valido 100% offline para payload Pix BR Code', () => 
   assert.ok(svg.endsWith('</svg>'));
 });
 
-test('calculateCartTotals soma itens e taxa de entrega corretamente', () => {
+test('resolveCouponDiscount aplica desconto percentual e fixo respeitando o teto do subtotal', () => {
+  const coupons = [
+    { code: 'BAIRRO10', type: 'percent', value: 10 },
+    { code: 'BEMVINDO5', type: 'fixed', value: 5 },
+  ];
+  assert.equal(resolveCouponDiscount(100, 'bairro10', coupons).discountAmount, 10);
+  assert.equal(resolveCouponDiscount(3, 'BEMVINDO5', coupons).discountAmount, 3);
+  assert.equal(resolveCouponDiscount(100, 'INVALIDO', coupons).discountAmount, 0);
+});
+
+test('calculateCartTotals soma itens, taxa de entrega e subtrai desconto corretamente', () => {
   const totals = calculateCartTotals([
     { name: 'X-Burger', qty: 2, price: 24.9 },
     { name: 'Refri', qty: 1, price: 6.5 },
-  ], 6.0);
+  ], 6.0, 5.0);
   assert.equal(totals.itemCount, 3);
   assert.equal(totals.subtotal, 56.3);
   assert.equal(totals.deliveryFee, 6);
-  assert.equal(totals.total, 62.3);
+  assert.equal(totals.discount, 5);
+  assert.equal(totals.total, 57.3);
 });
 
 test('normalizeBrPhone adiciona prefixo 55 quando ausente', () => {
@@ -62,27 +75,42 @@ test('normalizeBrPhone adiciona prefixo 55 quando ausente', () => {
   assert.equal(normalizeBrPhone('5515997110674'), '5515997110674');
 });
 
-test('buildWhatsAppOrderUrl gera link wa.me formatado sem depender de API paga', () => {
-  const res = buildWhatsAppOrderUrl({
-    storeName: 'Elefante Auto Center',
-    storeWhatsapp: '(15) 3227-5835',
-    customerName: 'Leandro',
-    deliveryMode: 'Retirada',
-    items: [{ name: 'Alinhamento', qty: 1, price: 130 }],
-    mode: 'orcamento',
-  });
-  assert.ok(res.url.startsWith('https://wa.me/551532275835?text='));
-  assert.ok(res.message.includes('*ORCAMENTO - Elefante Auto Center*'));
-  assert.equal(res.totals.total, 130);
+test('isStoreOpenNow avalia horario de funcionamento corretamente', () => {
+  const noon = new Date('2026-11-15T12:00:00');
+  assert.equal(isStoreOpenNow('08:00', '18:00', noon), true);
+  assert.equal(isStoreOpenNow('18:00', '23:30', noon), false);
 });
 
-test('VitrineStore registra pedidos e calcula resumo diario e ticket medio', () => {
+test('buildWhatsAppOrderUrl inclui cupom e troco quando informados', () => {
+  const res = buildWhatsAppOrderUrl({
+    storeName: 'Emporio do Lanche',
+    storeWhatsapp: '(15) 99999-0001',
+    customerName: 'Leandro',
+    deliveryMode: 'Entrega',
+    address: 'Rua A, 123',
+    paymentMethod: 'Dinheiro',
+    changeFor: 'R$ 100,00',
+    discount: 5,
+    couponCode: 'BEMVINDO5',
+    deliveryFee: 6,
+    items: [{ name: 'Combo', qty: 1, price: 50 }],
+    mode: 'pedido',
+  });
+  assert.ok(res.url.startsWith('https://wa.me/5515999990001?text='));
+  assert.ok(res.message.includes('BEMVINDO5'));
+  assert.ok(res.message.includes('Troco para:* R$ 100,00'));
+  assert.equal(res.totals.total, 51);
+});
+
+test('VitrineStore registra pedidos, perfil do cliente e calcula ticket medio', () => {
   const mem = {};
   const fakeStorage = {
     getItem: k => mem[k] || null,
     setItem: (k, v) => { mem[k] = v; },
   };
   const store = createStore(fakeStorage);
+  store.saveCustomerProfile({ name: 'Ana', phone: '15999998888', address: 'Rua B, 10' });
+  assert.equal(store.loadCustomerProfile().name, 'Ana');
   store.recordOrder({ customerName: 'Joao', channel: 'WhatsApp', total: 42.9 });
   store.recordOrder({ customerName: 'Maria', channel: 'PDF', total: 65.1 });
   const today = new Date().toISOString().slice(0, 10);
@@ -90,6 +118,15 @@ test('VitrineStore registra pedidos e calcula resumo diario e ticket medio', () 
   assert.equal(summary.count, 2);
   assert.equal(summary.totalRevenue, 108);
   assert.equal(summary.avgTicket, 54);
+});
+
+test('exportOrdersCsv gera CSV valido para planilhas', () => {
+  const csv = exportOrdersCsv([
+    { id: 'VZ-123', createdAt: '2026-11-15T18:00:00Z', customerName: 'Carlos, Jr', channel: 'WhatsApp', paymentMethod: 'Pix', itemCount: 2, total: 55.5 },
+  ]);
+  assert.ok(csv.startsWith('ID,Data,Cliente,Canal,Pagamento,Itens,Total'));
+  assert.ok(csv.includes('"Carlos, Jr"'));
+  assert.ok(csv.includes('55.50'));
 });
 
 test('encodeStoreConfig e decodeStoreConfig preservam configuracao da loja na URL', () => {
@@ -100,9 +137,11 @@ test('encodeStoreConfig e decodeStoreConfig preservam configuracao da loja na UR
   assert.equal(decodeStoreConfig('invalid@@@'), null);
 });
 
-test('NICHE_PRESETS possui os 4 nichos com itens e dicas de demonstracao', () => {
+test('NICHE_PRESETS possui os 4 nichos com itens, cupons e horarios', () => {
   for (const key of ['lanchonete', 'padaria', 'petshop', 'oficina']) {
     assert.ok(NICHE_PRESETS[key].items.length >= 4);
     assert.ok(NICHE_PRESETS[key].pitchTip.length > 10);
+    assert.ok(NICHE_PRESETS[key].coupons.length >= 1);
+    assert.ok(NICHE_PRESETS[key].openHour.includes(':'));
   }
 });

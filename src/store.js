@@ -7,10 +7,6 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  /**
-   * Camada de Persistencia Zero-Custo (backend-squad + innovation-squad)
-   * Gerencia configuracao White-Label, catalogo, historico diario e codec URL-State (?loja=...).
-   */
   function encodeStoreConfig(state) {
     const compact = {
       id: state.id || 'custom',
@@ -21,7 +17,10 @@
       pixKey: state.pixKey || '',
       deliveryFee: Number(state.deliveryFee || 0),
       primaryColor: state.primaryColor || '#0F766E',
+      openHour: state.openHour || '08:00',
+      closeHour: state.closeHour || '22:00',
       mode: state.mode || 'pedido',
+      coupons: (state.coupons || []).slice(0, 5),
       items: (state.items || []).slice(0, 30).map(i => ({
         id: i.id,
         category: i.category,
@@ -30,6 +29,7 @@
         price: Number(i.price || 0),
         badge: i.badge || '',
         prepTime: i.prepTime || '',
+        paused: Boolean(i.paused),
       })),
     };
     const json = JSON.stringify(compact);
@@ -67,9 +67,25 @@
     }
   }
 
+  function exportOrdersCsv(orders) {
+    const header = 'ID,Data,Cliente,Canal,Pagamento,Itens,Total';
+    const rows = (orders || []).map(o => [
+      o.id || '',
+      o.createdAt || '',
+      `"${String(o.customerName || '').replace(/"/g, '""')}"`,
+      o.channel || '',
+      o.paymentMethod || '',
+      Number(o.itemCount || 0),
+      Number(o.total || 0).toFixed(2),
+    ].join(','));
+    return [header, ...rows].join('\n');
+  }
+
   function createStore(storageAdapter, keys = {}) {
-    const stateKey = keys.stateKey || 'vitrine_zap_local_state_v3';
+    const stateKey = keys.stateKey || 'vitrine_zap_local_state_v4';
     const historyKey = keys.historyKey || 'vitrine_zap_order_history_v1';
+    const customerKey = keys.customerKey || 'vitrine_zap_customer_profile_v1';
+    const lastOrderKey = keys.lastOrderKey || 'vitrine_zap_last_cart_v1';
 
     function loadState(fallbackPreset) {
       try {
@@ -81,6 +97,32 @@
 
     function saveState(state) {
       storageAdapter.setItem(stateKey, JSON.stringify(state));
+    }
+
+    function loadCustomerProfile() {
+      try {
+        const raw = storageAdapter.getItem(customerKey);
+        return raw ? JSON.parse(raw) : { name: '', phone: '', address: '' };
+      } catch {
+        return { name: '', phone: '', address: '' };
+      }
+    }
+
+    function saveCustomerProfile(profile) {
+      storageAdapter.setItem(customerKey, JSON.stringify(profile));
+    }
+
+    function saveLastCart(items) {
+      storageAdapter.setItem(lastOrderKey, JSON.stringify(items || []));
+    }
+
+    function loadLastCart() {
+      try {
+        const raw = storageAdapter.getItem(lastOrderKey);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
     }
 
     function loadHistory() {
@@ -119,8 +161,19 @@
       };
     }
 
-    return { loadState, saveState, loadHistory, recordOrder, clearHistory, getDailySummary };
+    return {
+      loadState,
+      saveState,
+      loadCustomerProfile,
+      saveCustomerProfile,
+      saveLastCart,
+      loadLastCart,
+      loadHistory,
+      recordOrder,
+      clearHistory,
+      getDailySummary,
+    };
   }
 
-  return { createStore, encodeStoreConfig, decodeStoreConfig };
+  return { createStore, encodeStoreConfig, decodeStoreConfig, exportOrdersCsv };
 }));

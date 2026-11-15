@@ -7,11 +7,6 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  /**
-   * Calcula CRC16-CCITT (polinomio 0x1021, inicial 0xFFFF) exigido pelo padrao EMV Pix do Banco Central.
-   * @param {string} payload
-   * @returns {string} 4 caracteres hexadecimais em maiusculo
-   */
   function crc16Ccitt(payload) {
     let crc = 0xFFFF;
     for (let i = 0; i < payload.length; i++) {
@@ -39,16 +34,6 @@
       .slice(0, maxLen);
   }
 
-  /**
-   * Gera codigo Pix Copia-e-Cola estatico (EMV BR Code) 100% offline sem API paga.
-   * @param {Object} params
-   * @param {string} params.pixKey - Chave Pix (CPF, CNPJ, email, telefone +55... ou aleatoria)
-   * @param {string} params.merchantName - Nome do recebedor (ate 25 chars)
-   * @param {string} [params.merchantCity='Sorocaba'] - Cidade (ate 15 chars)
-   * @param {number} [params.amount=0] - Valor em reais (opcional)
-   * @param {string} [params.txid='VITRINEZAP'] - Identificador da transacao
-   * @returns {string} Payload EMV completo com CRC16
-   */
   function generatePixBrCode({ pixKey, merchantName, merchantCity = 'Sorocaba', amount = 0, txid = 'VITRINEZAP' }) {
     const key = String(pixKey || '').trim();
     if (!key) throw new Error('Chave Pix obrigatoria para gerar BR Code.');
@@ -62,25 +47,37 @@
     const safeTxid = sanitizeAscii(txid || '***', 25).replace(/\s+/g, '') || '***';
 
     let payload = '';
-    payload += emvField('00', '01');                  // Payload Format Indicator
-    payload += merchantAccount;                       // Merchant Account Information (Pix)
-    payload += emvField('52', '0000');                // Merchant Category Code
-    payload += emvField('53', '986');                 // BRL (986)
+    payload += emvField('00', '01');
+    payload += merchantAccount;
+    payload += emvField('52', '0000');
+    payload += emvField('53', '986');
     if (Number(amount) > 0) {
       payload += emvField('54', Number(amount).toFixed(2));
     }
-    payload += emvField('58', 'BR');                  // Country Code
-    payload += emvField('59', name);                  // Merchant Name
-    payload += emvField('60', city);                  // Merchant City
-    payload += emvField('62', emvField('05', safeTxid)); // Additional Data Field (TXID)
-    payload += '6304';                                // CRC16 header
+    payload += emvField('58', 'BR');
+    payload += emvField('59', name);
+    payload += emvField('60', city);
+    payload += emvField('62', emvField('05', safeTxid));
+    payload += '6304';
 
     return payload + crc16Ccitt(payload);
   }
 
-  /**
-   * Calcula totais do carrinho/orcamento de forma deterministica.
-   */
+  function resolveCouponDiscount(subtotal, couponCode, couponsList = []) {
+    const code = String(couponCode || '').trim().toUpperCase();
+    if (!code || subtotal <= 0) return { applied: null, discountAmount: 0 };
+    const found = (couponsList || []).find(c => String(c.code || '').toUpperCase() === code);
+    if (!found) return { applied: null, discountAmount: 0 };
+    let discountAmount = 0;
+    if (found.type === 'percent') {
+      discountAmount = (subtotal * Number(found.value || 0)) / 100;
+    } else {
+      discountAmount = Number(found.value || 0);
+    }
+    discountAmount = Math.min(subtotal, Math.max(0, Number(discountAmount.toFixed(2))));
+    return { applied: found, discountAmount };
+  }
+
   function calculateCartTotals(items, deliveryFee = 0, discount = 0) {
     const safeItems = Array.isArray(items) ? items : [];
     const subtotal = safeItems.reduce((acc, item) => {
@@ -89,7 +86,7 @@
       return acc + qty * price;
     }, 0);
     const fee = Math.max(0, Number(deliveryFee || 0));
-    const disc = Math.max(0, Number(discount || 0));
+    const disc = Math.min(subtotal + fee, Math.max(0, Number(discount || 0)));
     const total = Math.max(0, Number((subtotal + fee - disc).toFixed(2)));
     return {
       itemCount: safeItems.reduce((acc, i) => acc + Math.max(0, Number(i.qty || 0)), 0),
@@ -110,14 +107,38 @@
     return digits.startsWith('55') ? digits : `55${digits}`;
   }
 
-  /**
-   * Monta link wa.me com mensagem formatada para WhatsApp (custo zero, sem WhatsApp Business API).
-   */
-  function buildWhatsAppOrderUrl({ storeName, storeWhatsapp, customerName, customerPhone, deliveryMode, address, notes, items, deliveryFee = 0, paymentMethod = 'Pix', mode = 'pedido' }) {
+  function isStoreOpenNow(openHour = '08:00', closeHour = '22:00', nowDate = new Date()) {
+    const toMins = (hhmm) => {
+      const [h, m] = String(hhmm || '00:00').split(':').map(Number);
+      return (h || 0) * 60 + (m || 0);
+    };
+    const nowMins = nowDate.getHours() * 60 + nowDate.getMinutes();
+    const start = toMins(openHour);
+    const end = toMins(closeHour);
+    if (start <= end) return nowMins >= start && nowMins <= end;
+    return nowMins >= start || nowMins <= end;
+  }
+
+  function buildWhatsAppOrderUrl({
+    storeName,
+    storeWhatsapp,
+    customerName,
+    customerPhone,
+    deliveryMode,
+    address,
+    notes,
+    items,
+    deliveryFee = 0,
+    discount = 0,
+    couponCode = '',
+    paymentMethod = 'Pix',
+    changeFor = '',
+    mode = 'pedido',
+  }) {
     const targetPhone = normalizeBrPhone(storeWhatsapp);
     if (!targetPhone) throw new Error('WhatsApp da loja invalido.');
 
-    const totals = calculateCartTotals(items, deliveryMode === 'Entrega' ? deliveryFee : 0);
+    const totals = calculateCartTotals(items, deliveryMode === 'Entrega' ? deliveryFee : 0, discount);
     const header = mode === 'orcamento'
       ? `*ORCAMENTO - ${storeName}*`
       : `*NOVO PEDIDO - ${storeName}*`;
@@ -139,8 +160,14 @@
 
     lines.push('');
     if (totals.deliveryFee > 0) lines.push(`Taxa de entrega: ${formatBrl(totals.deliveryFee)}`);
+    if (totals.discount > 0) {
+      lines.push(`Desconto${couponCode ? ` (${couponCode})` : ''}: -${formatBrl(totals.discount)}`);
+    }
     lines.push(`*Total:* ${formatBrl(totals.total)}`);
     lines.push(`*Pagamento:* ${paymentMethod}`);
+    if (paymentMethod === 'Dinheiro' && changeFor) {
+      lines.push(`*Troco para:* ${changeFor}`);
+    }
     if (notes) lines.push(`*Observacoes:* ${notes}`);
 
     const text = lines.join('\n');
@@ -154,9 +181,11 @@
   return {
     crc16Ccitt,
     generatePixBrCode,
+    resolveCouponDiscount,
     calculateCartTotals,
     formatBrl,
     normalizeBrPhone,
+    isStoreOpenNow,
     buildWhatsAppOrderUrl,
   };
 }));

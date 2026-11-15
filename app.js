@@ -1,17 +1,26 @@
 (function () {
   'use strict';
 
-  const { generatePixBrCode, calculateCartTotals, formatBrl, buildWhatsAppOrderUrl } = window.VitrineIntegrations;
+  const {
+    generatePixBrCode,
+    resolveCouponDiscount,
+    calculateCartTotals,
+    formatBrl,
+    isStoreOpenNow,
+    buildWhatsAppOrderUrl,
+  } = window.VitrineIntegrations;
   const { renderQrSvg } = window.VitrineQrCode;
-  const { createStore, encodeStoreConfig, decodeStoreConfig } = window.VitrineStore;
+  const { createStore, encodeStoreConfig, decodeStoreConfig, exportOrdersCsv } = window.VitrineStore;
   const { NICHE_PRESETS } = window.VitrinePresets;
 
   const store = createStore(window.localStorage);
   let state = loadInitialState();
   let cart = [];
   let activeCategory = 'Todos';
+  let sortMode = 'featured';
   let deliveryMode = 'Retirada';
   let paymentMethod = 'Pix';
+  let activeCouponCode = '';
 
   function loadInitialState() {
     const params = new URLSearchParams(window.location.search);
@@ -35,6 +44,13 @@
     setTimeout(() => el.remove(), 3200);
   }
 
+  function initTheme() {
+    const saved = window.localStorage.getItem('vitrine_theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
   function getCategoryIconSvg() {
     return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>';
   }
@@ -46,8 +62,18 @@
     document.getElementById('store-tagline').textContent = state.tagline || '';
     document.getElementById('store-neighborhood').textContent = state.neighborhood || 'Sorocaba-SP';
     document.getElementById('cart-title').textContent = state.mode === 'orcamento' ? 'Orçamento / OS' : 'Seu Pedido';
+
+    const openHour = state.openHour || '08:00';
+    const closeHour = state.closeHour || '22:00';
+    document.getElementById('hero-hours').textContent = `${openHour} - ${closeHour}`;
+    const isOpen = isStoreOpenNow(openHour, closeHour);
+    const statusPill = document.getElementById('store-status-pill');
+    statusPill.classList.toggle('closed', !isOpen);
+    document.getElementById('store-status-text').textContent = isOpen ? 'Aberto agora' : 'Fechado (Aceita agendamento)';
+
+    const activeItems = (state.items || []).filter(i => !i.paused);
     document.getElementById('hero-delivery-fee').textContent = Number(state.deliveryFee || 0) > 0 ? formatBrl(state.deliveryFee) : 'Grátis / Retirada';
-    document.getElementById('hero-item-count').textContent = `${(state.items || []).length} itens`;
+    document.getElementById('hero-item-count').textContent = `${activeItems.length} itens`;
 
     const banner = document.getElementById('pitch-banner');
     const bannerText = document.getElementById('pitch-banner-text');
@@ -57,6 +83,21 @@
     } else {
       banner.classList.add('hidden');
     }
+  }
+
+  function hydrateCustomerProfile() {
+    const profile = store.loadCustomerProfile();
+    if (profile.name) document.getElementById('cust-name').value = profile.name;
+    if (profile.phone) document.getElementById('cust-phone').value = profile.phone;
+    if (profile.address) document.getElementById('cust-address').value = profile.address;
+  }
+
+  function persistCustomerProfile() {
+    store.saveCustomerProfile({
+      name: document.getElementById('cust-name').value.trim(),
+      phone: document.getElementById('cust-phone').value.trim(),
+      address: document.getElementById('cust-address').value.trim(),
+    });
   }
 
   function initSwitcher() {
@@ -70,6 +111,8 @@
       state = JSON.parse(JSON.stringify(preset));
       cart = [];
       activeCategory = 'Todos';
+      activeCouponCode = '';
+      document.getElementById('coupon-input').value = '';
       store.saveState(state);
       renderAll();
       showToast(`Vitrine alterada para ${preset.label}`);
@@ -77,7 +120,8 @@
   }
 
   function renderCategories() {
-    const cats = ['Todos', ...new Set((state.items || []).map(i => i.category))];
+    const activeItems = (state.items || []).filter(i => !i.paused);
+    const cats = ['Todos', ...new Set(activeItems.map(i => i.category))];
     const wrap = document.getElementById('category-pills');
     wrap.innerHTML = cats.map(c =>
       `<button type="button" class="pill-btn ${c === activeCategory ? 'active' : ''}" data-cat="${c}">${c}</button>`
@@ -94,7 +138,7 @@
   function updateQty(itemId, delta) {
     const existing = cart.find(c => c.id === itemId);
     if (!existing && delta > 0) {
-      const item = (state.items || []).find(i => i.id === itemId);
+      const item = (state.items || []).find(i => i.id === itemId && !i.paused);
       if (item) cart.push({ ...item, qty: 1 });
     } else if (existing) {
       existing.qty += delta;
@@ -106,11 +150,16 @@
 
   function renderCatalog() {
     const q = (document.getElementById('search-input').value || '').toLowerCase();
-    const list = (state.items || []).filter(item => {
+    let list = (state.items || []).filter(item => {
+      if (item.paused) return false;
       const matchCat = activeCategory === 'Todos' || item.category === activeCategory;
       const matchText = !q || item.name.toLowerCase().includes(q) || (item.description || '').toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
       return matchCat && matchText;
     });
+
+    if (sortMode === 'price-asc') list = [...list].sort((a, b) => a.price - b.price);
+    if (sortMode === 'price-desc') list = [...list].sort((a, b) => b.price - a.price);
+    if (sortMode === 'az') list = [...list].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
 
     const grid = document.getElementById('catalog-grid');
     if (!list.length) {
@@ -154,16 +203,36 @@
     });
   }
 
+  function getTotalsWithCoupon() {
+    const fee = deliveryMode === 'Entrega' ? Number(state.deliveryFee || 0) : 0;
+    const rawSubtotal = cart.reduce((acc, i) => acc + Number(i.qty || 0) * Number(i.price || 0), 0);
+    const { applied, discountAmount } = resolveCouponDiscount(rawSubtotal, activeCouponCode, state.coupons || []);
+    const totals = calculateCartTotals(cart, fee, discountAmount);
+    return { totals, applied };
+  }
+
   function renderCart() {
     const wrap = document.getElementById('cart-items');
-    const fee = deliveryMode === 'Entrega' ? Number(state.deliveryFee || 0) : 0;
-    const totals = calculateCartTotals(cart, fee);
+    const { totals, applied } = getTotalsWithCoupon();
 
     document.getElementById('cart-badge-count').textContent = String(totals.itemCount);
     document.getElementById('subtotal-val').textContent = formatBrl(totals.subtotal);
     document.getElementById('delivery-val').textContent = formatBrl(totals.deliveryFee);
     document.getElementById('total-val').textContent = formatBrl(totals.total);
-    document.getElementById('delivery-row').classList.toggle('hidden', fee === 0);
+    document.getElementById('delivery-row').classList.toggle('hidden', totals.deliveryFee === 0);
+
+    const discRow = document.getElementById('discount-row');
+    if (totals.discount > 0 && applied) {
+      discRow.classList.remove('hidden');
+      document.getElementById('discount-code-label').textContent = applied.code;
+      document.getElementById('discount-val').textContent = `-${formatBrl(totals.discount)}`;
+    } else {
+      discRow.classList.add('hidden');
+    }
+
+    document.getElementById('clear-cart-btn').classList.toggle('hidden', cart.length === 0);
+    const hasLast = store.loadLastCart().length > 0 && cart.length === 0;
+    document.getElementById('repeat-order-btn').classList.toggle('hidden', !hasLast);
 
     const mobileBar = document.getElementById('mobile-cart-bar');
     if (totals.itemCount > 0) {
@@ -198,6 +267,7 @@
   }
 
   function getCheckoutPayload() {
+    const { totals, applied } = getTotalsWithCoupon();
     return {
       storeName: state.storeName,
       storeWhatsapp: state.whatsapp,
@@ -206,8 +276,11 @@
       deliveryMode,
       address: document.getElementById('cust-address').value.trim(),
       paymentMethod,
+      changeFor: document.getElementById('cust-change').value.trim(),
       notes: document.getElementById('cust-notes').value.trim(),
       deliveryFee: deliveryMode === 'Entrega' ? Number(state.deliveryFee || 0) : 0,
+      discount: totals.discount,
+      couponCode: applied ? applied.code : '',
       items: cart,
       mode: state.mode,
     };
@@ -224,6 +297,7 @@
       document.getElementById('cust-name').focus();
       return false;
     }
+    persistCustomerProfile();
     return true;
   }
 
@@ -231,6 +305,7 @@
     if (!validateOrder()) return;
     const payload = getCheckoutPayload();
     const { url, totals } = buildWhatsAppOrderUrl(payload);
+    store.saveLastCart(cart);
     store.recordOrder({
       customerName: payload.customerName,
       channel: 'WhatsApp',
@@ -252,15 +327,14 @@
       showToast('Configure a Chave Pix no Painel do Dono.');
       return;
     }
-    const fee = deliveryMode === 'Entrega' ? Number(state.deliveryFee || 0) : 0;
-    const { total } = calculateCartTotals(cart, fee);
+    const { totals } = getTotalsWithCoupon();
     const code = generatePixBrCode({
       pixKey: state.pixKey,
       merchantName: state.storeName,
       merchantCity: 'Sorocaba',
-      amount: total,
+      amount: totals.total,
     });
-    document.getElementById('pix-amount-badge').textContent = formatBrl(total);
+    document.getElementById('pix-amount-badge').textContent = formatBrl(totals.total);
     document.getElementById('pix-qr-svg').innerHTML = renderQrSvg(code, 176);
     document.getElementById('pix-code-output').value = code;
     document.getElementById('pix-box').classList.remove('hidden');
@@ -271,6 +345,7 @@
     if (!validateOrder()) return;
     const payload = getCheckoutPayload();
     const { totals } = buildWhatsAppOrderUrl(payload);
+    store.saveLastCart(cart);
     store.recordOrder({
       customerName: payload.customerName,
       channel: 'PDF',
@@ -310,6 +385,8 @@
     document.getElementById('cfg-whatsapp').value = state.whatsapp || '';
     document.getElementById('cfg-pix').value = state.pixKey || '';
     document.getElementById('cfg-delivery').value = Number(state.deliveryFee || 0);
+    document.getElementById('cfg-open').value = state.openHour || '08:00';
+    document.getElementById('cfg-close').value = state.closeHour || '22:00';
     document.getElementById('cfg-color').value = state.primaryColor || '#0F766E';
 
     const shareUrl = buildShareableUrl();
@@ -319,11 +396,23 @@
     listEl.innerHTML = (state.items || []).map(item => `
       <div class="admin-item-row">
         <div>
-          <strong>${item.name}</strong> <span class="cart-row-sub">(${item.category})</span>
+          <strong>${item.name}</strong> <span class="cart-row-sub">(${item.category}${item.paused ? ' • Pausado' : ''})</span>
           <div class="cart-row-sub mono">${formatBrl(item.price)}</div>
         </div>
-        <button type="button" class="btn btn-secondary btn-sm remove-item-btn" data-id="${item.id}">Remover</button>
+        <div class="inline-actions">
+          <button type="button" class="btn btn-secondary btn-xs toggle-pause-btn" data-id="${item.id}">${item.paused ? 'Ativar' : 'Pausar'}</button>
+          <button type="button" class="btn btn-secondary btn-xs remove-item-btn" data-id="${item.id}">Remover</button>
+        </div>
       </div>`).join('');
+
+    listEl.querySelectorAll('.toggle-pause-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.items = (state.items || []).map(i => i.id === btn.dataset.id ? { ...i, paused: !i.paused } : i);
+        store.saveState(state);
+        renderAll();
+        showToast('Visibilidade do item atualizada.');
+      });
+    });
 
     listEl.querySelectorAll('.remove-item-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -358,6 +447,51 @@
 
   function bindEvents() {
     document.getElementById('search-input').addEventListener('input', renderCatalog);
+    document.getElementById('sort-select').addEventListener('change', (e) => {
+      sortMode = e.target.value;
+      renderCatalog();
+    });
+
+    document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+      const curr = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const next = curr === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      window.localStorage.setItem('vitrine_theme', next);
+    });
+
+    document.getElementById('apply-coupon-btn').addEventListener('click', () => {
+      const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+      if (!code) {
+        activeCouponCode = '';
+        renderCart();
+        return;
+      }
+      const rawSubtotal = cart.reduce((acc, i) => acc + Number(i.qty || 0) * Number(i.price || 0), 0);
+      const { applied } = resolveCouponDiscount(rawSubtotal || 100, code, state.coupons || []);
+      if (!applied) {
+        showToast('Cupom não encontrado nesta loja.');
+        return;
+      }
+      activeCouponCode = applied.code;
+      renderCart();
+      showToast(`Cupom ${applied.code} aplicado.`);
+    });
+
+    document.getElementById('clear-cart-btn').addEventListener('click', () => {
+      cart = [];
+      renderCatalog();
+      renderCart();
+      showToast('Carrinho limpo.');
+    });
+
+    document.getElementById('repeat-order-btn').addEventListener('click', () => {
+      const last = store.loadLastCart();
+      if (!last.length) return;
+      cart = JSON.parse(JSON.stringify(last));
+      renderCatalog();
+      renderCart();
+      showToast('Último pedido carregado no carrinho.');
+    });
 
     document.querySelectorAll('.seg-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -374,6 +508,7 @@
         document.querySelectorAll('.pay-pill').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         paymentMethod = btn.dataset.pay;
+        document.getElementById('change-wrap').classList.toggle('hidden', paymentMethod !== 'Dinheiro');
       });
     });
 
@@ -428,6 +563,8 @@
       state.whatsapp = document.getElementById('cfg-whatsapp').value.trim();
       state.pixKey = document.getElementById('cfg-pix').value.trim();
       state.deliveryFee = Number(document.getElementById('cfg-delivery').value || 0);
+      state.openHour = document.getElementById('cfg-open').value || '08:00';
+      state.closeHour = document.getElementById('cfg-close').value || '22:00';
       state.primaryColor = document.getElementById('cfg-color').value;
       store.saveState(state);
       renderAll();
@@ -444,12 +581,23 @@
         prepTime: document.getElementById('item-prep').value.trim(),
         badge: document.getElementById('item-badge').value.trim(),
         description: document.getElementById('item-desc').value.trim(),
+        paused: false,
       };
       state.items = [...(state.items || []), newItem];
       store.saveState(state);
       e.target.reset();
       renderAll();
       showToast('Novo item adicionado ao catálogo.');
+    });
+
+    document.getElementById('export-csv-btn').addEventListener('click', () => {
+      const csv = exportOrdersCsv(store.loadHistory());
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `pedidos-${state.id || 'vitrinezap'}.csv`;
+      a.click();
+      showToast('Planilha CSV exportada.');
     });
 
     document.getElementById('clear-history-btn').addEventListener('click', () => {
@@ -488,6 +636,8 @@
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
+  initTheme();
+  hydrateCustomerProfile();
   initSwitcher();
   bindEvents();
   renderAll();

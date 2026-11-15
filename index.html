@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <!-- Topbar Comercial Limpa -->
   <header class="topbar no-print">
     <div class="container topbar-inner">
       <div class="brand-cluster">
@@ -23,14 +22,15 @@
           <span class="brand-kicker" id="store-neighborhood">Jardim Martinez • Sorocaba-SP</span>
           <strong class="brand-name" id="topbar-store-name">Empório do Lanche Martinez</strong>
         </div>
-        <span class="status-pill"><span class="status-dot"></span>Aberto agora</span>
+        <span id="store-status-pill" class="status-pill"><span class="status-dot"></span><span id="store-status-text">Aberto agora</span></span>
       </div>
 
       <div class="topbar-actions">
-        <div class="switcher-wrap">
-          <label for="niche-switcher" class="sr-only">Selecionar nicho de demonstração</label>
-          <select id="niche-switcher" class="select-compact" aria-label="Selecionar nicho de demonstração"></select>
-        </div>
+        <label for="niche-switcher" class="sr-only">Selecionar nicho de demonstração</label>
+        <select id="niche-switcher" class="select-compact" aria-label="Selecionar nicho de demonstração"></select>
+        <button id="theme-toggle-btn" class="btn btn-secondary btn-icon" type="button" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
         <button id="toggle-admin-btn" class="btn btn-secondary btn-sm" type="button">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           <span>Painel do Dono</span>
@@ -39,7 +39,6 @@
     </div>
   </header>
 
-  <!-- Hero da Vitrine -->
   <section class="hero-strip no-print">
     <div class="container hero-card">
       <div class="hero-main">
@@ -62,6 +61,10 @@
       </div>
       <div class="hero-meta">
         <div class="meta-chip">
+          <span class="meta-label">Horário</span>
+          <strong id="hero-hours" class="mono">18:00 - 23:30</strong>
+        </div>
+        <div class="meta-chip">
           <span class="meta-label">Entrega no bairro</span>
           <strong id="hero-delivery-fee" class="mono">R$ 6,00</strong>
         </div>
@@ -74,7 +77,6 @@
   </section>
 
   <main class="container main-grid">
-    <!-- Coluna Principal: Vitrine ou Painel Admin -->
     <section id="catalog-section" class="catalog-panel no-print">
       <div id="pitch-banner" class="pitch-callout hidden">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.7.6 1 1.3 1 2.3h6c0-1 .3-1.7 1-2.3A7 7 0 0 0 12 2z"/></svg>
@@ -82,9 +84,17 @@
       </div>
 
       <div class="toolbar">
-        <div class="search-box">
-          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="search-input" type="search" class="text-input search-input" placeholder="Buscar produto, serviço ou categoria..." aria-label="Buscar" />
+        <div class="toolbar-top">
+          <div class="search-box">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="search-input" type="search" class="text-input search-input" placeholder="Buscar produto, serviço ou categoria..." aria-label="Buscar" />
+          </div>
+          <select id="sort-select" class="select-compact sort-select" aria-label="Ordenar catálogo">
+            <option value="featured">Ordenar: Destaques</option>
+            <option value="price-asc">Menor Preço</option>
+            <option value="price-desc">Maior Preço</option>
+            <option value="az">Ordem Alfabética (A-Z)</option>
+          </select>
         </div>
         <div id="category-pills" class="category-pills"></div>
       </div>
@@ -92,7 +102,6 @@
       <div id="catalog-grid" class="catalog-grid"></div>
     </section>
 
-    <!-- Painel do Dono (Merchant Dashboard em Abas) -->
     <section id="admin-section" class="admin-panel hidden no-print">
       <div class="card admin-shell">
         <div class="admin-header">
@@ -112,7 +121,6 @@
           <button type="button" class="tab-btn" data-tab="settings">Loja, Link & QR</button>
         </div>
 
-        <!-- Tab 1: Overview & History -->
         <div class="tab-pane active" data-pane="overview">
           <div class="kpi-grid">
             <div class="kpi-card">
@@ -131,12 +139,14 @@
 
           <div class="section-subhead">
             <h3>Histórico Local de Pedidos</h3>
-            <button type="button" id="clear-history-btn" class="btn btn-ghost btn-sm">Limpar histórico</button>
+            <div class="inline-actions">
+              <button type="button" id="export-csv-btn" class="btn btn-secondary btn-sm">Exportar CSV</button>
+              <button type="button" id="clear-history-btn" class="btn btn-ghost btn-sm">Limpar</button>
+            </div>
           </div>
           <div id="order-history-list" class="admin-items-list"></div>
         </div>
 
-        <!-- Tab 2: Catalog CRUD -->
         <div class="tab-pane" data-pane="catalog">
           <h3 class="pane-title">Adicionar Novo Item</h3>
           <form id="add-item-form" class="form-grid">
@@ -164,12 +174,11 @@
           </form>
 
           <div class="section-subhead">
-            <h3>Itens Publicados</h3>
+            <h3>Itens Publicados (Pausar / Editar Preço)</h3>
           </div>
           <div id="admin-items-list" class="admin-items-list"></div>
         </div>
 
-        <!-- Tab 3: Settings & Shareable Storefront QR -->
         <div class="tab-pane" data-pane="settings">
           <div class="share-banner">
             <div class="share-info">
@@ -206,6 +215,12 @@
             <label>Taxa de Entrega Padrão (R$)
               <input type="number" step="0.01" min="0" id="cfg-delivery" class="text-input mono" />
             </label>
+            <label>Abre às (HH:MM)
+              <input type="time" id="cfg-open" class="text-input mono" />
+            </label>
+            <label>Fecha às (HH:MM)
+              <input type="time" id="cfg-close" class="text-input mono" />
+            </label>
             <label>Cor Principal da Marca
               <input type="color" id="cfg-color" class="color-input" />
             </label>
@@ -221,21 +236,30 @@
       </div>
     </section>
 
-    <!-- Coluna Lateral: Checkout Profissional -->
     <aside id="cart-aside" class="cart-panel card">
       <div class="cart-header">
         <div class="cart-title-wrap">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           <h2 id="cart-title">Seu Pedido</h2>
         </div>
-        <span id="cart-badge-count" class="cart-count mono">0</span>
+        <div class="cart-head-actions">
+          <button id="repeat-order-btn" class="btn btn-ghost btn-xs hidden" type="button">Repetir último</button>
+          <button id="clear-cart-btn" class="btn btn-ghost btn-xs hidden" type="button">Limpar</button>
+          <span id="cart-badge-count" class="cart-count mono">0</span>
+        </div>
       </div>
 
       <div id="cart-items" class="cart-items"></div>
 
+      <div class="coupon-row no-print">
+        <input type="text" id="coupon-input" class="text-input coupon-input mono" placeholder="Cupom (ex: BAIRRO10)" aria-label="Cupom de desconto" />
+        <button type="button" id="apply-coupon-btn" class="btn btn-secondary btn-sm">Aplicar</button>
+      </div>
+
       <div class="totals-box">
         <div class="total-row"><span>Subtotal</span><strong id="subtotal-val" class="mono">R$ 0,00</strong></div>
         <div class="total-row" id="delivery-row"><span>Taxa de entrega</span><strong id="delivery-val" class="mono">R$ 0,00</strong></div>
+        <div class="total-row discount-row hidden" id="discount-row"><span>Desconto (<span id="discount-code-label"></span>)</span><strong id="discount-val" class="mono">-R$ 0,00</strong></div>
         <div class="total-row grand-total"><span>Total</span><strong id="total-val" class="mono">R$ 0,00</strong></div>
       </div>
 
@@ -262,6 +286,10 @@
             <button type="button" class="pay-pill" data-pay="Dinheiro">Dinheiro</button>
           </div>
         </div>
+
+        <label id="change-wrap" class="field-label hidden">Troco para quanto? (R$)
+          <input type="text" id="cust-change" class="text-input mono" placeholder="Ex: R$ 100,00 ou Sem troco" />
+        </label>
 
         <label class="field-label">Observações
           <input type="text" id="cust-notes" class="text-input" placeholder="Ex: Sem cebola / Placa ABC-1234" />

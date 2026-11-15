@@ -7,10 +7,6 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  /**
-   * Presets White-Label com copy persuasiva e SLA por item (research-squad)
-   * Foco: Jardim Residencial Martinez e Sorocaba-SP
-   */
   const NICHE_PRESETS = {
     lanchonete: {
       id: 'lanchonete',
@@ -22,8 +18,14 @@
       pixKey: '15999990001',
       deliveryFee: 6.0,
       primaryColor: '#0F766E',
+      openHour: '18:00',
+      closeHour: '23:30',
       mode: 'pedido',
-      pitchTip: 'Economize até 27% em comissões de apps de entrega recebendo pedidos diretos no WhatsApp com Pix instantâneo.',
+      coupons: [
+        { code: 'BAIRRO10', type: 'percent', value: 10 },
+        { code: 'BEMVINDO5', type: 'fixed', value: 5 },
+      ],
+      pitchTip: 'Use o cupom BAIRRO10 (10% OFF) no checkout para demonstrar campanhas locais sem depender de apps de entrega.',
       items: [
         { id: 'lan-1', category: 'Burgers', name: 'X-Martinez Bacon Artesanal', description: 'Blend bovino 160g na brasa, cheddar cremoso, bacon crocante e maionese da casa.', price: 32.9, badge: 'Mais Pedido', prepTime: '20 min' },
         { id: 'lan-2', category: 'Combos', name: 'Combo Casal Clássico', description: '2 X-Salada artesanais + porção média de fritas + 2 refrigerantes lata 350ml.', price: 68.0, badge: 'Economia', prepTime: '25 min' },
@@ -42,7 +44,10 @@
       pixKey: '15999990002',
       deliveryFee: 5.0,
       primaryColor: '#B45309',
+      openHour: '06:00',
+      closeHour: '20:30',
       mode: 'pedido',
+      coupons: [{ code: 'BAIRRO10', type: 'percent', value: 10 }],
       pitchTip: 'Ideal para encomendas de café corporativo e festas de fim de semana com sinal pago via Pix.',
       items: [
         { id: 'pad-1', category: 'Kits Café', name: 'Kit Café da Manhã Família', description: '8 pães franceses, 200g presunto, 200g mussarela, bolo caseiro e suco 1L.', price: 54.9, badge: 'Mais Pedido', prepTime: '30 min' },
@@ -61,7 +66,10 @@
       pixKey: '15999990003',
       deliveryFee: 7.0,
       primaryColor: '#1D4ED8',
+      openHour: '08:30',
+      closeHour: '19:00',
       mode: 'pedido',
+      coupons: [{ code: 'BAIRRO10', type: 'percent', value: 10 }],
       pitchTip: 'Facilite a recompra mensal de ração no bairro e preencha horários ociosos de banho e tosa.',
       items: [
         { id: 'pet-1', category: 'Estética Pet', name: 'Banho & Tosa Higiênica (Porte P)', description: 'Banho morno, hidratação, corte de unhas e limpeza de ouvidos.', price: 65.0, badge: 'Mais Pedido', prepTime: 'Agenda' },
@@ -80,7 +88,10 @@
       pixKey: '15999990004',
       deliveryFee: 0.0,
       primaryColor: '#0F172A',
+      openHour: '08:00',
+      closeHour: '18:00',
       mode: 'orcamento',
+      coupons: [{ code: 'REVISAO10', type: 'percent', value: 10 }],
       pitchTip: 'Gere orçamentos profissionais em PDF ou WhatsApp na frente do cliente e aumente a taxa de aprovação.',
       items: [
         { id: 'ofi-1', category: 'Revisão', name: 'Troca de Óleo 5W30 Sintético + Filtro', description: 'Inclui até 4L de óleo sintético homologado, filtro novo e check-up de fluidos.', price: 249.0, badge: 'Preventiva', prepTime: '45 min' },
