@@ -1,0 +1,14 @@
+{
+  "id": "occasion-card-message",
+  "reference": { "dossie": "Dossie-REA-GiulianaFlores-e-1800Flowers", "pista": "B", "grau": "A" },
+  "categories": ["floricultura"],
+  "priority": "P0",
+  "ui": { "slots": ["catalog-occasions-strip", "cart-step-2-domain"], "gestures": ["tap"] },
+  "state": ["selectedOccasion", "cardMessage", "isSurpriseGift"],
+  "events": ["occasion:selected", "card-message:updated"],
+  "zeroApi": { "storage": "state+wa.me", "send": "wa.me com dedicatória + surpresa", "degradation": "janelas locais sem consulta remota de SLA por transportadora; contador offline 160 chars" },
+  "offline": true,
+  "a11y": ["contador aria-live", "toggle surpresa >= 44px", "templates de mensagem acessiveis"],
+  "budgetKB": 8,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

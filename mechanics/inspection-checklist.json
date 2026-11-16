@@ -1,0 +1,14 @@
+{
+  "id": "inspection-checklist",
+  "reference": { "dossie": "Dossie-REA-RepairPal-e-Tekmetric", "pista": "B", "grau": "B" },
+  "categories": ["oficina"],
+  "priority": "P0",
+  "ui": { "slots": ["compact-context-chip", "cart-step-1-items", "cart-step-2-domain"], "gestures": ["tap"] },
+  "state": ["vehicleModel", "vehiclePlate", "vehicleSymptom", "severityFilter", "approvedItemIds"],
+  "events": ["inspection:item-toggled", "inspection:severity-filtered"],
+  "zeroApi": { "storage": "localStorage+FIPE-offline", "send": "wa.me OS itemizada + PDF", "degradation": "catalogo local de canned jobs sem consulta OEM paga de chassi" },
+  "offline": true,
+  "a11y": ["semaforo com rotulo textual alem de cor", "toggle >= 44px", "dobra <= 265px"],
+  "budgetKB": 9,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

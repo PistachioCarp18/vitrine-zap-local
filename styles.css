@@ -118,26 +118,77 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn, .pack-chip, .slot-chip, 
   font-size: 0.74rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-pill); cursor: pointer;
 }
 
-/* Slot Contextual Dinâmico (Oficina / Pet Shop) */
-.auto-vehicle-bar { background: #0F172A; padding: 8px 0; border-bottom: 1px solid #1E293B; }
-.auto-vehicle-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px; }
+/* Slot Contextual Dinâmico Compacto (Oficina / Pet Shop / Barbearia / Floricultura / Moda — dobra <= 275px) */
+.auto-vehicle-bar { background: #0F172A; padding: 2px 0; border-bottom: 1px solid #1E293B; }
+.auto-vehicle-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6px; }
 .compact-input { min-height: 44px !important; height: 44px; }
 .auto-vehicle-bar .compact-input { background: #1E293B; color: #F8FAFC; border-color: #475569; }
 
-.pet-reorder-strip { padding-top: 8px; }
-.pet-reorder-card { display: flex; flex-direction: column; gap: 8px; background: var(--surface-card); border: 1px solid var(--brand-border-tint); border-radius: var(--radius-md); padding: 8px 12px; }
-.pet-reorder-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.pet-reorder-strip { padding-top: 0; }
+.pet-reorder-card { display: flex; align-items: center; justify-content: space-between; gap: 6px; background: var(--surface-card); border: 1px solid var(--brand-border-tint); border-radius: var(--radius-md); padding: 2px 6px; }
+.vertical-context-slot:not(.hidden) + .main-grid { padding-top: 0; }
+.vertical-context-slot:not(.hidden) + .main-grid .sticky-filter-bar { padding-top: 2px; padding-bottom: 4px; margin-bottom: 4px; }
+.pet-reorder-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; width: 100%; }
 .btn-pet-repeat {
   min-height: 44px; border: 0; background: var(--brand-surface-tint); color: var(--brand-ink-accent);
-  font-weight: 700; font-size: 0.8rem; padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; text-align: left;
+  font-weight: 700; font-size: 0.78rem; padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.pet-size-pills { display: flex; gap: 6px; }
+.pet-size-pills { display: flex; gap: 4px; flex-shrink: 0; }
 .pet-size-chip {
   min-width: 44px; min-height: 44px; border: 1px solid var(--hairline);
   border-radius: var(--radius-pill); background: var(--surface-card); color: var(--text-primary);
-  font-weight: 700; font-size: 0.82rem; cursor: pointer;
+  font-weight: 700; font-size: 0.8rem; cursor: pointer;
 }
 .pet-size-chip.active { background: var(--brand-primary); color: var(--brand-on-primary); border-color: var(--brand-primary); }
+
+/* Switch Acessivel >= 44px (elimina checkbox 20x20 no WebKit/Chromium) */
+.deposit-switch-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; min-height: 44px; padding: 8px 12px; margin-bottom: 10px;
+  border: 1px solid var(--brand-border-tint); background: var(--brand-surface-tint);
+  color: var(--text-primary); border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 0.8rem; font-weight: 600; text-align: left; cursor: pointer;
+}
+.deposit-switch-btn.active { border-color: var(--brand-primary); }
+.switch-track {
+  position: relative; width: 44px; height: 24px; flex-shrink: 0;
+  border-radius: 99px; background: #94A3B8; transition: background 0.2s;
+}
+.deposit-switch-btn.active .switch-track,
+.surprise-switch-btn[aria-checked="true"] .switch-track { background: var(--brand-primary); }
+.switch-thumb {
+  position: absolute; left: 3px; top: 3px; width: 18px; height: 18px;
+  border-radius: 50%; background: #FFFFFF; transition: transform 0.2s;
+}
+.deposit-switch-btn.active .switch-thumb,
+.surprise-switch-btn[aria-checked="true"] .switch-thumb { transform: translateX(20px); }
+
+/* Mecanicas v11: DVI OS Semaforo, Guia de Medidas, Reserva Expressa & Floricultura */
+.context-compact-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 12px; scrollbar-width: none; }
+.context-compact-row::-webkit-scrollbar { display: none; }
+.sev-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+.sev-crit { background: #FEF2F2; color: #991B1B; }
+.sev-warn { background: #FFFBEB; color: #92400E; }
+.sev-ok { background: #ECFDF5; color: #065F46; }
+.os-approve-btn {
+  min-height: 44px; min-width: 84px; padding: 4px 10px; border-radius: var(--radius-sm);
+  border: 1px solid var(--hairline); background: var(--surface-card); color: var(--text-primary);
+  font-size: 0.74rem; font-weight: 700; cursor: pointer;
+}
+.os-approve-btn[aria-checked="true"] { background: #ECFDF5; color: #065F46; border-color: #059669; }
+.size-guide-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.size-guide-table th, .size-guide-table td { border: 1px solid var(--hairline); padding: 8px; text-align: center; }
+.size-guide-table th { background: var(--surface-muted); color: var(--text-primary); }
+.char-counter-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+.mechanics-composer { border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 10px; margin-top: 6px; }
+.mechanics-composer legend { font-size: 0.76rem; font-weight: 700; color: var(--brand-ink-accent); padding: 0 6px; }
+.mechanics-toggle-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.mech-toggle-btn {
+  display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 44px;
+  padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--hairline);
+  background: var(--surface-subtle); color: var(--text-primary); font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.mech-toggle-btn[aria-pressed="true"] { border-color: var(--brand-primary); background: var(--brand-surface-tint); color: var(--brand-ink-accent); }
 
 /* 3. Sticky Search + Horizontal Category Bar */
 .main-grid { display: block; padding-top: 4px; }
@@ -149,7 +200,7 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn, .pack-chip, .slot-chip, 
 .search-box { position: relative; flex: 1; min-width: 0; }
 .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 .text-input, .select-input, .select-compact {
-  width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--hairline);
+  width: 100%; min-height: 45px; padding: 0 12px; border: 1px solid var(--hairline);
   border-radius: var(--radius-sm); font-family: inherit; background: var(--surface-card); color: var(--text-primary);
 }
 .search-input { min-height: 44px; padding-left: 34px; }

@@ -1,0 +1,14 @@
+{
+  "id": "slot-picker",
+  "reference": { "dossie": "Dossie-REA-Booksy-e-Trinks", "pista": "B", "grau": "A" },
+  "categories": ["barbearia"],
+  "priority": "P0",
+  "ui": { "slots": ["catalog-after-hero", "express-checkout-bar"], "gestures": ["tap", "swipe-days"] },
+  "state": ["selectedDay", "selectedProfessional", "selectedSlot"],
+  "events": ["slot:selected", "booking:express-opened"],
+  "zeroApi": { "storage": "localStorage", "send": "wa.me + .ics", "degradation": "sem bloqueio concorrente em tempo real; envia solicitacao de horario e gera evento .ics local; fluxo expresso de 3-4 toques pulando etapas de entrega" },
+  "offline": true,
+  "a11y": ["role=radiogroup nos dias/profissionais/horarios", "alvo >= 44px"],
+  "budgetKB": 8,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

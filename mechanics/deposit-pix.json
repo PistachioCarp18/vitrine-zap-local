@@ -1,0 +1,14 @@
+{
+  "id": "deposit-pix",
+  "reference": { "dossie": "Dossie-REA-SquareOnline-e-Starbucks", "pista": "B", "grau": "B" },
+  "categories": ["padaria", "floricultura"],
+  "priority": "P0",
+  "ui": { "slots": ["cart-step-1-top", "pix-panel"], "gestures": ["tap"] },
+  "state": ["payDeposit50", "depositAmount", "remainingBalance"],
+  "events": ["deposit:toggled"],
+  "zeroApi": { "storage": "state-derived", "send": "Pix EMV CRC16 + wa.me", "degradation": "split deterministico 50/50 sobre Pix estatico EMV sem webhook bancario" },
+  "offline": true,
+  "a11y": ["button[role=switch] >= 44x44px (elimina bug P0 20x20)", "aria-checked"],
+  "budgetKB": 4,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

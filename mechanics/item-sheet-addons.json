@@ -1,0 +1,14 @@
+{
+  "id": "item-sheet-addons",
+  "reference": { "dossie": "Dossie-REA-iFood-e-MenuDino", "pista": "B", "grau": "B" },
+  "categories": ["lanchonete", "padaria", "floricultura", "custom"],
+  "priority": "P0",
+  "ui": { "slots": ["item-modal", "catalog-card-quick-add"], "gestures": ["tap", "scroll-lock"] },
+  "state": ["selectedVariant", "selectedExtras", "itemNote", "qty"],
+  "events": ["item:quick-add", "item:customized"],
+  "zeroApi": { "storage": "memory+localStorage", "send": "wa.me formatted extras", "degradation": "modificadores definidos estaticamente no pack da loja" },
+  "offline": true,
+  "a11y": ["role=radiogroup nas variantes", "alvo >= 44px", "fechamento por popstate/ESC"],
+  "budgetKB": 8,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "reorder-1-tap",
+  "reference": { "dossie": "Dossie-REA-iFood-e-MenuDino", "pista": "B", "grau": "B" },
+  "categories": ["lanchonete", "padaria", "petshop"],
+  "priority": "P1",
+  "ui": { "slots": ["compact-context-chip"], "gestures": ["tap"] },
+  "state": ["lastCartItems"],
+  "events": ["cart:reordered"],
+  "zeroApi": { "storage": "localStorage", "send": "wa.me", "degradation": "exibe chip compacto apenas quando ha pedido anterior no mesmo aparelho" },
+  "offline": true,
+  "a11y": ["alvo >= 44x44px", "altura maxima chip <= 48px para preservar dobra"],
+  "budgetKB": 5,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

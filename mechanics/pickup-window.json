@@ -1,0 +1,14 @@
+{
+  "id": "pickup-window",
+  "reference": { "dossie": "Dossie-REA-SquareOnline-e-Starbucks", "pista": "B", "grau": "B" },
+  "categories": ["padaria", "floricultura"],
+  "priority": "P0",
+  "ui": { "slots": ["cart-step-2-domain"], "gestures": ["tap"] },
+  "state": ["scheduleDate", "scheduleWindow"],
+  "events": ["schedule:window-selected"],
+  "zeroApi": { "storage": "session+wa.me", "send": "wa.me template", "degradation": "calcula janelas validas localmente por offset de preparo sem KDS em tempo real" },
+  "offline": true,
+  "a11y": ["<label> associado", "alvo >= 44px", "font-size >= 16px"],
+  "budgetKB": 5,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

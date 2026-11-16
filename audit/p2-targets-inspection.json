@@ -1,0 +1,335 @@
+{
+  "inspectedAt": "2026-11-16T17:22:13.125Z",
+  "targets": {
+    "andes-ui": {
+      "url": "https://raw.githubusercontent.com/mercadolibre/fury_andesui-android/develop/LICENSE",
+      "status": 404,
+      "accessible": false,
+      "mitConfirmed": false,
+      "sample": "404: Not Found"
+    },
+    "primer-mit": {
+      "url": "https://raw.githubusercontent.com/primer/css/main/LICENSE",
+      "status": 200,
+      "accessible": true,
+      "mitConfirmed": true,
+      "sample": "The MIT License (MIT)\n\nCopyright (c) 2021 GitHub Inc.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Sof"
+    },
+    "radix-mit": {
+      "url": "https://raw.githubusercontent.com/radix-ui/primitives/main/LICENSE",
+      "status": 200,
+      "accessible": true,
+      "mitConfirmed": true,
+      "sample": "MIT License\n\nCopyright (c) 2022 WorkOS\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without r"
+    },
+    "primer-style": {
+      "url": "https://primer.style/",
+      "status": 200,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "Primer",
+        "headings": [
+          "Primer",
+          "Build UI at GitHub with Primer Product UI",
+          "Create for GitHub using the Brand toolkit",
+          "Design digital marketing experiences with Primer Brand UI",
+          "Shared Foundations",
+          "Design at GitHub"
+        ],
+        "interactiveCount": 3,
+        "transferKB": 1140.5
+      },
+      "tokenCounts": {
+        "hex_colors": 0,
+        "functional_colors": 0,
+        "css_custom_properties": 0,
+        "referenced_urls": 9
+      },
+      "sampleColors": [],
+      "sampleVars": []
+    },
+    "radix-ui": {
+      "url": "https://www.radix-ui.com/",
+      "status": 200,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "Radix UI",
+        "headings": [
+          "Start building\nyour app now",
+          "Start buildingyour app now"
+        ],
+        "interactiveCount": 63,
+        "transferKB": 853.3
+      },
+      "tokenCounts": {
+        "hex_colors": 9,
+        "functional_colors": 2,
+        "css_custom_properties": 32,
+        "referenced_urls": 6
+      },
+      "sampleColors": [
+        "#E18BFF",
+        "#7971E9AA",
+        "#3463",
+        "#3461",
+        "#7514",
+        "#384",
+        "#3456",
+        "#000",
+        "#fff"
+      ],
+      "sampleVars": [
+        "--height:0\" class=\"rt-Box rt-r-h\"><div data-scroll-state=\"at-top\" data-mobile-menu-open=\"false\" class=\"radix-themes radix-themes-custom-fonts header-module__bY5_QG__HeaderRoot header-module__bY5_QG__ghost\" data-is-root-theme=\"false\" data-accent-color=\"indigo\" data-gray-color=\"slate\" data-has-background=\"false\" data-panel-background=\"translucent\" data-radius=\"medium\" data-scaling=\"100%\"><div class=\"header-module__bY5_QG__HeaderInner\"><div class=\"width-before-scroll-bar\" style=\"position:absolute",
+        "--theme-toggle-sun-icon-display: block",
+        "--theme-toggle-moon-icon-display: none",
+        "--theme-toggle-sun-icon-display: none",
+        "--theme-toggle-moon-icon-display: block",
+        "--color-background-image-base:var(--color-background)",
+        "--color-background-image-accent-1:var(--indigo-a7)",
+        "--color-background-image-accent-2:var(--violet-6)",
+        "--color-background-image-accent-3:var(--purple-9)",
+        "--color-background-image-accent-4:var(--blue-5)",
+        "--color-background-image-accent-5:var(--slate-1)",
+        "--color-background-image-accent-6:var(--crimson-a5)"
+      ]
+    },
+    "giuliana-flores": {
+      "url": "https://www.giulianaflores.com.br/",
+      "status": 200,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "A Maior Floricultura Online do Brasil — Entrega Hoje",
+        "headings": [
+          "Escolha o seu Presente",
+          "Entrega para todo o Brasil",
+          "Clube de Assinatura",
+          "Agende o horário da entrega",
+          "Compre pelo Whatsapp",
+          "ENTREGA EM TODO O BRASIL"
+        ],
+        "interactiveCount": 28,
+        "transferKB": 521
+      },
+      "tokenCounts": {
+        "hex_colors": 7,
+        "functional_colors": 0,
+        "css_custom_properties": 0,
+        "referenced_urls": 397
+      },
+      "sampleColors": [
+        "#DA1B28",
+        "#000000",
+        "#FFFFFF",
+        "#197C34",
+        "#FFd700",
+        "#000",
+        "#808080"
+      ],
+      "sampleVars": []
+    },
+    "booksy": {
+      "url": "https://booksy.com/",
+      "status": 200,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "Agende Serviços de Beleza em Poucos Cliques - Booksy",
+        "headings": [
+          "Descubra talentos locais. Agende com confiança.",
+          "Descubra talentos locais. Agende com confiança.",
+          "Aproveite mais com o Booksy",
+          "Encontre o seu especialista do Booksy na sua cidade",
+          "Booksy para empresas"
+        ],
+        "interactiveCount": 34,
+        "transferKB": 210.9
+      },
+      "tokenCounts": {
+        "hex_colors": 57,
+        "functional_colors": 0,
+        "css_custom_properties": 98,
+        "referenced_urls": 224
+      },
+      "sampleColors": [
+        "#00000080",
+        "#fcfcfc",
+        "#f8f8f8",
+        "#f3f3f3",
+        "#ededed",
+        "#e8e8e8",
+        "#e2e2e2",
+        "#dbdbdb",
+        "#c7c7c7",
+        "#8f8f8f"
+      ],
+      "sampleVars": [
+        "--outline-none:focus{outline:none",
+        "--toast-icon-margin-start:-3px",
+        "--toast-icon-margin-end:4px",
+        "--toast-svg-margin-start:-1px",
+        "--toast-svg-margin-end:0px",
+        "--toast-button-margin-start:auto",
+        "--toast-button-margin-end:0",
+        "--toast-icon-margin-start:4px",
+        "--toast-icon-margin-end:-3px",
+        "--toast-svg-margin-start:0px",
+        "--toast-svg-margin-end:-1px",
+        "--toast-button-margin-start:0"
+      ]
+    },
+    "cobasi": {
+      "url": "https://www.cobasi.com.br/",
+      "status": 200,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "Cobasi: aproveite as ofertas na melhor Black Friday Pet",
+        "headings": [
+          "Sobre nós",
+          "Dúvidas",
+          "Mundo Cobasi",
+          "Serviços Pet",
+          "Especiais",
+          "Categorias"
+        ],
+        "interactiveCount": 69,
+        "transferKB": 1947.3
+      },
+      "tokenCounts": {
+        "hex_colors": 7,
+        "functional_colors": 0,
+        "css_custom_properties": 0,
+        "referenced_urls": 214
+      },
+      "sampleColors": [
+        "#00a3b4",
+        "#FFFFFF",
+        "#fff",
+        "#000000",
+        "#009CA6",
+        "#E67500",
+        "#7EB339"
+      ],
+      "sampleVars": []
+    },
+    "square-online": {
+      "url": "https://squareup.com/us/en/online-store",
+      "status": 200,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "Sell online - build a free online store or eCommerce website | Square",
+        "headings": [
+          "WEBSITES\nBuild a free online store that sells itself",
+          "Everything you need in one integrated system",
+          "Go big with your brand",
+          "Create a premium online shopping experience",
+          "Offer shipping, in-store pickup, and delivery",
+          "Widen your reach. Make more sales."
+        ],
+        "interactiveCount": 96,
+        "transferKB": 291.6
+      },
+      "tokenCounts": {
+        "hex_colors": 101,
+        "functional_colors": 27,
+        "css_custom_properties": 1595,
+        "referenced_urls": 776
+      },
+      "sampleColors": [
+        "#006aff",
+        "#05c",
+        "#cee7f3",
+        "#1379f3",
+        "#df3320",
+        "#0bb634",
+        "#a1499c",
+        "#c14f70",
+        "#fff",
+        "#f7f7f7"
+      ],
+      "sampleVars": [
+        "--pwr:metadata:start--><!----> <link rel=\"icon\" href=\"https://pw-renderer-production-c.squarecdn.com/6e24dd66428fac1ebb537173522f54d582e79121/_svelte/favicon.ico\">  <!--[--><meta name=\"description\" content=\"Create and customize an eCommerce website that fits your brand with the all-in-one website platform. Start your free trial today.\"><!--]--> <!--[!--><!--]--> <!--[!--><!--]--> <link rel=\"canonical\" href=\"https://squareup.com/us/en/online-store\"> <meta property=\"og:title\" content=\"Sell online - build a free online store or eCommerce website | Square\"> <meta property=\"og:url\" content=\"https://squareup.com/us/en/online-store\"> <!--[--><!----><meta property=\"og:image\" content=\"https://images.ctfassets.net/2d5q1td6cyxq/7wxVuIkMDFjJcxDggchRjL/bf61a3bfe12155440cde7a78e2bdd63b/PD07129_-_USEN_online_store_social_share.png?w=1200&amp",
+        "--pwr:metadata:end--><!----><!---->",
+        "--square-sans-text: \"Square Sans Text VF\", \"Square Sans Text\", helvetica, arial, sans-serif",
+        "--square-sans-display: \"Square Sans Display VF\", \"Square Sans Display\", helvetica, arial, sans-serif",
+        "--square-sans-mono: \"Square Sans Mono VF\", \"Square Sans Mono\", ui-monospace, menlo, \"Courier New\", monospace",
+        "--color-blue: #006aff",
+        "--color-blue-dark: #05c",
+        "--color-blue-light: #cee7f3",
+        "--color-blue-color-mode-dark: #1379f3",
+        "--color-red: #df3320",
+        "--color-green: #0bb634",
+        "--color-plum: #a1499c"
+      ]
+    },
+    "menudino": {
+      "url": "https://menudino.com/",
+      "status": 200,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "Restaurantes em Sorocaba - MenuDino | MenuDino",
+        "headings": [
+          "Sorocaba",
+          "Lojas",
+          "Delivery em Sorocaba: peça dos melhores restaurantes da sua região"
+        ],
+        "interactiveCount": 25,
+        "transferKB": 568.5
+      },
+      "tokenCounts": {
+        "hex_colors": 28,
+        "functional_colors": 0,
+        "css_custom_properties": 1,
+        "referenced_urls": 179
+      },
+      "sampleColors": [
+        "#FF3008",
+        "#FFD60A",
+        "#FFAA00",
+        "#FFB300",
+        "#C0892A",
+        "#FFF3B0",
+        "#FF7A00",
+        "#FFE066",
+        "#E0F0FF",
+        "#007AFF"
+      ],
+      "sampleVars": [
+        "--hide-scrollbars::-webkit-scrollbar {"
+      ]
+    },
+    "mercadopago-ux": {
+      "url": "https://www.mercadopago.com.br/developers/en/docs/your-integrations/ux-best-practices/introduction",
+      "status": 404,
+      "accessible": true,
+      "gated": false,
+      "metrics": {
+        "title": "Documentação - Mercado Pago Developers",
+        "headings": [
+          "404"
+        ],
+        "interactiveCount": 8,
+        "transferKB": 401.1
+      },
+      "tokenCounts": {
+        "hex_colors": 3,
+        "functional_colors": 1,
+        "css_custom_properties": 1,
+        "referenced_urls": 29
+      },
+      "sampleColors": [
+        "#fff",
+        "#007EB5",
+        "#252537"
+      ],
+      "sampleVars": [
+        "--andes-font-family-inter:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif"
+      ]
+    }
+  }
+}

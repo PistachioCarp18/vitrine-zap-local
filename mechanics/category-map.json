@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "category-map": {
+    "lanchonete": ["item-sheet-addons", "free-shipping-progress", "reorder-1-tap"],
+    "padaria": ["pickup-window", "deposit-pix", "reorder-1-tap"],
+    "petshop": ["autoship-reminder", "reorder-1-tap"],
+    "oficina": ["inspection-checklist"],
+    "barbearia": ["slot-picker"],
+    "moda": ["variant-picker"],
+    "floricultura": ["occasion-card-message", "pickup-window", "deposit-pix"]
+  }
+}

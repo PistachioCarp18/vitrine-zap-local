@@ -26,25 +26,40 @@
     encodeMagicHash,
     decodeMagicHash,
   } = window.VitrineBrandEngine;
+  const {
+    MECHANIC_LABELS,
+    getAllowedMechanicsForCategory,
+    resolveActiveMechanics,
+    loadMechanicsOnDemand,
+  } = window.VitrineMechanicsRegistry;
   const { createStore, decodeStoreConfig, parseBrandUrlParams, exportOrdersCsv } = window.VitrineStore;
   const { NICHE_PRESETS } = window.VitrinePresets;
 
+  window.VitrineMechanics = window.VitrineMechanics || {};
+
   const store = createStore(window.localStorage);
   let state = loadInitialState();
+  let activeMechanics = resolveActiveMechanics(state);
   let cart = [];
   let activeCategory = 'Todos';
+  let activeOccasion = 'Todas';
+  let activeSeverityFilter = 'todos';
   let sortMode = 'featured';
   let deliveryMode = 'Retirada';
   let paymentMethod = 'Pix';
   let activeCouponCode = '';
   let splitPeople = 1;
   let payDeposit50Flag = false;
+  let surpriseGiftFlag = false;
+  let selectedBookingDayIso = new Date().toISOString().slice(0, 10);
+  let selectedBarberFilter = 'Todos';
   let pendingPhotoDataUrl = '';
   let routeInfo = null;
   let weatherInfo = null;
   const selectedPackIdxMap = {};
   const selectedSlotMap = {};
   const selectedSizeMap = {};
+  const osApprovedMap = {};
   let modalState = { item: null, qty: 1, selectedExtras: [], selectedVariant: '', packOverride: null };
 
   const NICHE_EMBLEMS = {
@@ -56,6 +71,10 @@
     moda: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
     floricultura: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 7.5a4.5 4.5 0 1 1 4.5 4.5M12 7.5A4.5 4.5 0 1 0 7.5 12M12 7.5V9m-4.5 3a4.5 4.5 0 1 0 4.5 4.5M7.5 12H9m3 4.5a4.5 4.5 0 1 0 4.5-4.5M12 16.5V15m4.5-3H15"/><circle cx="12" cy="12" r="2"/></svg>',
   };
+
+  function hasMech(id) {
+    return activeMechanics.includes(id);
+  }
 
   function mergePresetWithBrand(basePreset, brandPatch) {
     const merged = JSON.parse(JSON.stringify(basePreset));
@@ -165,23 +184,26 @@
     const drawerOpen = document.getElementById('cart-aside').classList.contains('drawer-open');
     const modalOpen = !document.getElementById('item-modal').classList.contains('hidden');
     const studioOpen = !document.getElementById('merchant-studio-modal').classList.contains('hidden');
-    document.body.classList.toggle('sheet-lock', drawerOpen || modalOpen || studioOpen);
+    const guideOpen = !document.getElementById('size-guide-modal').classList.contains('hidden');
+    document.body.classList.toggle('sheet-lock', drawerOpen || modalOpen || studioOpen || guideOpen);
   }
 
   function setWizardStep(step) {
+    const isExpressBooking = hasMech('slot-picker');
     document.getElementById('checkout-step-1').classList.toggle('hidden', step !== 1);
     document.getElementById('checkout-step-2').classList.toggle('hidden', step !== 2);
-    document.getElementById('wizard-step-label').textContent = `Etapa ${step}/2`;
+    document.getElementById('wizard-back-btn').classList.toggle('hidden', isExpressBooking && cart.length <= 1 && step === 2);
+    document.getElementById('wizard-step-label').textContent = isExpressBooking && step === 2
+      ? 'Reserva Expressa'
+      : `Etapa ${step}/2`;
   }
 
   function pushOverlayHistory(tag) {
-    try {
-      window.history.pushState({ overlay: tag }, '');
-    } catch { /* ignore */ }
+    try { window.history.pushState({ overlay: tag }, ''); } catch { /* ignore */ }
   }
 
-  function openCartDrawer() {
-    setWizardStep(1);
+  function openCartDrawer(initialStep = 1) {
+    setWizardStep(initialStep);
     document.getElementById('cart-aside').classList.add('drawer-open');
     document.getElementById('cart-backdrop').classList.remove('hidden');
     syncBodyScrollLock();
@@ -208,6 +230,29 @@
     syncBodyScrollLock();
   }
 
+  function openSizeGuideModal() {
+    const mod = window.VitrineMechanics['variant-picker'];
+    const html = mod ? mod.renderSizeGuideTableHtml() : '<p>Medidas P (92-96cm) a GG (114-120cm).</p>';
+    document.getElementById('size-guide-body').innerHTML = html;
+    document.getElementById('size-guide-backdrop').classList.remove('hidden');
+    document.getElementById('size-guide-modal').classList.remove('hidden');
+    syncBodyScrollLock();
+    pushOverlayHistory('size-guide');
+  }
+
+  function closeSizeGuideModal() {
+    document.getElementById('size-guide-backdrop').classList.add('hidden');
+    document.getElementById('size-guide-modal').classList.add('hidden');
+    syncBodyScrollLock();
+  }
+
+  function downloadIcsFile(icsContent, filename) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([icsContent], { type: 'text/calendar;charset=utf-8;' }));
+    a.download = filename;
+    a.click();
+  }
+
   function compressImageToWebp(file) {
     return new Promise((resolve) => {
       if (!file) { resolve(''); return; }
@@ -223,11 +268,8 @@
           const w = img.width * scale;
           const h = img.height * scale;
           ctx.drawImage(img, (320 - w) / 2, (320 - h) / 2, w, h);
-          try {
-            resolve(canvas.toDataURL('image/webp', 0.78));
-          } catch {
-            resolve(canvas.toDataURL('image/jpeg', 0.8));
-          }
+          try { resolve(canvas.toDataURL('image/webp', 0.78)); }
+          catch { resolve(canvas.toDataURL('image/jpeg', 0.8)); }
         };
         img.onerror = () => resolve('');
         img.src = String(reader.result || '');
@@ -266,6 +308,7 @@
         itemNote: itemNote.trim(),
         qty,
       });
+      osApprovedMap[cartKey] = true;
     }
     renderCatalog();
     renderCart();
@@ -278,13 +321,11 @@
     if (!variants.length && Array.isArray(item.slots) && item.slots.length) {
       variants = item.slots.map(s => `Horário ${s}`);
       variantLabel = 'Horário livre';
-      const chosenSlot = selectedSlotMap[item.id] || item.slots[0];
-      defaultVariant = `Horário ${chosenSlot}`;
+      defaultVariant = `Horário ${selectedSlotMap[item.id] || item.slots[0]}`;
     } else if (!variants.length && Array.isArray(item.sizes) && item.sizes.length) {
       variants = item.sizes.map(sz => `Tamanho ${sz}`);
       variantLabel = 'Tamanho';
-      const chosenSize = selectedSizeMap[item.id] || item.sizes[0];
-      defaultVariant = `Tamanho ${chosenSize}`;
+      defaultVariant = `Tamanho ${selectedSizeMap[item.id] || item.sizes[0]}`;
     }
 
     const packIdx = selectedPackIdxMap[item.id] ?? item.defaultPackIdx ?? 0;
@@ -311,13 +352,15 @@
     if (variants.length) {
       varWrap.classList.remove('hidden');
       document.getElementById('modal-variant-label').textContent = variantLabel;
+      varList.setAttribute('role', 'radiogroup');
       varList.innerHTML = variants.map(v =>
-        `<button type="button" class="variant-pill ${v === defaultVariant ? 'active' : ''}" data-var="${v}">${v}</button>`
+        `<button type="button" role="radio" aria-checked="${v === defaultVariant ? 'true' : 'false'}" class="variant-pill ${v === defaultVariant ? 'active' : ''}" data-var="${v}">${v}</button>`
       ).join('');
       varList.querySelectorAll('.variant-pill').forEach(btn => {
         btn.addEventListener('click', () => {
-          varList.querySelectorAll('.variant-pill').forEach(b => b.classList.remove('active'));
+          varList.querySelectorAll('.variant-pill').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-checked', 'false'); });
           btn.classList.add('active');
+          btn.setAttribute('aria-checked', 'true');
           modalState.selectedVariant = btn.dataset.var;
         });
       });
@@ -362,18 +405,19 @@
   function updateModalCta() {
     if (!modalState.item) return;
     const base = modalState.packOverride ? Number(modalState.packOverride.price) : Number(modalState.item.price || 0);
-    const extrasTotal = modalState.selectedExtras.reduce((s, e) => s + Number(e.price || 0), 0);
-    const total = (base + extrasTotal) * modalState.qty;
+    const sheetMod = window.VitrineMechanics['item-sheet-addons'];
+    const unit = sheetMod
+      ? sheetMod.calculateModalUnitTotal(base, modalState.selectedExtras)
+      : (base + modalState.selectedExtras.reduce((s, e) => s + Number(e.price || 0), 0));
+    const total = unit * modalState.qty;
     document.getElementById('modal-qty-val').textContent = String(modalState.qty);
     document.getElementById('modal-add-btn').textContent = `Adicionar • ${formatBrl(total)}`;
   }
 
   function renderVerticalContextSlot() {
     const slot = document.getElementById('vertical-context-slot');
-    const modules = state.modules || {};
-    const layoutMode = state.layout?.catalog || state.layoutMode || 'list-thumb';
 
-    if (modules.osTecnica || layoutMode === 'checklist-table' || layoutMode === 'auto-blueprint') {
+    if (hasMech('inspection-checklist')) {
       slot.classList.remove('hidden');
       slot.innerHTML = `
         <div class="auto-vehicle-bar">
@@ -386,20 +430,18 @@
       return;
     }
 
-    if (modules.recompra || layoutMode === 'pet-packs' || layoutMode === 'pet-recurring') {
+    if (hasMech('autoship-reminder')) {
       const profile = store.loadCustomerProfile();
       const currSize = profile.petSize || 'Médio';
       slot.classList.remove('hidden');
       slot.innerHTML = `
         <div class="container pet-reorder-strip">
           <div class="pet-reorder-card">
-            <div class="pet-reorder-top">
-              <button type="button" id="pet-quick-repeat-btn" class="btn-pet-repeat">Repetir último pedido do Pet</button>
-              <div class="pet-size-pills" role="group" aria-label="Porte do Pet">
-                <button type="button" class="pet-size-chip ${currSize === 'Pequeno' ? 'active' : ''}" data-petsize="Pequeno" aria-label="Porte Pequeno">P</button>
-                <button type="button" class="pet-size-chip ${currSize === 'Médio' ? 'active' : ''}" data-petsize="Médio" aria-label="Porte Médio">M</button>
-                <button type="button" class="pet-size-chip ${currSize === 'Grande' ? 'active' : ''}" data-petsize="Grande" aria-label="Porte Grande">G</button>
-              </div>
+            <button type="button" id="pet-quick-repeat-btn" class="btn-pet-repeat">Repetir ${profile.petName ? 'de ' + profile.petName : 'último pedido'}</button>
+            <div class="pet-size-pills" role="radiogroup" aria-label="Porte do Pet">
+              <button type="button" role="radio" aria-checked="${currSize === 'Pequeno' ? 'true' : 'false'}" class="pet-size-chip ${currSize === 'Pequeno' ? 'active' : ''}" data-petsize="Pequeno" aria-label="Porte Pequeno">P</button>
+              <button type="button" role="radio" aria-checked="${currSize === 'Médio' ? 'true' : 'false'}" class="pet-size-chip ${currSize === 'Médio' ? 'active' : ''}" data-petsize="Médio" aria-label="Porte Médio">M</button>
+              <button type="button" role="radio" aria-checked="${currSize === 'Grande' ? 'true' : 'false'}" class="pet-size-chip ${currSize === 'Grande' ? 'active' : ''}" data-petsize="Grande" aria-label="Porte Grande">G</button>
             </div>
           </div>
         </div>`;
@@ -419,11 +461,39 @@
       });
       slot.querySelectorAll('.pet-size-chip').forEach(btn => {
         btn.addEventListener('click', () => {
-          slot.querySelectorAll('.pet-size-chip').forEach(b => b.classList.remove('active'));
+          slot.querySelectorAll('.pet-size-chip').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-checked', 'false'); });
           btn.classList.add('active');
+          btn.setAttribute('aria-checked', 'true');
           const prev = store.loadCustomerProfile();
           store.saveCustomerProfile({ ...prev, petSize: btn.dataset.petsize });
-          showToast(`Porte selecionado: ${btn.dataset.petsize}`);
+          renderCatalog();
+          showToast(`Cálculo ajustado para Porte ${btn.dataset.petsize}`);
+        });
+      });
+      return;
+    }
+
+    if (hasMech('variant-picker')) {
+      slot.classList.remove('hidden');
+      slot.innerHTML = `<div class="container context-compact-row" style="justify-content:flex-end; padding-top:4px;">
+        <button type="button" id="open-size-guide-btn" class="pill-btn">Guia de Medidas (cm)</button>
+      </div>`;
+      slot.querySelector('#open-size-guide-btn').addEventListener('click', openSizeGuideModal);
+      return;
+    }
+
+    if (hasMech('occasion-card-message')) {
+      const occMod = window.VitrineMechanics['occasion-card-message'];
+      const occasions = occMod ? occMod.OCCASIONS : ['Todas', 'Romântico', 'Aniversário', 'Agradecimento'];
+      slot.classList.remove('hidden');
+      slot.innerHTML = `<div class="context-compact-row container" role="radiogroup" aria-label="Ocasião do presente">
+        ${occasions.map(o => `<button type="button" role="radio" aria-checked="${o === activeOccasion ? 'true' : 'false'}" class="pill-btn ${o === activeOccasion ? 'active' : ''}" data-occ="${o}">${o}</button>`).join('')}
+      </div>`;
+      slot.querySelectorAll('[data-occ]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeOccasion = btn.dataset.occ;
+          renderVerticalContextSlot();
+          renderCatalog();
         });
       });
       return;
@@ -437,39 +507,106 @@
     const dm = state.domainMode || 'food-delivery';
     const modules = state.modules || {};
     const box = document.getElementById('dynamic-domain-fields');
-    const isBookingOrQuote = dm === 'service-quote' || dm === 'service-booking';
+    const isBookingOrQuote = dm === 'service-quote' || dm === 'service-booking' || hasMech('slot-picker');
     document.getElementById('delivery-mode-wrap').classList.toggle('hidden', isBookingOrQuote || !modules.freteKm);
-    if (!modules.freteKm) {
+    if (!modules.freteKm || isBookingOrQuote) {
       document.getElementById('address-wrap').classList.add('hidden');
     }
 
-    if (dm === 'food-delivery' || dm === 'retail-variants') {
-      box.classList.add('hidden');
-      box.innerHTML = '';
-      return;
-    }
-    box.classList.remove('hidden');
-
-    if (dm === 'scheduled-order' || dm === 'floral-scheduled' || dm === 'service-booking') {
-      const tmr = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-      const wins = (state.scheduleWindows || ['09:00 - 11:00', '16:00 - 18:30'])
-        .map(w => `<option value="${w}">${w}</option>`).join('');
-      const notePrompt = dm === 'floral-scheduled'
-        ? 'Mensagem do Cartão Dedicatória'
-        : (dm === 'service-booking' ? 'Preferência de Profissional / Estilo' : 'Dizeres do Topo de Bolo / Cartão');
+    if (hasMech('slot-picker')) {
+      const spMod = window.VitrineMechanics['slot-picker'];
+      const days = spMod ? spMod.getUpcomingDays(4) : [{ iso: selectedBookingDayIso, label: 'Hoje' }];
+      const profs = ['Qualquer profissional', ...new Set((state.items || []).flatMap(i => String(i.barber || '').split('/').map(s => s.trim())).filter(Boolean))];
+      box.classList.remove('hidden');
       box.innerHTML = `
         <div class="domain-grid-2">
-          <label class="field-label">Data<input type="date" id="sched-date" class="text-input mono" value="${tmr}" /></label>
-          <label class="field-label">Horário<select id="sched-window" class="select-input">${wins}</select></label>
+          <label class="field-label">Dia da Reserva
+            <select id="sched-date" class="select-input">
+              ${days.map(d => `<option value="${d.iso}" ${d.iso === selectedBookingDayIso ? 'selected' : ''}>${d.label} (${d.iso.slice(5).split('-').reverse().join('/')})</option>`).join('')}
+            </select>
+          </label>
+          <label class="field-label">Profissional
+            <select id="sched-window" class="select-input">
+              ${profs.map(p => `<option value="${p}">${p}</option>`).join('')}
+            </select>
+          </label>
         </div>
-        <label class="field-label">${notePrompt}
-          <input type="text" id="cake-message" class="text-input" placeholder="${dm === 'service-booking' ? 'Ex: Com o barbeiro Thiago' : 'Ex: Parabéns Júlia!'}" />
+        <button type="button" id="download-booking-ics-btn" class="btn btn-secondary btn-sm full-width">Salvar Lembrete na Agenda (.ics)</button>`;
+      box.querySelector('#sched-date').addEventListener('change', (e) => { selectedBookingDayIso = e.target.value; });
+      box.querySelector('#download-booking-ics-btn').addEventListener('click', () => {
+        if (!spMod || !cart.length) { showToast('Selecione um serviço antes.'); return; }
+        const first = cart[0];
+        const slot = String(first.selectedVariant || '').replace('Horário ', '') || '10:00';
+        const ics = spMod.buildBookingIcsEvent({
+          storeName: state.storeName,
+          serviceName: first.name,
+          professional: document.getElementById('sched-window').value,
+          dateIso: document.getElementById('sched-date').value,
+          timeSlot: slot,
+        });
+        downloadIcsFile(ics, `agendamento-${state.id || 'barbearia'}.ics`);
+        showToast('Arquivo .ics gerado offline!');
+      });
+      return;
+    }
+
+    if (hasMech('occasion-card-message')) {
+      const occMod = window.VitrineMechanics['occasion-card-message'];
+      const pkMod = window.VitrineMechanics['pickup-window'];
+      const tmr = pkMod ? pkMod.getTomorrowIso() : new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      const wins = pkMod ? pkMod.resolveAvailableWindows(state.scheduleWindows) : ['08:30 - 11:30', '13:30 - 16:30'];
+      const templates = occMod ? occMod.CARD_TEMPLATES : [];
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <div class="domain-grid-2">
+          <label class="field-label">Data Entrega<input type="date" id="sched-date" class="text-input mono" value="${tmr}" /></label>
+          <label class="field-label">Período<select id="sched-window" class="select-input">${wins.map(w => `<option value="${w}">${w}</option>`).join('')}</select></label>
+        </div>
+        <div class="field-label">
+          <label for="cake-message" class="field-label-text">Cartão Dedicatória</label>
+          <div class="quick-tags">${templates.map(t => `<button type="button" class="quick-tag-btn card-tpl-btn" data-txt="${t.text}">+ ${t.occasion}</button>`).join('')}</div>
+          <input type="text" id="cake-message" maxlength="160" class="text-input" placeholder="Escreva sua mensagem..." />
+          <div class="char-counter-row"><span>Opcional</span><span id="card-char-count" class="mono" aria-live="polite">0/160</span></div>
+        </div>
+        <button type="button" id="surprise-gift-switch" role="switch" aria-checked="${surpriseGiftFlag ? 'true' : 'false'}" class="deposit-switch-btn surprise-switch-btn ${surpriseGiftFlag ? 'active' : ''}">
+          <span>Presente surpresa (não revelar meu nome)</span>
+          <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        </button>`;
+      const msgEl = box.querySelector('#cake-message');
+      const cntEl = box.querySelector('#card-char-count');
+      msgEl.addEventListener('input', () => { cntEl.textContent = `${msgEl.value.length}/160`; });
+      box.querySelectorAll('.card-tpl-btn').forEach(b => b.addEventListener('click', () => {
+        msgEl.value = b.dataset.txt;
+        cntEl.textContent = `${msgEl.value.length}/160`;
+      }));
+      const surBtn = box.querySelector('#surprise-gift-switch');
+      surBtn.addEventListener('click', () => {
+        surpriseGiftFlag = !surpriseGiftFlag;
+        surBtn.classList.toggle('active', surpriseGiftFlag);
+        surBtn.setAttribute('aria-checked', surpriseGiftFlag ? 'true' : 'false');
+      });
+      return;
+    }
+
+    if (hasMech('pickup-window') || dm === 'scheduled-order') {
+      const pkMod = window.VitrineMechanics['pickup-window'];
+      const tmr = pkMod ? pkMod.getTomorrowIso() : new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      const wins = pkMod ? pkMod.resolveAvailableWindows(state.scheduleWindows) : (state.scheduleWindows || ['08:00 - 10:00', '16:00 - 18:30']);
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <div class="domain-grid-2">
+          <label class="field-label">Data Encomenda<input type="date" id="sched-date" class="text-input mono" value="${tmr}" /></label>
+          <label class="field-label">Janela Horário<select id="sched-window" class="select-input">${wins.map(w => `<option value="${w}">${w}</option>`).join('')}</select></label>
+        </div>
+        <label class="field-label">Dizeres do Topo de Bolo / Cartão
+          <input type="text" id="cake-message" class="text-input" placeholder="Ex: Parabéns Júlia!" />
         </label>`;
       return;
     }
 
-    if (dm === 'recurring-pet') {
+    if (hasMech('autoship-reminder')) {
       const profile = store.loadCustomerProfile();
+      box.classList.remove('hidden');
       box.innerHTML = `
         <div class="domain-grid-2">
           <label class="field-label">Nome do Pet<input type="text" id="pet-name" class="text-input" value="${profile.petName || ''}" placeholder="Ex: Thor" /></label>
@@ -481,23 +618,38 @@
             </select>
           </label>
         </div>
-        <label class="field-label">Lembrete de recompra
-          <select id="pet-remind-days" class="select-input">
-            <option value="30">Avisar daqui a 30 dias</option>
-            <option value="15">Avisar daqui a 15 dias</option>
-            <option value="">Sem lembrete</option>
-          </select>
-        </label>`;
+        <div class="domain-grid-2">
+          <label class="field-label">Lembrete recompra
+            <select id="pet-remind-days" class="select-input">
+              <option value="30">Em 30 dias</option>
+              <option value="15">Em 15 dias</option>
+              <option value="45">Em 45 dias</option>
+              <option value="">Sem lembrete</option>
+            </select>
+          </label>
+          <div class="field-label" style="justify-content:flex-end;">
+            <button type="button" id="download-pet-ics-btn" class="btn btn-secondary btn-sm">Lembrete (.ics)</button>
+          </div>
+        </div>`;
+      box.querySelector('#download-pet-ics-btn').addEventListener('click', () => {
+        const autoMod = window.VitrineMechanics['autoship-reminder'];
+        const days = Number(document.getElementById('pet-remind-days').value || 30);
+        if (autoMod) {
+          downloadIcsFile(autoMod.buildPetReminderIcs(state.storeName, document.getElementById('pet-name').value, days), 'recompra-pet.ics');
+          showToast('Lembrete .ics gerado offline!');
+        }
+      });
       return;
     }
 
-    if (dm === 'service-quote') {
+    if (hasMech('inspection-checklist')) {
       const qModelEl = document.getElementById('quick-veh-model');
       const qPlateEl = document.getElementById('quick-veh-plate');
       const qModel = qModelEl ? qModelEl.value : '';
       const qPlate = qPlateEl ? qPlateEl.value : '';
       const sympBtns = (state.symptoms || ['Barulho ao frear', 'Revisão preventiva'])
         .map(s => `<button type="button" class="quick-tag-btn symp-btn" data-symp="${s}">${s}</button>`).join('');
+      box.classList.remove('hidden');
       box.innerHTML = `
         <div class="domain-grid-2">
           <label class="field-label">Veículo / Modelo *<input type="text" id="veh-model" list="fipe-vehicles-list" class="text-input" value="${qModel}" placeholder="Ex: Onix 1.0" /></label>
@@ -511,7 +663,11 @@
       box.querySelectorAll('.symp-btn').forEach(btn => {
         btn.addEventListener('click', () => { document.getElementById('veh-symptom').value = btn.dataset.symp; });
       });
+      return;
     }
+
+    box.classList.add('hidden');
+    box.innerHTML = '';
   }
 
   function applyTheme() {
@@ -629,18 +785,23 @@
     sel.innerHTML = Object.values(NICHE_PRESETS)
       .map(p => `<option value="${p.id}" ${p.id === state.id ? 'selected' : ''}>${p.label} — ${p.storeName}</option>`)
       .join('');
-    sel.addEventListener('change', (e) => {
+    sel.addEventListener('change', async (e) => {
       const preset = NICHE_PRESETS[e.target.value];
       if (!preset) return;
       state = JSON.parse(JSON.stringify(preset));
+      activeMechanics = resolveActiveMechanics(state);
       cart = [];
       activeCategory = 'Todos';
+      activeOccasion = 'Todas';
+      activeSeverityFilter = 'todos';
       activeCouponCode = '';
       splitPeople = 1;
       payDeposit50Flag = false;
+      surpriseGiftFlag = false;
       routeInfo = null;
       document.getElementById('coupon-input').value = '';
       store.saveState(state);
+      await loadMechanicsOnDemand(activeMechanics);
       renderAll();
       window.scrollTo({ top: 0 });
       showToast(`Vertical carregada: ${preset.storeName}`);
@@ -669,7 +830,7 @@
 
   function renderItemStepperOrBtn(item, customLabel, isMini = false) {
     const qtyInCart = cart.filter(c => c.id === item.id).reduce((s, c) => s + c.qty, 0);
-    if (qtyInCart > 0) {
+    if (qtyInCart > 0 && !hasMech('slot-picker')) {
       return `<div class="qty-inline">
         <button type="button" class="card-dec-btn" data-id="${item.id}" aria-label="Remover 1 ${item.name}">-</button>
         <span>${qtyInCart}</span>
@@ -686,6 +847,10 @@
       if (item.paused) return false;
       const matchCat = activeCategory === 'Todos' || item.category === activeCategory;
       const matchText = !q || item.name.toLowerCase().includes(q) || (item.description || '').toLowerCase().includes(q) || (item.sku || '').toLowerCase().includes(q);
+      if (hasMech('occasion-card-message') && activeOccasion !== 'Todas') {
+        const occHay = `${item.name} ${item.description} ${item.category} ${item.yieldLabel || ''}`.toLowerCase();
+        if (activeOccasion === 'Romântico' && !/rosa|orqu[ií]dea|buqu[eê]/i.test(occHay)) return matchCat && matchText;
+      }
       return matchCat && matchText;
     });
 
@@ -701,6 +866,9 @@
 
     const layoutMode = state.layout?.catalog || state.layoutMode || 'list-thumb';
     const emblem = NICHE_EMBLEMS[state.vertical || state.id] || NICHE_EMBLEMS.lanchonete;
+    const petMod = window.VitrineMechanics['autoship-reminder'];
+    const inspMod = window.VitrineMechanics['inspection-checklist'];
+    const petProfile = store.loadCustomerProfile();
 
     grid.innerHTML = list.map(item => {
       const visualContent = item.photoDataUrl ? `<img src="${item.photoDataUrl}" alt="${item.name}" />` : emblem;
@@ -720,8 +888,8 @@
               ${item.barber ? `<div class="cart-row-sub" style="margin-top:4px;">${item.barber}</div>` : ''}
             </div>
           </div>
-          <div class="agenda-slots-row" role="group" aria-label="Horários para ${item.name}">
-            ${slots.map(sl => `<button type="button" class="slot-chip ${sl === currSlot ? 'active' : ''}" data-item="${item.id}" data-slot="${sl}">${sl}</button>`).join('')}
+          <div class="agenda-slots-row" role="radiogroup" aria-label="Horários para ${item.name}">
+            ${slots.map(sl => `<button type="button" role="radio" aria-checked="${sl === currSlot ? 'true' : 'false'}" class="slot-chip ${sl === currSlot ? 'active' : ''}" data-item="${item.id}" data-slot="${sl}">${sl}</button>`).join('')}
           </div>
           <div class="agenda-card-foot">
             <strong class="food-price mono">${formatBrl(item.price)}</strong>
@@ -739,8 +907,8 @@
           <div class="fashion-body">
             ${item.colorTag ? `<span class="fashion-color-tag">${item.colorTag}</span>` : ''}
             <h3>${item.name}</h3>
-            <div class="size-chips-row" role="group" aria-label="Tamanhos de ${item.name}">
-              ${sizes.map(sz => `<button type="button" class="size-chip ${sz === currSize ? 'active' : ''}" data-item="${item.id}" data-size="${sz}">${sz}</button>`).join('')}
+            <div class="size-chips-row" role="radiogroup" aria-label="Tamanhos de ${item.name}">
+              ${sizes.map(sz => `<button type="button" role="radio" aria-checked="${sz === currSize ? 'true' : 'false'}" class="size-chip ${sz === currSize ? 'active' : ''}" data-item="${item.id}" data-size="${sz}">${sz}</button>`).join('')}
             </div>
             <strong class="bakery-price mono">${formatBrl(item.price)}</strong>
             <button type="button" class="bakery-cta add-btn" data-id="${item.id}">Adicionar (${currSize})</button>
@@ -765,9 +933,17 @@
         const pIdx = selectedPackIdxMap[item.id] ?? item.defaultPackIdx ?? 0;
         const activePack = packs[pIdx] || null;
         const dispPrice = activePack ? activePack.price : item.price;
+        let durationBadge = item.cycleLabel || '';
+        if (hasMech('autoship-reminder') && petMod && activePack) {
+          const kg = petMod.extractKgFromLabel(activePack.label);
+          if (kg) {
+            const days = petMod.calculateFoodDurationDays(kg, petProfile.petSize || 'Médio');
+            durationBadge = `Dura ~${days} dias (${petProfile.petSize || 'Médio'})`;
+          }
+        }
         const chipsHtml = packs.length
-          ? `<div class="pet-pack-chips">${packs.map((pk, idx) =>
-              `<button type="button" class="pack-chip ${idx === pIdx ? 'active' : ''}" data-item="${item.id}" data-idx="${idx}">${pk.label}</button>`
+          ? `<div class="pet-pack-chips" role="radiogroup" aria-label="Opções de ${item.name}">${packs.map((pk, idx) =>
+              `<button type="button" role="radio" aria-checked="${idx === pIdx ? 'true' : 'false'}" class="pack-chip ${idx === pIdx ? 'active' : ''}" data-item="${item.id}" data-idx="${idx}">${pk.label}</button>`
             ).join('')}</div>`
           : '';
         return `<article class="pet-card" data-open-id="${item.id}">
@@ -776,7 +952,7 @@
               <h3>${item.name}</h3>
               <p class="food-desc">${item.description || ''}</p>
             </div>
-            ${item.cycleLabel ? `<span class="pet-cycle-badge">${item.cycleLabel}</span>` : ''}
+            ${durationBadge ? `<span class="pet-cycle-badge">${durationBadge}</span>` : ''}
           </div>
           ${chipsHtml}
           <div class="pet-card-foot">
@@ -787,9 +963,14 @@
       }
 
       if (layoutMode === 'auto-blueprint' || layoutMode === 'checklist-table') {
+        const sevKey = inspMod ? inspMod.getItemSeverity(item) : 'rotina';
+        const sevMeta = inspMod ? inspMod.SEVERITY_MAP[sevKey] : { label: 'Rotina', badgeClass: 'sev-ok' };
         return `<article class="auto-card" data-open-id="${item.id}">
           <div class="auto-card-top">
-            <span class="auto-sku">[${item.sku || 'OS-SRV'}]</span>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="auto-sku">[${item.sku || 'OS-SRV'}]</span>
+              ${hasMech('inspection-checklist') ? `<span class="sev-badge ${sevMeta.badgeClass}">${sevMeta.label}</span>` : ''}
+            </div>
             <span class="auto-warranty">${item.warranty || 'Garantia 90 dias'}</span>
           </div>
           <h3>${item.name}</h3>
@@ -863,7 +1044,12 @@
         let variant = '';
         if (selectedSlotMap[item.id]) variant = `Horário ${selectedSlotMap[item.id]}`;
         else if (selectedSizeMap[item.id]) variant = `Tam. ${selectedSizeMap[item.id]}`;
+
         addItemToCart(item, 1, [], '', variant, pack);
+        // Fluxo expresso (3-4 toques) na Barbearia via slot-picker
+        if (hasMech('slot-picker')) {
+          openCartDrawer(2);
+        }
       });
     });
 
@@ -881,18 +1067,24 @@
     });
   }
 
+  function getApprovedCartItems() {
+    if (!hasMech('inspection-checklist')) return cart;
+    return cart.filter(c => osApprovedMap[c.cartKey] !== false);
+  }
+
   function getTotalsWithPromos() {
     const modules = state.modules || {};
-    const rawSubtotal = cart.reduce((acc, item) => acc + Number(item.qty || 0) * getItemUnitPrice(item), 0);
+    const activeItems = getApprovedCartItems();
+    const rawSubtotal = activeItems.reduce((acc, item) => acc + Number(item.qty || 0) * getItemUnitPrice(item), 0);
     const dynamicBaseFee = routeInfo ? Number(routeInfo.deliveryFee) : Number(state.deliveryFee || 0);
     const freeProg = calculateFreeDeliveryProgress(rawSubtotal, state.freeDeliveryThreshold || 0, dynamicBaseFee);
     const fee = (deliveryMode === 'Entrega' && modules.freteKm) ? freeProg.effectiveDeliveryFee : 0;
     const { applied, discountAmount } = resolveCouponDiscount(rawSubtotal, activeCouponCode, state.coupons || []);
-    const totals = calculateCartTotals(cart, fee, discountAmount);
-    const payDeposit50 = Boolean(modules.sinalPix && payDeposit50Flag);
+    const totals = calculateCartTotals(activeItems, fee, discountAmount);
+    const payDeposit50 = Boolean((hasMech('deposit-pix') || modules.sinalPix) && payDeposit50Flag);
     const depositInfo = calculateDepositAmount(totals.total, 0.5);
     const split = calculateSplitBill(totals.total, splitPeople);
-    return { totals, applied, freeProg, payDeposit50, depositInfo, split };
+    return { totals, applied, freeProg, payDeposit50, depositInfo, split, activeItems };
   }
 
   function renderCart() {
@@ -900,28 +1092,33 @@
     const modules = state.modules || {};
     const { totals, applied, freeProg, payDeposit50, depositInfo, split } = getTotalsWithPromos();
 
-    // Renderiza modulos exclusivos da vertical apenas quando habilitados
     const topSlot = document.getElementById('cart-modules-top');
     let topHtml = '';
-    if (modules.freteKm && freeProg.enabled) {
-      const barTxt = freeProg.unlocked
-        ? 'Entrega Grátis desbloqueada!'
-        : `Faltam ${formatBrl(freeProg.remaining)} para Entrega Grátis`;
-      topHtml += `<div id="free-delivery-box" class="free-bar-card">
-        <div class="free-bar-top"><span>${barTxt}</span><span class="mono">${freeProg.percent}%</span></div>
-        <div class="free-progress-track"><div class="free-progress-fill" style="width:${freeProg.percent}%"></div></div>
-      </div>`;
+    if (hasMech('free-shipping-progress') && freeProg.enabled) {
+      const fMod = window.VitrineMechanics['free-shipping-progress'];
+      if (fMod) {
+        topHtml += fMod.renderFreeBarHtml({
+          enabled: freeProg.enabled,
+          unlocked: freeProg.unlocked,
+          remainingFormatted: formatBrl(freeProg.remaining),
+          percent: freeProg.percent,
+        });
+      }
     }
-    if (modules.sinalPix) {
-      topHtml += `<label id="padaria-deposit-wrap" class="deposit-toggle-box">
-        <input type="checkbox" id="pay-deposit-50" ${payDeposit50Flag ? 'checked' : ''} />
-        <span>Pagar sinal de 50% via Pix agora (restante na entrega/retirada)</span>
-      </label>`;
+    if (hasMech('deposit-pix')) {
+      const dMod = window.VitrineMechanics['deposit-pix'];
+      topHtml += dMod
+        ? dMod.renderDepositSwitchHtml(payDeposit50Flag)
+        : `<button type="button" id="pay-deposit-50" role="switch" aria-checked="${payDeposit50Flag ? 'true' : 'false'}" class="deposit-switch-btn ${payDeposit50Flag ? 'active' : ''}"><span>Pagar sinal de 50% via Pix agora</span><span class="switch-track"><span class="switch-thumb"></span></span></button>`;
     }
     topSlot.innerHTML = topHtml;
-    const depCheck = document.getElementById('pay-deposit-50');
-    if (depCheck) {
-      depCheck.addEventListener('change', (e) => { payDeposit50Flag = e.target.checked; renderCart(); });
+
+    const depBtn = document.getElementById('pay-deposit-50');
+    if (depBtn) {
+      depBtn.addEventListener('click', () => {
+        payDeposit50Flag = !payDeposit50Flag;
+        renderCart();
+      });
     }
 
     const splitSlot = document.getElementById('cart-split-slot');
@@ -974,11 +1171,20 @@
       return;
     }
 
+    const isOsApproval = hasMech('inspection-checklist');
     wrap.innerHTML = cart.map(c => {
       const packHtml = c.selectedPack ? `<div class="cart-row-sub">Opção: ${c.selectedPack}</div>` : '';
       const varHtml = c.selectedVariant ? `<div class="cart-row-sub">${c.selectedVariant}</div>` : '';
       const extrasNames = Array.isArray(c.selectedExtras) && c.selectedExtras.length
         ? `<div class="cart-row-sub">+ ${c.selectedExtras.map(e => e.name).join(', ')}</div>` : '';
+      const osApproved = osApprovedMap[c.cartKey] !== false;
+      const rightControl = isOsApproval
+        ? `<button type="button" class="os-approve-btn" role="switch" aria-checked="${osApproved ? 'true' : 'false'}" data-key="${c.cartKey}">${osApproved ? 'Aprovado' : 'Adiado'}</button>`
+        : `<div class="qty-controls">
+            <button type="button" class="qty-btn dec" data-key="${c.cartKey}" aria-label="Diminuir ${c.name}">-</button>
+            <strong class="mono">${c.qty}</strong>
+            <button type="button" class="qty-btn inc" data-key="${c.cartKey}" aria-label="Aumentar ${c.name}">+</button>
+          </div>`;
       return `
         <div class="cart-row">
           <div>
@@ -986,13 +1192,15 @@
             ${packHtml}${varHtml}${extrasNames}
             <div class="cart-row-sub mono">${formatBrl(getItemUnitPrice(c))} un.</div>
           </div>
-          <div class="qty-controls">
-            <button type="button" class="qty-btn dec" data-key="${c.cartKey}" aria-label="Diminuir ${c.name}">-</button>
-            <strong class="mono">${c.qty}</strong>
-            <button type="button" class="qty-btn inc" data-key="${c.cartKey}" aria-label="Aumentar ${c.name}">+</button>
-          </div>
+          ${rightControl}
         </div>`;
     }).join('');
+
+    wrap.querySelectorAll('.os-approve-btn').forEach(b => b.addEventListener('click', () => {
+      const curr = osApprovedMap[b.dataset.key] !== false;
+      osApprovedMap[b.dataset.key] = !curr;
+      renderCart();
+    }));
 
     wrap.querySelectorAll('.inc').forEach(b => b.addEventListener('click', () => {
       const found = cart.find(c => c.cartKey === b.dataset.key);
@@ -1009,12 +1217,17 @@
   }
 
   function getCheckoutPayload() {
-    const { totals, applied, freeProg, payDeposit50 } = getTotalsWithPromos();
+    const { totals, applied, freeProg, payDeposit50, activeItems } = getTotalsWithPromos();
     const dm = state.domainMode || 'food-delivery';
     const valOf = (id) => {
       const el = document.getElementById(id);
       return el ? String(el.value || '').trim() : '';
     };
+    let cakeMessage = valOf('cake-message');
+    if (hasMech('occasion-card-message')) {
+      const occMod = window.VitrineMechanics['occasion-card-message'];
+      cakeMessage = occMod ? occMod.formatCardSummary(cakeMessage, surpriseGiftFlag) : cakeMessage;
+    }
     return {
       storeName: state.identity?.name || state.storeName,
       storeWhatsapp: state.contact?.whatsapp || state.whatsapp,
@@ -1029,13 +1242,13 @@
       deliveryFee: deliveryMode === 'Entrega' ? freeProg.effectiveDeliveryFee : 0,
       discount: totals.discount,
       couponCode: applied ? applied.code : '',
-      items: cart,
+      items: activeItems,
       routeInfo,
       mode: state.mode,
       domainMode: dm,
       scheduleDate: valOf('sched-date'),
       scheduleWindow: valOf('sched-window'),
-      cakeMessage: valOf('cake-message'),
+      cakeMessage,
       payDeposit50,
       petName: valOf('pet-name'),
       petSize: valOf('pet-size'),
@@ -1047,7 +1260,8 @@
   }
 
   function validateOrder() {
-    if (!cart.length) { showToast('Adicione pelo menos 1 item.'); return false; }
+    const { activeItems } = getTotalsWithPromos();
+    if (!activeItems.length) { showToast('Selecione/aprove pelo menos 1 item.'); return false; }
     const custName = document.getElementById('cust-name').value.trim();
     if (!custName) { showToast('Informe seu nome.'); document.getElementById('cust-name').focus(); return false; }
     persistCustomerProfile();
@@ -1066,10 +1280,10 @@
   }
 
   function handleGeneratePix() {
-    if (!cart.length) { showToast('Adicione itens à sacola.'); return; }
+    const { totals, payDeposit50, depositInfo, activeItems } = getTotalsWithPromos();
+    if (!activeItems.length) { showToast('Adicione itens à sacola.'); return; }
     const pixKey = state.pixKey || state.contact?.pixKey;
     if (!pixKey) { showToast('Configure a Chave Pix no Estúdio.'); return; }
-    const { totals, payDeposit50, depositInfo } = getTotalsWithPromos();
     const pixValue = payDeposit50 ? depositInfo.deposit : totals.total;
     const merchantCity = state.geo?.city || 'Sorocaba';
     const merchantName = state.identity?.name || state.storeName;
@@ -1110,6 +1324,33 @@
     window.print();
   }
 
+  function renderStudioMechanicsComposer() {
+    const wrap = document.getElementById('studio-mechanics-list');
+    if (!wrap) return;
+    const cat = state.vertical || state.id || 'lanchonete';
+    const allowed = getAllowedMechanicsForCategory(cat);
+    wrap.innerHTML = allowed.map(id => {
+      const on = hasMech(id);
+      return `<button type="button" class="mech-toggle-btn" data-mech="${id}" aria-pressed="${on ? 'true' : 'false'}">
+        <span>${MECHANIC_LABELS[id] || id}</span>
+        <strong class="mono">${on ? 'ATIVA' : 'OFF'}</strong>
+      </button>`;
+    }).join('');
+    wrap.querySelectorAll('[data-mech]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.mech;
+        const nextSet = new Set(activeMechanics);
+        if (nextSet.has(id)) nextSet.delete(id);
+        else nextSet.add(id);
+        state.enabledMechanics = Array.from(nextSet);
+        activeMechanics = resolveActiveMechanics(state);
+        await loadMechanicsOnDemand(activeMechanics);
+        store.saveState(state);
+        renderAll();
+      });
+    });
+  }
+
   function renderStudioPanel() {
     const today = new Date().toISOString().slice(0, 10);
     const summary = store.getDailySummary(today);
@@ -1135,7 +1376,8 @@
     document.getElementById('cfg-close').value = state.closeHour || '22:00';
     document.getElementById('cfg-color').value = state.color?.seed || state.primaryColor || '#B42318';
 
-    // Magic Hash privado sem exposicao de chave Pix em query string
+    renderStudioMechanicsComposer();
+
     const shareUrl = encodeMagicHash(window.location.href, {
       vertical: state.vertical || state.id || 'lanchonete',
       identity: {
@@ -1202,6 +1444,7 @@
   }
 
   function renderAll() {
+    activeMechanics = resolveActiveMechanics(state);
     applyTheme();
     renderCategories();
     renderCatalog();
@@ -1290,14 +1533,17 @@
     initOpenApisBackground();
 
     window.addEventListener('popstate', () => {
+      closeSizeGuideModal();
       closeItemModal();
       closeStudioModal();
       closeCartDrawer();
     });
 
-    window.addEventListener('hashchange', () => {
+    window.addEventListener('hashchange', async () => {
       if (window.location.hash && window.location.hash.includes('brand=')) {
         state = loadInitialState();
+        activeMechanics = resolveActiveMechanics(state);
+        await loadMechanicsOnDemand(activeMechanics);
         cart = [];
         activeCategory = 'Todos';
         renderAll();
@@ -1344,6 +1590,9 @@
     document.getElementById('close-studio-btn').addEventListener('click', closeStudioModal);
     document.getElementById('studio-backdrop').addEventListener('click', closeStudioModal);
 
+    document.getElementById('close-size-guide-btn').addEventListener('click', closeSizeGuideModal);
+    document.getElementById('size-guide-backdrop').addEventListener('click', closeSizeGuideModal);
+
     document.getElementById('theme-toggle-btn').addEventListener('click', () => {
       const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
@@ -1352,7 +1601,8 @@
     });
 
     document.getElementById('wizard-next-btn').addEventListener('click', () => {
-      if (!cart.length) { showToast('Adicione pelo menos 1 item antes de continuar.'); return; }
+      const { activeItems } = getTotalsWithPromos();
+      if (!activeItems.length) { showToast('Adicione pelo menos 1 item antes de continuar.'); return; }
       renderDynamicDomainFields();
       setWizardStep(2);
     });
@@ -1393,7 +1643,9 @@
       });
     });
 
-    document.getElementById('mobile-cart-bar').addEventListener('click', openCartDrawer);
+    document.getElementById('mobile-cart-bar').addEventListener('click', () => {
+      openCartDrawer(hasMech('slot-picker') && cart.length > 0 ? 2 : 1);
+    });
     document.getElementById('close-cart-drawer-btn').addEventListener('click', closeCartDrawer);
     document.getElementById('cart-backdrop').addEventListener('click', closeCartDrawer);
 
@@ -1405,7 +1657,8 @@
       if (!modalState.item) return;
       addItemToCart(modalState.item, modalState.qty, modalState.selectedExtras, document.getElementById('modal-item-note').value, modalState.selectedVariant, modalState.packOverride);
       closeItemModal();
-      showToast(`${modalState.item.name} adicionado!`);
+      if (hasMech('slot-picker')) openCartDrawer(2);
+      else showToast(`${modalState.item.name} adicionado!`);
     });
 
     document.getElementById('send-wa-btn').addEventListener('click', handleSendWhatsApp);
@@ -1533,16 +1786,20 @@
     });
   }
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  async function bootstrap() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+    initTheme();
+    hydrateCustomerProfile();
+    await loadMechanicsOnDemand(activeMechanics);
+    initSwitcher();
+    bindEvents();
+    renderAll();
+    if (new URLSearchParams(window.location.search).get('studio') === '1') {
+      openStudioModal();
+    }
   }
 
-  initTheme();
-  hydrateCustomerProfile();
-  initSwitcher();
-  bindEvents();
-  renderAll();
-  if (new URLSearchParams(window.location.search).get('studio') === '1') {
-    openStudioModal();
-  }
+  bootstrap();
 })();

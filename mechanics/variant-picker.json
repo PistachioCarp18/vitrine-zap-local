@@ -1,0 +1,14 @@
+{
+  "id": "variant-picker",
+  "reference": { "dossie": "Dossie-REA-MercadoLivre-Andes-e-Dawn", "pista": "A+B", "grau": "A" },
+  "categories": ["moda"],
+  "priority": "P0",
+  "ui": { "slots": ["catalog-cards", "size-guide-modal"], "gestures": ["tap"] },
+  "state": ["selectedSize", "sizeGuideOpen"],
+  "events": ["variant:selected", "size-guide:opened"],
+  "zeroApi": { "storage": "pack-declarative", "send": "wa.me reserva com tamanho e cor", "degradation": "disponibilidade por variante declarada no JSON sem consulta ERP em tempo real" },
+  "offline": true,
+  "a11y": ["role=radiogroup nos tamanhos", "aria-checked", "alvo >= 44px", "dialog ARIA no Guia de Medidas"],
+  "budgetKB": 8,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

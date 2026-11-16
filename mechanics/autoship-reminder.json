@@ -1,0 +1,14 @@
+{
+  "id": "autoship-reminder",
+  "reference": { "dossie": "Dossie-REA-Chewy-e-Cobasi", "pista": "B", "grau": "B" },
+  "categories": ["petshop"],
+  "priority": "P0",
+  "ui": { "slots": ["compact-context-chip", "cart-step-2-domain"], "gestures": ["tap"] },
+  "state": ["petName", "petSize", "petWeightKg", "petRemindDays", "estimatedDurationDays"],
+  "events": ["pet:duration-calculated", "pet:reminder-set"],
+  "zeroApi": { "storage": "localStorage", "send": "wa.me + .ics calendar download", "degradation": "sem cobranca automatica em cartao; calcula duracao estimada por porte/peso e exporta lembrete local" },
+  "offline": true,
+  "a11y": ["role=radiogroup no porte P/M/G", "alvo >= 44px", "dobra <= 265px"],
+  "budgetKB": 8,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

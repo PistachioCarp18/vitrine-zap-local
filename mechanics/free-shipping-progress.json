@@ -1,0 +1,14 @@
+{
+  "id": "free-shipping-progress",
+  "reference": { "dossie": "Dossie-REA-iFood-e-MenuDino", "pista": "B", "grau": "B" },
+  "categories": ["lanchonete", "moda"],
+  "priority": "P0",
+  "ui": { "slots": ["cart-step-1-top"], "gestures": ["passive-progress"] },
+  "state": ["subtotal", "freeDeliveryThreshold", "remaining", "percent"],
+  "events": ["shipping:unlocked"],
+  "zeroApi": { "storage": "state-derived", "send": "wa.me", "degradation": "limiar calculado localmente sobre subtotal bruto" },
+  "offline": true,
+  "a11y": ["role=progressbar", "aria-valuenow", "contraste inkAccent >= 4.5:1"],
+  "budgetKB": 4,
+  "tests": ["tests/mechanics/mechanics.test.js"]
+}

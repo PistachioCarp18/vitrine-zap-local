@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vitrine-zap-v10';
+const CACHE_NAME = 'vitrine-zap-v11';
 const ASSETS = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ const ASSETS = [
   './src/brand/brand-engine.js',
   './src/store.js',
   './src/presets.js',
+  './src/mechanics/registry.js',
   './manifest.webmanifest',
 ];
 
