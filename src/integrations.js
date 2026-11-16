@@ -34,6 +34,68 @@
       .slice(0, maxLen);
   }
 
+  function normalizeHexColor(hexColor, fallback = '#0F766E') {
+    const raw = String(hexColor || '').trim();
+    const shortMatch = /^#([0-9a-fA-F]{3})$/.exec(raw);
+    if (shortMatch) {
+      const [r, g, b] = shortMatch[1].split('');
+      return `#${r}${r}${g}${g}${b}${b}`.toUpperCase();
+    }
+    const fullMatch = /^#([0-9a-fA-F]{6})$/.exec(raw);
+    return fullMatch ? `#${fullMatch[1].toUpperCase()}` : fallback;
+  }
+
+  function linearizeChannel(channel255) {
+    const c = channel255 / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  }
+
+  /**
+   * Motor Matematico de Auto-Contraste WCAG AA (ux-ui-design-squad)
+   * Calcula luminancia relativa L = 0.2126R + 0.7152G + 0.0722B e tokens derivados.
+   */
+  function computeAccessibleBrandTokens(hexColor, surfaceHex = '#FFFFFF') {
+    const primary = normalizeHexColor(hexColor, '#0F766E');
+    const r = parseInt(primary.slice(1, 3), 16);
+    const g = parseInt(primary.slice(3, 5), 16);
+    const b = parseInt(primary.slice(5, 7), 16);
+
+    const luminance = Number((
+      0.2126 * linearizeChannel(r) +
+      0.7152 * linearizeChannel(g) +
+      0.0722 * linearizeChannel(b)
+    ).toFixed(4));
+
+    const contrastWithWhite = (1.0 + 0.05) / (luminance + 0.05);
+    const darkLum = 0.0199; // #0F172A relative luminance
+    const contrastWithDark = (luminance + 0.05) / (darkLum + 0.05);
+
+    const useDarkText = contrastWithDark >= contrastWithWhite;
+    const onPrimary = useDarkText ? '#0F172A' : '#FFFFFF';
+    const contrastRatio = Number((useDarkText ? contrastWithDark : contrastWithWhite).toFixed(2));
+
+    const surf = normalizeHexColor(surfaceHex, '#FFFFFF');
+    const sr = parseInt(surf.slice(1, 3), 16);
+    const sg = parseInt(surf.slice(3, 5), 16);
+    const sb = parseInt(surf.slice(5, 7), 16);
+
+    const mix = (a, c, ratio) => Math.round(a * ratio + c * (1 - ratio));
+    const toHex = (nr, ng, nb) => '#' + [nr, ng, nb].map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+
+    const surfaceTint = toHex(mix(r, sr, 0.08), mix(g, sg, 0.08), mix(b, sb, 0.08));
+    const borderTint = toHex(mix(r, sr, 0.26), mix(g, sg, 0.26), mix(b, sb, 0.26));
+
+    return {
+      primary,
+      onPrimary,
+      surfaceTint,
+      borderTint,
+      luminance,
+      contrastRatio,
+      wcagAA: contrastRatio >= 4.5,
+    };
+  }
+
   function generatePixBrCode({ pixKey, merchantName, merchantCity = 'Sorocaba', amount = 0, txid = 'VITRINEZAP' }) {
     const key = String(pixKey || '').trim();
     if (!key) throw new Error('Chave Pix obrigatoria para gerar BR Code.');
@@ -78,9 +140,6 @@
     return { applied: found, discountAmount };
   }
 
-  /**
-   * Engenharia reversa iFood/Amazon: barra de progresso de Frete Gratis.
-   */
   function calculateFreeDeliveryProgress(subtotal, threshold = 0, baseDeliveryFee = 0) {
     const sub = Math.max(0, Number(subtotal || 0));
     const goal = Math.max(0, Number(threshold || 0));
@@ -98,6 +157,14 @@
       percent,
       effectiveDeliveryFee: unlocked ? 0 : fee,
     };
+  }
+
+  function calculateDepositAmount(total, ratio = 0.5) {
+    const t = Math.max(0, Number(total || 0));
+    const r = Math.min(1, Math.max(0, Number(ratio)));
+    const deposit = Number((t * r).toFixed(2));
+    const balance = Number((t - deposit).toFixed(2));
+    return { deposit, balance };
   }
 
   function calculateCartTotals(items, deliveryFee = 0, discount = 0) {
@@ -144,6 +211,29 @@
     return nowMins >= start || nowMins <= end;
   }
 
+  /**
+   * Gera URL compartilhavel compacta (?name=...&phone=...&pix=...&color=...&archetype=...&niche=...)
+   * Compativel com limite de bytes do QR Code SVG offline (v1..v14 <= 450 bytes).
+   */
+  function buildShareableBrandUrl(baseUrl, config = {}) {
+    const url = new URL(baseUrl);
+    url.search = '';
+    const params = new URLSearchParams();
+    if (config.storeName) params.set('name', String(config.storeName).slice(0, 60));
+    if (config.whatsapp) params.set('phone', normalizeBrPhone(config.whatsapp));
+    if (config.pixKey) params.set('pix', String(config.pixKey).slice(0, 60));
+    if (config.primaryColor) params.set('color', normalizeHexColor(config.primaryColor));
+    if (config.brandArchetype) params.set('archetype', config.brandArchetype);
+    if (config.id) params.set('niche', config.id);
+    if (config.tagline) params.set('tagline', String(config.tagline).slice(0, 80));
+    url.search = params.toString();
+    return url.toString();
+  }
+
+  /**
+   * Monta link wa.me polimorfico adaptado aos 4 domainModes:
+   * food-delivery | scheduled-order | recurring-pet | service-quote
+   */
   function buildWhatsAppOrderUrl({
     storeName,
     storeWhatsapp,
@@ -159,14 +249,34 @@
     paymentMethod = 'Pix',
     changeFor = '',
     mode = 'pedido',
+    domainMode = 'food-delivery',
+    scheduleDate = '',
+    scheduleWindow = '',
+    cakeMessage = '',
+    payDeposit50 = false,
+    petName = '',
+    petSize = '',
+    petRemindDays = '',
+    vehicleModel = '',
+    vehiclePlate = '',
+    vehicleSymptom = '',
   }) {
     const targetPhone = normalizeBrPhone(storeWhatsapp);
     if (!targetPhone) throw new Error('WhatsApp da loja invalido.');
 
-    const totals = calculateCartTotals(items, deliveryMode === 'Entrega' ? deliveryFee : 0, discount);
-    const header = mode === 'orcamento'
-      ? `*ORCAMENTO - ${storeName}*`
-      : `*NOVO PEDIDO - ${storeName}*`;
+    const isServiceQuote = domainMode === 'service-quote' || mode === 'orcamento';
+    const effectiveFee = (deliveryMode === 'Entrega' && !isServiceQuote) ? deliveryFee : 0;
+    const totals = calculateCartTotals(items, effectiveFee, discount);
+
+    const headerMap = {
+      'food-delivery': `*NOVO PEDIDO - ${storeName}*`,
+      'scheduled-order': `*ENCOMENDA AGENDADA - ${storeName}*`,
+      'recurring-pet': `*PEDIDO PET & RECOMPRA - ${storeName}*`,
+      'service-quote': `*PRE-ORCAMENTO TECNICO - ${storeName}*`,
+    };
+    const header = isServiceQuote
+      ? (headerMap['service-quote'])
+      : (headerMap[domainMode] || `*NOVO PEDIDO - ${storeName}*`);
 
     const lines = [
       header,
@@ -174,36 +284,70 @@
       `*Cliente:* ${customerName || 'Nao informado'}`,
     ];
     if (customerPhone) lines.push(`*Contato:* ${customerPhone}`);
-    if (deliveryMode) lines.push(`*Modalidade:* ${deliveryMode}`);
-    if (deliveryMode === 'Entrega' && address) lines.push(`*Endereco:* ${address}`);
 
-    lines.push('', '*Itens:*');
+    if (domainMode === 'scheduled-order') {
+      if (scheduleDate || scheduleWindow) {
+        lines.push(`*Retirada/Entrega em:* ${scheduleDate || 'A definir'} (${scheduleWindow || 'Horario comercial'})`);
+      }
+      if (cakeMessage) lines.push(`*Topo/Embalagem:* ${cakeMessage}`);
+    }
+
+    if (domainMode === 'recurring-pet') {
+      if (petName || petSize) {
+        lines.push(`*Pet:* ${petName || 'Pet'} (Porte: ${petSize || 'Nao informado'})`);
+      }
+      if (petRemindDays) {
+        lines.push(`*Lembrete de recompra:* a cada ${petRemindDays} dias`);
+      }
+    }
+
+    if (isServiceQuote) {
+      if (vehicleModel || vehiclePlate) {
+        lines.push(`*Veiculo:* ${vehicleModel || 'Nao informado'} | *Placa/KM:* ${vehiclePlate || '-'}`);
+      }
+      if (vehicleSymptom) lines.push(`*Sintoma relatado:* ${vehicleSymptom}`);
+    } else if (deliveryMode) {
+      lines.push(`*Modalidade:* ${deliveryMode}`);
+      if (deliveryMode === 'Entrega' && address) lines.push(`*Endereco:* ${address}`);
+    }
+
+    lines.push('', isServiceQuote ? '*Servicos e Pecas:*' : '*Itens:*');
     (items || []).forEach((item, idx) => {
       const extrasSum = Array.isArray(item.selectedExtras)
         ? item.selectedExtras.reduce((s, ex) => s + Number(ex.price || 0), 0)
         : 0;
       const unitTotal = Number(item.price || 0) + extrasSum;
       const lineTotal = Number(item.qty || 0) * unitTotal;
-      lines.push(`${idx + 1}. ${item.qty}x ${item.name} — ${formatBrl(lineTotal)}`);
+      const kindTag = isServiceQuote && item.kind ? ` [${item.kind}]` : '';
+      lines.push(`${idx + 1}. ${item.qty}x ${item.name}${kindTag} — ${formatBrl(lineTotal)}`);
+      if (item.selectedVariant) lines.push(`   Opcao: ${item.selectedVariant}`);
       if (extrasSum > 0 && Array.isArray(item.selectedExtras)) {
         lines.push(`   + Adicionais: ${item.selectedExtras.map(e => e.name).join(', ')}`);
       }
-      if (item.itemNote) {
-        lines.push(`   Obs. item: ${item.itemNote}`);
-      }
+      if (item.itemNote) lines.push(`   Obs.: ${item.itemNote}`);
     });
 
     lines.push('');
-    if (deliveryMode === 'Entrega') {
+    if (!isServiceQuote && deliveryMode === 'Entrega') {
       lines.push(totals.deliveryFee > 0 ? `Taxa de entrega: ${formatBrl(totals.deliveryFee)}` : 'Taxa de entrega: GRATIS');
     }
     if (totals.discount > 0) {
       lines.push(`Desconto${couponCode ? ` (${couponCode})` : ''}: -${formatBrl(totals.discount)}`);
     }
     lines.push(`*Total:* ${formatBrl(totals.total)}`);
+
+    if (domainMode === 'scheduled-order' && payDeposit50) {
+      const { deposit, balance } = calculateDepositAmount(totals.total, 0.5);
+      lines.push(`*Sinal Pix (50%):* ${formatBrl(deposit)}`);
+      lines.push(`*Saldo na entrega/retirada:* ${formatBrl(balance)}`);
+    }
+
     lines.push(`*Pagamento:* ${paymentMethod}`);
     if (paymentMethod === 'Dinheiro' && changeFor) {
       lines.push(`*Troco para:* ${changeFor}`);
+    }
+    if (isServiceQuote) {
+      lines.push('*Validade deste pre-orcamento:* 7 dias');
     }
     if (notes) lines.push(`*Observacoes:* ${notes}`);
 
@@ -217,13 +361,16 @@
 
   return {
     crc16Ccitt,
+    computeAccessibleBrandTokens,
     generatePixBrCode,
     resolveCouponDiscount,
     calculateFreeDeliveryProgress,
+    calculateDepositAmount,
     calculateCartTotals,
     formatBrl,
     normalizeBrPhone,
     isStoreOpenNow,
+    buildShareableBrandUrl,
     buildWhatsAppOrderUrl,
   };
 }));

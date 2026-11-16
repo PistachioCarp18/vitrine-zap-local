@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-archetype="high-energy-food">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#D9480F" />
-  <title>VitrineZap Local — Vitrine Mobile-First, Pix & Orçamento</title>
+  <meta name="theme-color" content="#EA1D2C" />
+  <title>VitrineZap Local — Motor White-Label Camaleão</title>
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,14 +12,13 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <!-- App Topbar Mobile-First (1 linha fixa sem quebra) -->
   <header class="topbar no-print">
     <div class="container topbar-inner">
       <div class="brand-cluster">
         <div class="brand-mark" id="brand-mark-icon" aria-hidden="true"></div>
         <div class="brand-text">
           <div class="brand-line">
-            <strong class="brand-name" id="topbar-store-name">Empório do Lanche</strong>
+            <strong class="brand-name" id="topbar-store-name">Empório Lanches Martinez</strong>
             <span id="store-status-pill" class="status-pill"><span class="status-dot"></span><span id="store-status-text">Aberto</span></span>
           </div>
           <span class="brand-kicker" id="store-neighborhood">Jardim Martinez • Sorocaba-SP</span>
@@ -27,43 +26,42 @@
       </div>
 
       <div class="topbar-actions">
-        <label for="niche-switcher" class="sr-only">Selecionar nicho</label>
+        <label for="niche-switcher" class="sr-only">Selecionar nicho de demonstração</label>
         <select id="niche-switcher" class="select-compact" aria-label="Selecionar nicho de demonstração"></select>
         <button id="theme-toggle-btn" class="btn btn-secondary btn-icon" type="button" title="Alternar tema" aria-label="Alternar tema claro/escuro">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
-        <button id="toggle-admin-btn" class="btn btn-secondary btn-sm admin-toggle-btn" type="button" aria-label="Painel do Dono">
+        <button id="toggle-admin-btn" class="btn btn-secondary btn-sm admin-toggle-btn" type="button" aria-label="Personalizar Marca e Painel">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          <span class="hide-on-mobile">Painel</span>
+          <span class="hide-on-mobile">Marca & Painel</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Hero Editorial Compacto no Mobile / Assimétrico no Desktop -->
   <section class="hero-strip no-print">
     <div class="container hero-editorial">
       <div class="hero-copy">
         <div class="hero-eyebrow-row">
-          <span class="art-direction-tag" id="art-direction-tag">Ember Craft • Zero Taxa</span>
+          <span class="art-direction-tag" id="art-direction-tag">High Energy Food • Zero Taxa</span>
           <button type="button" id="hero-coupon-pill" class="coupon-hero-btn hidden">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
             <span id="hero-coupon-text">Cupom BAIRRO10</span>
           </button>
         </div>
-        <h1 id="store-title">Empório do Lanche Martinez</h1>
-        <p id="store-tagline" class="hero-tagline">Artesanais na brasa direto no WhatsApp, sem taxa de aplicativo.</p>
+        <h1 id="store-title">Empório Lanches Martinez</h1>
+        <p id="store-tagline" class="hero-tagline"></p>
       </div>
 
       <div class="hero-dossier-card">
         <div class="dossier-top">
           <div id="hero-emblem" class="hero-emblem"></div>
           <div>
-            <span class="meta-label">Tempo médio</span>
+            <span class="meta-label">Atendimento</span>
             <strong id="hero-eta" class="mono">25-35 min</strong>
           </div>
           <div class="dossier-badge-right">
-            <span class="meta-label">Entrega</span>
+            <span class="meta-label" id="hero-right-label">Entrega</span>
             <strong id="hero-delivery-fee" class="mono">R$ 6,00</strong>
           </div>
         </div>
@@ -77,15 +75,15 @@
             <strong id="hero-item-count" class="mono">5</strong>
           </div>
           <div>
-            <span class="meta-label">Canal</span>
-            <strong class="mono">WhatsApp</strong>
+            <span class="meta-label">Arquétipo</span>
+            <strong id="hero-archetype-label" class="mono">Food</strong>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Barra de Frete Grátis (Padrão iFood / Amazon) -->
+  <!-- Barra Gamificada de Frete Grátis (food-delivery / scheduled-order / recurring-pet) -->
   <section id="free-delivery-banner" class="container free-bar-wrap hidden no-print" aria-live="polite">
     <div class="free-bar-card">
       <div class="free-bar-top">
@@ -103,14 +101,14 @@
       <div id="pitch-banner" class="pitch-callout hidden">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.7.6 1 1.3 1 2.3h6c0-1 .3-1.7 1-2.3A7 7 0 0 0 12 2z"/></svg>
         <span id="pitch-banner-text"></span>
+        <button id="hero-repeat-last-btn" class="btn btn-primary btn-xs hidden" type="button">Repetir Último Pedido</button>
       </div>
 
-      <!-- Sticky Search + Horizontal Scroll Category Bar -->
       <div class="sticky-filter-bar">
         <div class="toolbar-top">
           <div class="search-box">
             <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input id="search-input" type="search" class="text-input search-input" placeholder="Buscar no cardápio..." aria-label="Buscar" />
+            <input id="search-input" type="search" class="text-input search-input" placeholder="Buscar no catálogo..." aria-label="Buscar" />
           </div>
           <select id="sort-select" class="select-compact sort-select" aria-label="Ordenar">
             <option value="featured">Destaques</option>
@@ -119,19 +117,19 @@
             <option value="az">A-Z</option>
           </select>
         </div>
-        <div id="category-pills" class="category-pills" role="tablist" aria-label="Categorias"></div>
+        <div id="category-pills" class="category-pills category-strip" role="tablist" aria-label="Categorias"></div>
       </div>
 
       <div id="catalog-grid" class="catalog-grid"></div>
     </section>
 
-    <!-- Painel do Dono -->
+    <!-- Painel do Dono + Modo Apresentação (Chameleon Brand Engine) -->
     <section id="admin-section" class="admin-panel hidden no-print">
       <div class="card admin-shell">
         <div class="admin-header">
           <div>
-            <span class="section-eyebrow">Gestão White-Label</span>
-            <h2>Painel do Dono</h2>
+            <span class="section-eyebrow">Chameleon Brand Engine</span>
+            <h2>Personalizar Marca & Painel</h2>
           </div>
           <button id="close-admin-btn" class="btn btn-secondary btn-sm" type="button">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -140,15 +138,118 @@
         </div>
 
         <div class="admin-tabs" role="tablist">
-          <button type="button" class="tab-btn active" data-tab="overview">Resumo</button>
+          <button type="button" class="tab-btn active" data-tab="settings">Marca & Magic Link</button>
           <button type="button" class="tab-btn" data-tab="catalog">Catálogo</button>
-          <button type="button" class="tab-btn" data-tab="settings">Loja & QR</button>
+          <button type="button" class="tab-btn" data-tab="overview">Pedidos & KPIs</button>
         </div>
 
-        <div class="tab-pane active" data-pane="overview">
+        <!-- Tab 1: Personalizar Marca (Modo Apresentação) & Magic URL -->
+        <div class="tab-pane active" data-pane="settings">
+          <div class="share-banner">
+            <div class="share-info">
+              <span class="section-eyebrow">Prospecção Presencial (Magic Brand URL)</span>
+              <h3>Link Mágico & QR Code da Marca</h3>
+              <p>Gere um link compacto (`?name=...&color=...&archetype=...`) para abrir no celular de qualquer comércio de Sorocaba já com a marca dele.</p>
+              <div class="share-actions">
+                <button type="button" id="copy-store-link-btn" class="btn btn-primary btn-sm">Copiar Magic Brand Link</button>
+                <button type="button" id="print-counter-qr-btn" class="btn btn-secondary btn-sm">Imprimir Plaquinha QR</button>
+              </div>
+            </div>
+            <div class="share-qr-box">
+              <div id="store-counter-qr"></div>
+              <small>Escaneie no balcão</small>
+            </div>
+          </div>
+
+          <form id="store-config-form" class="form-grid">
+            <label>Nome da Empresa
+              <input type="text" id="cfg-name" class="text-input" required />
+            </label>
+            <label>Bairro / Cidade
+              <input type="text" id="cfg-neighborhood" class="text-input" />
+            </label>
+            <label>Tagline / Slogan
+              <input type="text" id="cfg-tagline" class="text-input" />
+            </label>
+            <label>Arquétipo Visual (Chameleon)
+              <select id="cfg-archetype" class="select-input">
+                <option value="high-energy-food">High Energy Food (Delivery)</option>
+                <option value="artisanal-warm">Artisanal Warm (Padaria / Café)</option>
+                <option value="playful-soft">Playful Soft (Pet Shop / Serviços)</option>
+                <option value="industrial-precision">Industrial Precision (Oficina / Técnico)</option>
+              </select>
+            </label>
+            <label>WhatsApp (DDD)
+              <input type="tel" id="cfg-whatsapp" class="text-input mono" required />
+            </label>
+            <label>Chave Pix
+              <input type="text" id="cfg-pix" class="text-input mono" />
+            </label>
+            <label>Entrega Padrão (R$)
+              <input type="number" step="0.01" min="0" id="cfg-delivery" class="text-input mono" />
+            </label>
+            <label>Frete Grátis Acima (R$)
+              <input type="number" step="0.01" min="0" id="cfg-free-threshold" class="text-input mono" />
+            </label>
+            <label>Abre às
+              <input type="time" id="cfg-open" class="text-input mono" />
+            </label>
+            <label>Fecha às
+              <input type="time" id="cfg-close" class="text-input mono" />
+            </label>
+            <label>Cor Principal (Auto-Contraste WCAG AA)
+              <div class="color-picker-row">
+                <input type="color" id="cfg-color" class="color-input" />
+                <span id="wcag-badge" class="wcag-pill mono">AA OK</span>
+              </div>
+            </label>
+            <div class="form-actions full-span">
+              <button type="submit" class="btn btn-primary">Aplicar & Salvar Marca</button>
+              <button type="button" id="export-json-btn" class="btn btn-secondary">Exportar JSON</button>
+              <label class="btn btn-secondary file-btn">Importar JSON
+                <input type="file" id="import-json-input" accept=".json" hidden />
+              </label>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tab 2: Catálogo CRUD -->
+        <div class="tab-pane" data-pane="catalog">
+          <h3 class="pane-title">Adicionar Novo Item</h3>
+          <form id="add-item-form" class="form-grid">
+            <label>Categoria
+              <input type="text" id="item-category" class="text-input" placeholder="Ex: Burgers, Revisão" required />
+            </label>
+            <label>Nome do Item
+              <input type="text" id="item-name" class="text-input" placeholder="Ex: X-Bacon Especial" required />
+            </label>
+            <label>Preço (R$)
+              <input type="number" step="0.01" min="0" id="item-price" class="text-input mono" required />
+            </label>
+            <label>Prazo / Tipo
+              <input type="text" id="item-prep" class="text-input" placeholder="Ex: 20 min ou Peça Fixa" />
+            </label>
+            <label>Selo (opcional)
+              <input type="text" id="item-badge" class="text-input" placeholder="Ex: Mais Pedido" />
+            </label>
+            <label>Descrição Curta
+              <input type="text" id="item-desc" class="text-input" placeholder="Detalhes do produto" />
+            </label>
+            <div class="form-actions full-span">
+              <button type="submit" class="btn btn-primary">Adicionar ao Catálogo</button>
+            </div>
+          </form>
+          <div class="section-subhead">
+            <h3>Itens Publicados</h3>
+          </div>
+          <div id="admin-items-list" class="admin-items-list"></div>
+        </div>
+
+        <!-- Tab 3: KPIs & Histórico -->
+        <div class="tab-pane" data-pane="overview">
           <div class="kpi-grid">
             <div class="kpi-card">
-              <span class="kpi-label">Pedidos Hoje</span>
+              <span class="kpi-label">Registros Hoje</span>
               <strong id="stat-today-count" class="kpi-value mono">0</strong>
             </div>
             <div class="kpi-card">
@@ -170,104 +271,13 @@
           </div>
           <div id="order-history-list" class="admin-items-list"></div>
         </div>
-
-        <div class="tab-pane" data-pane="catalog">
-          <h3 class="pane-title">Adicionar Novo Item</h3>
-          <form id="add-item-form" class="form-grid">
-            <label>Categoria
-              <input type="text" id="item-category" class="text-input" placeholder="Ex: Burgers, Revisão" required />
-            </label>
-            <label>Nome do Item
-              <input type="text" id="item-name" class="text-input" placeholder="Ex: X-Bacon Especial" required />
-            </label>
-            <label>Preço (R$)
-              <input type="number" step="0.01" min="0" id="item-price" class="text-input mono" required />
-            </label>
-            <label>Prazo / Preparo
-              <input type="text" id="item-prep" class="text-input" placeholder="Ex: 20 min" />
-            </label>
-            <label>Selo (opcional)
-              <input type="text" id="item-badge" class="text-input" placeholder="Ex: Mais Pedido" />
-            </label>
-            <label>Descrição Curta
-              <input type="text" id="item-desc" class="text-input" placeholder="Detalhes do produto" />
-            </label>
-            <div class="form-actions full-span">
-              <button type="submit" class="btn btn-primary">Adicionar ao Catálogo</button>
-            </div>
-          </form>
-
-          <div class="section-subhead">
-            <h3>Itens Publicados</h3>
-          </div>
-          <div id="admin-items-list" class="admin-items-list"></div>
-        </div>
-
-        <div class="tab-pane" data-pane="settings">
-          <div class="share-banner">
-            <div class="share-info">
-              <span class="section-eyebrow">Link Zero-Servidor</span>
-              <h3>QR Code de Balcão & Link da Loja</h3>
-              <p>Compartilhe sua vitrine no WhatsApp ou imprima o QR Code para o balcão.</p>
-              <div class="share-actions">
-                <button type="button" id="copy-store-link-btn" class="btn btn-primary btn-sm">Copiar Link</button>
-                <button type="button" id="print-counter-qr-btn" class="btn btn-secondary btn-sm">Imprimir QR</button>
-              </div>
-            </div>
-            <div class="share-qr-box">
-              <div id="store-counter-qr"></div>
-              <small>Aponte a câmera</small>
-            </div>
-          </div>
-
-          <form id="store-config-form" class="form-grid">
-            <label>Nome da Empresa
-              <input type="text" id="cfg-name" class="text-input" required />
-            </label>
-            <label>Bairro / Cidade
-              <input type="text" id="cfg-neighborhood" class="text-input" />
-            </label>
-            <label>Tagline
-              <input type="text" id="cfg-tagline" class="text-input" />
-            </label>
-            <label>WhatsApp (DDD)
-              <input type="text" id="cfg-whatsapp" class="text-input mono" required />
-            </label>
-            <label>Chave Pix
-              <input type="text" id="cfg-pix" class="text-input mono" />
-            </label>
-            <label>Entrega Padrão (R$)
-              <input type="number" step="0.01" min="0" id="cfg-delivery" class="text-input mono" />
-            </label>
-            <label>Frete Grátis Acima (R$)
-              <input type="number" step="0.01" min="0" id="cfg-free-threshold" class="text-input mono" />
-            </label>
-            <label>Abre às
-              <input type="time" id="cfg-open" class="text-input mono" />
-            </label>
-            <label>Fecha às
-              <input type="time" id="cfg-close" class="text-input mono" />
-            </label>
-            <label>Cor Principal
-              <input type="color" id="cfg-color" class="color-input" />
-            </label>
-            <div class="form-actions full-span">
-              <button type="submit" class="btn btn-primary">Salvar</button>
-              <button type="button" id="export-json-btn" class="btn btn-secondary">Exportar JSON</button>
-              <label class="btn btn-secondary file-btn">Importar JSON
-                <input type="file" id="import-json-input" accept=".json" hidden />
-              </label>
-            </div>
-          </form>
-        </div>
       </div>
     </section>
 
-    <!-- Backdrop do Drawer Mobile -->
     <div id="cart-backdrop" class="sheet-backdrop hidden no-print" aria-hidden="true"></div>
 
-    <!-- Bottom Sheet Drawer no Mobile / Checkout Sticky no Desktop -->
-    <aside id="cart-aside" class="cart-panel card" aria-label="Sacola de pedidos">
+    <!-- Bottom Sheet Drawer Polimórfico (Sacola / Encomenda / Pet / Pré-Orçamento OS) -->
+    <aside id="cart-aside" class="cart-panel card" aria-label="Sacola ou Orçamento">
       <div class="sheet-handle no-print" aria-hidden="true"></div>
       <div class="cart-header">
         <div class="cart-title-wrap">
@@ -278,7 +288,7 @@
           <button id="repeat-order-btn" class="btn btn-ghost btn-xs hidden" type="button">Repetir</button>
           <button id="clear-cart-btn" class="btn btn-ghost btn-xs hidden" type="button">Limpar</button>
           <span id="cart-badge-count" class="cart-count mono">0</span>
-          <button id="close-cart-drawer-btn" class="btn btn-secondary btn-icon mobile-only-btn no-print" type="button" aria-label="Fechar sacola">
+          <button id="close-cart-drawer-btn" class="btn btn-secondary btn-icon mobile-only-btn no-print" type="button" aria-label="Fechar gaveta">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
@@ -297,10 +307,14 @@
         <div class="total-row" id="delivery-row"><span>Entrega</span><strong id="delivery-val" class="mono">R$ 0,00</strong></div>
         <div class="total-row discount-row hidden" id="discount-row"><span>Desconto (<span id="discount-code-label"></span>)</span><strong id="discount-val" class="mono">-R$ 0,00</strong></div>
         <div class="total-row grand-total"><span>Total</span><strong id="total-val" class="mono">R$ 0,00</strong></div>
+        <div id="deposit-summary-row" class="total-row deposit-row hidden">
+          <span>Sinal Pix (50% agora)</span><strong id="deposit-val" class="mono">R$ 0,00</strong>
+        </div>
       </div>
 
       <div class="checkout-fields no-print">
-        <div class="segmented-control" role="group" aria-label="Modalidade de entrega">
+        <!-- Campos comuns -->
+        <div id="delivery-mode-wrap" class="segmented-control" role="group" aria-label="Modalidade de entrega">
           <button type="button" class="seg-btn active" data-delivery="Retirada">Retirada no Local</button>
           <button type="button" class="seg-btn" data-delivery="Entrega">Entrega no Bairro</button>
         </div>
@@ -312,8 +326,66 @@
           <input type="tel" id="cust-phone" class="text-input mono" placeholder="(15) 99999-9999" />
         </label>
         <label id="address-wrap" class="field-label hidden">Endereço Completo
-          <input type="text" id="cust-address" class="text-input" placeholder="Rua, número e complemento" />
+          <input type="text" id="cust-address" class="text-input" placeholder="Rua, número e bairro" />
         </label>
+
+        <!-- Polimórfico: Padaria / Encomenda (scheduled-order) -->
+        <div id="domain-scheduled-fields" class="domain-block hidden">
+          <div class="domain-grid-2">
+            <label class="field-label">Data Retirada/Entrega
+              <input type="date" id="sched-date" class="text-input mono" />
+            </label>
+            <label class="field-label">Janela de Horário
+              <select id="sched-window" class="select-input"></select>
+            </label>
+          </div>
+          <label class="field-label">Dizeres Topo de Bolo / Cartão Presente
+            <input type="text" id="cake-message" class="text-input" placeholder="Ex: Parabéns Júlia! 15 anos" />
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" id="pay-deposit-50" />
+            <span>Pagar sinal de 50% via Pix agora (saldo na retirada)</span>
+          </label>
+        </div>
+
+        <!-- Polimórfico: Pet Shop (recurring-pet) -->
+        <div id="domain-pet-fields" class="domain-block hidden">
+          <div class="domain-grid-2">
+            <label class="field-label">Nome do Pet
+              <input type="text" id="pet-name" class="text-input" placeholder="Ex: Thor" />
+            </label>
+            <label class="field-label">Porte do Pet
+              <select id="pet-size" class="select-input">
+                <option value="Pequeno">Pequeno (até 10kg)</option>
+                <option value="Médio" selected>Médio (10-25kg)</option>
+                <option value="Grande">Grande (+25kg)</option>
+              </select>
+            </label>
+          </div>
+          <label class="field-label">Lembrete de recompra no WhatsApp
+            <select id="pet-remind-days" class="select-input">
+              <option value="30">Avisar daqui a 30 dias</option>
+              <option value="15">Avisar daqui a 15 dias</option>
+              <option value="">Sem lembrete automático</option>
+            </select>
+          </label>
+        </div>
+
+        <!-- Polimórfico: Oficina / Autopeças (service-quote) -->
+        <div id="domain-quote-fields" class="domain-block hidden">
+          <div class="domain-grid-2">
+            <label class="field-label">Veículo / Modelo *
+              <input type="text" id="veh-model" class="text-input" placeholder="Ex: Onix 1.0 2021" />
+            </label>
+            <label class="field-label">Placa / KM Atual
+              <input type="text" id="veh-plate" class="text-input mono" placeholder="ABC-1D23 • 64mil km" />
+            </label>
+          </div>
+          <div class="field-label">Sintoma Relatado
+            <div id="symptom-pills" class="quick-tags"></div>
+            <input type="text" id="veh-symptom" class="text-input" placeholder="Descreva o barulho ou revisão desejada" />
+          </div>
+        </div>
 
         <div class="field-label">Forma de Pagamento
           <div class="payment-pills" role="group" aria-label="Forma de pagamento">
@@ -329,14 +401,14 @@
 
         <div class="field-label">Observações
           <div id="quick-tags-wrap" class="quick-tags"></div>
-          <input type="text" id="cust-notes" class="text-input" placeholder="Ex: Sem cebola / Placa ABC-1234" />
+          <input type="text" id="cust-notes" class="text-input" placeholder="Ex: Sem cebola / Deixar na portaria" />
         </div>
       </div>
 
       <div class="checkout-actions no-print">
         <button id="send-wa-btn" class="btn btn-whatsapp" type="button">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          <span>Enviar Pedido no WhatsApp</span>
+          <span id="send-wa-label">Enviar Pedido no WhatsApp</span>
         </button>
         <div class="secondary-actions">
           <button id="gen-pix-btn" class="btn btn-secondary btn-sm" type="button">QR Code Pix</button>
@@ -346,7 +418,7 @@
 
       <div id="pix-box" class="pix-box hidden no-print">
         <div class="pix-box-head">
-          <span>Pagamento via Pix (Offline)</span>
+          <span id="pix-box-title">Pagamento via Pix (Offline)</span>
           <strong id="pix-amount-badge" class="mono">R$ 0,00</strong>
         </div>
         <div id="pix-qr-svg" class="pix-qr-wrap"></div>
@@ -358,7 +430,6 @@
     </aside>
   </main>
 
-  <!-- Bottom Sheet de Detalhe do Produto & Adicionais (iFood / Amazon Pattern) -->
   <div id="item-modal-backdrop" class="sheet-backdrop hidden no-print" aria-hidden="true"></div>
   <section id="item-modal" class="item-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="modal-item-title">
     <div class="sheet-handle" aria-hidden="true"></div>
@@ -372,12 +443,16 @@
       </button>
     </div>
     <p id="modal-item-desc" class="modal-desc"></p>
+    <div id="modal-variants-wrap" class="modal-extras hidden">
+      <h4 id="modal-variant-label">Ponto / Opção</h4>
+      <div id="modal-variants-list" class="variant-pills"></div>
+    </div>
     <div id="modal-extras-wrap" class="modal-extras hidden">
       <h4>Adicionais opcionais</h4>
       <div id="modal-extras-list" class="extras-list"></div>
     </div>
-    <label class="field-label modal-note-field">Alguma observação neste item?
-      <input type="text" id="modal-item-note" class="text-input" placeholder="Ex: Sem picles, bem passado..." />
+    <label class="field-label modal-note-field">Observação neste item
+      <input type="text" id="modal-item-note" class="text-input" placeholder="Ex: Sem picles, detalhe da peça..." />
     </label>
     <div class="modal-footer">
       <div class="qty-inline modal-qty">
@@ -389,7 +464,6 @@
     </div>
   </section>
 
-  <!-- Thumb-Zone Sticky Sacola Dock Mobile -->
   <button id="mobile-cart-bar" class="mobile-cart-bar hidden no-print" type="button">
     <span class="mobile-bar-left">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>

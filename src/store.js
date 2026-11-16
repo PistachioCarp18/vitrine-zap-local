@@ -10,13 +10,17 @@
   function encodeStoreConfig(state) {
     const compact = {
       id: state.id || 'custom',
+      domainMode: state.domainMode || 'food-delivery',
+      brandArchetype: state.brandArchetype || 'high-energy-food',
       storeName: state.storeName || '',
       neighborhood: state.neighborhood || '',
       tagline: state.tagline || '',
       whatsapp: state.whatsapp || '',
       pixKey: state.pixKey || '',
       deliveryFee: Number(state.deliveryFee || 0),
+      freeDeliveryThreshold: Number(state.freeDeliveryThreshold || 0),
       primaryColor: state.primaryColor || '#0F766E',
+      logoInitials: state.logoInitials || '',
       openHour: state.openHour || '08:00',
       closeHour: state.closeHour || '22:00',
       mode: state.mode || 'pedido',
@@ -29,6 +33,8 @@
         price: Number(i.price || 0),
         badge: i.badge || '',
         prepTime: i.prepTime || '',
+        kind: i.kind || '',
+        cycleLabel: i.cycleLabel || '',
         paused: Boolean(i.paused),
       })),
     };
@@ -67,6 +73,38 @@
     }
   }
 
+  /**
+   * Hidratacao segura de Magic Brand URL (?name=...&phone=...&pix=...&color=...&archetype=...&niche=...)
+   */
+  function parseBrandUrlParams(searchString) {
+    const raw = String(searchString || '').trim();
+    if (!raw) return null;
+    const params = new URLSearchParams(raw.startsWith('?') ? raw.slice(1) : raw);
+    const hasMagic = ['name', 'phone', 'pix', 'color', 'archetype', 'niche', 'tagline'].some(k => params.has(k));
+    if (!hasMagic) return null;
+
+    const cleanHex = (val) => (/^#?[0-9a-fA-F]{3,6}$/.test(String(val || '').trim())
+      ? (val.trim().startsWith('#') ? val.trim() : `#${val.trim()}`)
+      : undefined);
+
+    const out = {};
+    if (params.get('niche')) out.id = params.get('niche').trim().slice(0, 32);
+    if (params.get('name')) out.storeName = params.get('name').trim().slice(0, 80);
+    if (params.get('phone')) out.whatsapp = params.get('phone').replace(/\D/g, '').slice(0, 15);
+    if (params.get('pix')) out.pixKey = params.get('pix').trim().slice(0, 80);
+    if (params.get('color')) {
+      const hex = cleanHex(params.get('color'));
+      if (hex) out.primaryColor = hex;
+    }
+    if (params.get('archetype')) {
+      const allowed = ['high-energy-food', 'artisanal-warm', 'playful-soft', 'industrial-precision'];
+      const arch = params.get('archetype').trim();
+      if (allowed.includes(arch)) out.brandArchetype = arch;
+    }
+    if (params.get('tagline')) out.tagline = params.get('tagline').trim().slice(0, 140);
+    return out;
+  }
+
   function exportOrdersCsv(orders) {
     const header = 'ID,Data,Cliente,Canal,Pagamento,Itens,Total';
     const rows = (orders || []).map(o => [
@@ -82,7 +120,7 @@
   }
 
   function createStore(storageAdapter, keys = {}) {
-    const stateKey = keys.stateKey || 'vitrine_zap_local_state_v4';
+    const stateKey = keys.stateKey || 'vitrine_zap_local_state_v7';
     const historyKey = keys.historyKey || 'vitrine_zap_order_history_v1';
     const customerKey = keys.customerKey || 'vitrine_zap_customer_profile_v1';
     const lastOrderKey = keys.lastOrderKey || 'vitrine_zap_last_cart_v1';
@@ -102,9 +140,9 @@
     function loadCustomerProfile() {
       try {
         const raw = storageAdapter.getItem(customerKey);
-        return raw ? JSON.parse(raw) : { name: '', phone: '', address: '' };
+        return raw ? JSON.parse(raw) : { name: '', phone: '', address: '', petName: '', petSize: 'Medio' };
       } catch {
-        return { name: '', phone: '', address: '' };
+        return { name: '', phone: '', address: '', petName: '', petSize: 'Medio' };
       }
     }
 
@@ -130,6 +168,15 @@
         const raw = storageAdapter.getItem(historyKey);
         return raw ? JSON.parse(raw) : [];
       } catch { return []; }
+    }
+
+    function getLastOrder() {
+      const items = loadLastCart();
+      const history = loadHistory();
+      return {
+        items,
+        record: history[0] || null,
+      };
     }
 
     function recordOrder(entry) {
@@ -168,6 +215,7 @@
       saveCustomerProfile,
       saveLastCart,
       loadLastCart,
+      getLastOrder,
       loadHistory,
       recordOrder,
       clearHistory,
@@ -175,5 +223,5 @@
     };
   }
 
-  return { createStore, encodeStoreConfig, decodeStoreConfig, exportOrdersCsv };
+  return { createStore, encodeStoreConfig, decodeStoreConfig, parseBrandUrlParams, exportOrdersCsv };
 }));
