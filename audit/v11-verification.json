@@ -1,14 +1,14 @@
 {
-  "auditedAt": "2026-11-16T19:14:49.432Z",
+  "auditedAt": "2026-11-16T21:50:42.631Z",
   "chromiumViewportsHome": [
     {
       "vertical": "lanchonete",
       "viewport": "320x568",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.7,
+      "initialTransferKB": 84.7,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -33,11 +33,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "360x800",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.7,
+      "initialTransferKB": 84.7,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -62,11 +62,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "390x844",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.7,
+      "initialTransferKB": 84.7,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -91,11 +91,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "412x915",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.7,
+      "initialTransferKB": 84.7,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -120,11 +120,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "800x360",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.7,
+      "initialTransferKB": 84.7,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -151,11 +151,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "320x568",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79,
+      "initialTransferKB": 85.9,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -180,11 +180,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "360x800",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79,
+      "initialTransferKB": 85.9,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -209,11 +209,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "390x844",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79,
+      "initialTransferKB": 85.9,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -238,11 +238,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "412x915",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79,
+      "initialTransferKB": 85.9,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -267,11 +267,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "800x360",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79,
+      "initialTransferKB": 85.9,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -298,11 +298,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "390x844",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.7,
+      "initialTransferKB": 84.7,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -327,11 +327,11 @@
     {
       "vertical": "padaria",
       "viewport": "390x844",
-      "firstProductTop": 229,
+      "firstProductTop": 305,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.9,
+      "initialTransferKB": 84.9,
       "loadedMechScripts": [
         "registry.js",
         "pickup-window.js",
@@ -362,7 +362,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.4,
+      "initialTransferKB": 84.3,
       "loadedMechScripts": [
         "registry.js",
         "autoship-reminder.js",
@@ -388,11 +388,11 @@
     {
       "vertical": "oficina",
       "viewport": "390x844",
-      "firstProductTop": 264,
+      "firstProductTop": 269,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 76.8,
+      "initialTransferKB": 83.7,
       "loadedMechScripts": [
         "registry.js",
         "inspection-checklist.js"
@@ -419,11 +419,11 @@
     {
       "vertical": "barbearia",
       "viewport": "390x844",
-      "firstProductTop": 229,
+      "firstProductTop": 300,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 76.8,
+      "initialTransferKB": 83.8,
       "loadedMechScripts": [
         "registry.js",
         "slot-picker.js"
@@ -449,11 +449,11 @@
     {
       "vertical": "moda",
       "viewport": "390x844",
-      "firstProductTop": 266,
+      "firstProductTop": 238,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 76.6,
+      "initialTransferKB": 83.6,
       "loadedMechScripts": [
         "registry.js",
         "variant-picker.js"
@@ -479,11 +479,11 @@
     {
       "vertical": "floricultura",
       "viewport": "390x844",
-      "firstProductTop": 266,
+      "firstProductTop": 295,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 78.2,
+      "initialTransferKB": 85.2,
       "loadedMechScripts": [
         "registry.js",
         "occasion-card-message.js",
@@ -514,11 +514,11 @@
     {
       "vertical": "lanchonete",
       "viewport": "390x844",
-      "firstProductTop": 228,
+      "firstProductTop": 304,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79,
+      "initialTransferKB": 85.9,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -543,11 +543,11 @@
     {
       "vertical": "padaria",
       "viewport": "390x844",
-      "firstProductTop": 229,
+      "firstProductTop": 305,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79.2,
+      "initialTransferKB": 86.1,
       "loadedMechScripts": [
         "registry.js",
         "pickup-window.js",
@@ -578,7 +578,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 78.7,
+      "initialTransferKB": 85.6,
       "loadedMechScripts": [
         "registry.js",
         "autoship-reminder.js",
@@ -604,11 +604,11 @@
     {
       "vertical": "oficina",
       "viewport": "390x844",
-      "firstProductTop": 264,
+      "firstProductTop": 269,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 78.1,
+      "initialTransferKB": 85,
       "loadedMechScripts": [
         "registry.js",
         "inspection-checklist.js"
@@ -634,11 +634,11 @@
     {
       "vertical": "barbearia",
       "viewport": "390x844",
-      "firstProductTop": 229,
+      "firstProductTop": 300,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 78.1,
+      "initialTransferKB": 85,
       "loadedMechScripts": [
         "registry.js",
         "slot-picker.js"
@@ -664,11 +664,11 @@
     {
       "vertical": "moda",
       "viewport": "390x844",
-      "firstProductTop": 266,
+      "firstProductTop": 238,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 77.9,
+      "initialTransferKB": 84.8,
       "loadedMechScripts": [
         "registry.js",
         "variant-picker.js"
@@ -694,11 +694,11 @@
     {
       "vertical": "floricultura",
       "viewport": "390x844",
-      "firstProductTop": 266,
+      "firstProductTop": 295,
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 79.5,
+      "initialTransferKB": 86.4,
       "loadedMechScripts": [
         "registry.js",
         "occasion-card-message.js",
@@ -780,7 +780,7 @@
     3
   ],
   "distinctTapsSetSize": 2,
-  "initialTransferKB": 79.5,
+  "initialTransferKB": 86.4,
   "axeCriticalSerious": 0,
   "blindDistinctScorePct": 100,
   "uniqueDesignSystemsRendered": 7

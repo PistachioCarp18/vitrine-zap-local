@@ -83,3 +83,14 @@ test('category-apis: dog breed size inference and BR upcoming holidays fallback 
   assert.equal(hol.nextHoliday.date, '2026-11-20');
   assert.ok(hol.nextHoliday.name.includes('Consciência Negra'));
 });
+
+test('illustrations: renders multi-layer item-specific SVG art and dynamic moda swatch tinting', () => {
+  const { getItemSwatches, renderRichItemArt } = require('../src/illustrations');
+  const swatches = getItemSwatches({ id: 'mod-1' });
+  assert.ok(swatches.length >= 3);
+  const svgModa = renderRichItemArt('moda', { id: 'mod-1', name: 'Camiseta Heavy' }, { swatchHex: '#9A3412' });
+  assert.ok(svgModa.includes('#9A3412'));
+  assert.ok(renderRichItemArt('lanchonete', { id: 'lan-3', name: 'Batata Rústica' }).includes('<svg'));
+  assert.ok(renderRichItemArt('padaria', { id: 'pad-1', name: 'Bolo Brigadeiro' }).includes('<svg'));
+  assert.ok(renderRichItemArt('floricultura', { id: 'flo-2', name: 'Orquídea Phalaenopsis' }).includes('<svg'));
+});

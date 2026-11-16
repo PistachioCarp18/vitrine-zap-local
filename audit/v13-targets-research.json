@@ -1,0 +1,53 @@
+[
+  {
+    "id": "appbarber",
+    "url": "https://appbarber.com.br/",
+    "status": 200,
+    "blocked": false,
+    "tag": "[O]",
+    "title": "AppBarber",
+    "data": {
+      "bg": "rgb(255, 255, 255)",
+      "font": "Quicksand, sans-serif",
+      "h1": "AppBarber",
+      "sections": 0,
+      "navLinks": [
+        "HOME (current)",
+        "SOBRE",
+        "FUNÇÕES",
+        "PREÇOS",
+        "TESTE GRÁTIS",
+        "BLOG",
+        "ACESSAR"
+      ]
+    }
+  },
+  {
+    "id": "insider",
+    "url": "https://www.insiderstore.com.br/",
+    "tag": "[L]",
+    "error": "page.goto: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://www.insiderstore.com.b"
+  },
+  {
+    "id": "giuliana",
+    "url": "https://www.giulianaflores.com.br/",
+    "status": 200,
+    "blocked": false,
+    "tag": "[O]",
+    "title": "A Maior Floricultura Online do Brasil — Entrega Hoje",
+    "data": {
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "Montserrat, Arial, \"Helvetica LT Std\", Verdana, sans-serif",
+      "h1": "",
+      "sections": 15,
+      "navLinks": [
+        "×",
+        "Televendas\n                                            11 3383-1700",
+        "Atendimento\n                                            11 4224-9930",
+        "WhatsApp\n                                            11 3383-1700",
+        "Ajuda",
+        "Cashback"
+      ]
+    }
+  }
+]

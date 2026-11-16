@@ -31,6 +31,10 @@
     fetchUpcomingHolidaysBR,
   } = window.VitrineCategoryApis;
   const { getDesignSystemForCategory } = window.VitrineDesignSystems;
+  const { getItemSwatches, renderRichItemArt } = window.VitrineIllustrations || {
+    getItemSwatches: () => [],
+    renderRichItemArt: () => '',
+  };
   const {
     generateBrandTokens,
     validateBrandConfig,
@@ -72,6 +76,9 @@
   let selectedFipeVehicle = null;
   let lastMaintenanceEstimate = null;
   let manualThemeOverride = null;
+  let petClubActive = false;
+  let cockpitMileageKm = 40000;
+  const selectedSwatchMap = {};
   const selectedPackIdxMap = {};
   const selectedSlotMap = {};
   const selectedSizeMap = {};
@@ -247,10 +254,23 @@
     syncBodyScrollLock();
   }
 
+  function updateVirtualFitRecommendation() {
+    const h = Number(document.getElementById('fit-height-cm')?.value || 175);
+    const w = Number(document.getElementById('fit-weight-kg')?.value || 76);
+    const ratio = w / Math.max(1.4, h / 100);
+    let rec = 'M';
+    if (w < 64 && h < 173) rec = 'P';
+    else if (ratio > 47 || w >= 92) rec = 'GG';
+    else if (w >= 80 || h >= 182) rec = 'G';
+    const el = document.getElementById('fit-recommendation-pill');
+    if (el) el.innerHTML = `Tamanho sugerido: <strong>${rec}</strong> (${h} cm • ${w} kg)`;
+  }
+
   function openSizeGuideModal() {
     const mod = window.VitrineMechanics['variant-picker'];
     const html = mod ? mod.renderSizeGuideTableHtml() : '<p>Medidas P (92-96cm) a GG (114-120cm).</p>';
     document.getElementById('size-guide-body').innerHTML = html;
+    updateVirtualFitRecommendation();
     document.getElementById('size-guide-backdrop').classList.remove('hidden');
     document.getElementById('size-guide-modal').classList.remove('hidden');
     syncBodyScrollLock();
@@ -500,21 +520,97 @@
     document.getElementById('modal-add-btn').textContent = `Adicionar • ${formatBrl(total)}`;
   }
 
+  function updateCockpitPrediction() {
+    const veh = selectedFipeVehicle || {
+      brand: 'Veículo',
+      model: document.getElementById('quick-veh-model')?.value || 'Chevrolet Onix 1.0',
+      year: 2022,
+      fuel: 'Flex',
+      fipePriceNumber: 76500,
+    };
+    const est = estimateMaintenanceByVehicleAndMileage({
+      vehicleName: `${veh.brand} ${veh.model}`.trim(),
+      fipePriceNumber: veh.fipePriceNumber,
+      fuel: veh.fuel,
+      year: veh.year,
+      mileageKm: cockpitMileageKm,
+    });
+    const chip = document.getElementById('cockpit-predict-chip');
+    if (chip) {
+      chip.textContent = `${(cockpitMileageKm / 1000).toFixed(0)}k km • Est. ${formatBrl(est.totalMin)}–${formatBrl(est.totalMax)}`;
+    }
+    return { veh, est };
+  }
+
   function renderVerticalContextSlot() {
     const slot = document.getElementById('vertical-context-slot');
+    const vKey = state.vertical || state.id || 'lanchonete';
 
     if (hasMech('inspection-checklist')) {
       slot.classList.remove('hidden');
       slot.innerHTML = `
-        <div class="auto-vehicle-bar">
-          <div class="container auto-vehicle-grid-v12">
-            <input type="text" id="quick-veh-model" list="fipe-vehicles-list" class="text-input compact-input" placeholder="Veículo (Ex: Onix 1.0)" aria-label="Modelo do veículo" />
-            <input type="text" id="quick-veh-plate" class="text-input compact-input mono" placeholder="Placa / KM" aria-label="Placa ou quilometragem" />
-            <button type="button" id="open-fipe-est-btn" class="btn btn-primary fipe-open-btn">FIPE + KM</button>
+        <div class="dvi-cockpit-stage">
+          <div class="container">
+            <div class="auto-vehicle-grid-v12" style="margin-bottom:4px;">
+              <input type="text" id="quick-veh-model" list="fipe-vehicles-list" class="text-input compact-input" value="${selectedFipeVehicle ? `${selectedFipeVehicle.brand} ${selectedFipeVehicle.model}` : ''}" placeholder="Veículo (Ex: Onix 1.0)" aria-label="Modelo do veículo" />
+              <input type="text" id="quick-veh-plate" class="text-input compact-input mono" placeholder="Placa / KM" aria-label="Placa ou quilometragem" />
+              <button type="button" id="open-fipe-est-btn" class="btn btn-primary fipe-open-btn">FIPE + KM</button>
+            </div>
+            <div class="dvi-km-row">
+              <label for="cockpit-km-slider" class="sr-only">Quilometragem estimada</label>
+              <input type="range" id="cockpit-km-slider" class="dvi-km-slider" min="10000" max="120000" step="10000" value="${cockpitMileageKm}" aria-label="Quilometragem para predição de revisão" />
+              <span id="cockpit-predict-chip" class="dvi-predict-chip"></span>
+            </div>
           </div>
           <datalist id="fipe-vehicles-list"></datalist>
         </div>`;
+      updateCockpitPrediction();
       slot.querySelector('#open-fipe-est-btn').addEventListener('click', openFipeEstimatorModal);
+      slot.querySelector('#cockpit-km-slider').addEventListener('input', (e) => {
+        cockpitMileageKm = Number(e.target.value || 40000);
+        const fKm = document.getElementById('fipe-km-input');
+        if (fKm) fKm.value = String(cockpitMileageKm);
+        updateCockpitPrediction();
+      });
+      return;
+    }
+
+    if (hasMech('slot-picker')) {
+      const spMod = window.VitrineMechanics['slot-picker'];
+      const days = spMod ? spMod.getUpcomingDays(4) : [{ iso: selectedBookingDayIso, label: 'Hoje' }];
+      const barbers = ['Todos', ...new Set((state.items || []).flatMap(i => String(i.barber || '').split('/').map(s => s.trim())).filter(Boolean))];
+      slot.classList.remove('hidden');
+      slot.innerHTML = `
+        <div class="barber-funnel-stage">
+          <div class="container">
+            <div class="barber-step-track">
+              <span>1. Barbeiro → 2. Data → 3. Horário</span>
+              <span>★ 5.0 Clube</span>
+            </div>
+            <div class="barber-avatars-row" role="radiogroup" aria-label="Escolher barbeiro" style="margin-bottom:6px;">
+              ${barbers.map(b => `<button type="button" role="radio" aria-checked="${b === selectedBarberFilter ? 'true' : 'false'}" class="barber-avatar-pill ${b === selectedBarberFilter ? 'active' : ''}" data-barber="${b}">
+                <span class="barber-avatar-circle" aria-hidden="true">${b === 'Todos' ? '★' : b.slice(0, 2).toUpperCase()}</span>
+                <span>${b}</span>
+              </button>`).join('')}
+            </div>
+            <div class="barber-days-row" role="radiogroup" aria-label="Data do agendamento">
+              ${days.map(d => `<button type="button" role="radio" aria-checked="${d.iso === selectedBookingDayIso ? 'true' : 'false'}" class="barber-day-pill ${d.iso === selectedBookingDayIso ? 'active' : ''}" data-bday="${d.iso}">${d.label}</button>`).join('')}
+            </div>
+          </div>
+        </div>`;
+      slot.querySelectorAll('[data-barber]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedBarberFilter = btn.dataset.barber;
+          renderVerticalContextSlot();
+          renderCatalog();
+        });
+      });
+      slot.querySelectorAll('[data-bday]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedBookingDayIso = btn.dataset.bday;
+          renderVerticalContextSlot();
+        });
+      });
       return;
     }
 
@@ -525,7 +621,8 @@
       slot.innerHTML = `
         <div class="container pet-reorder-strip">
           <div class="pet-reorder-card">
-            <button type="button" id="pet-quick-repeat-btn" class="btn-pet-repeat">Repetir ${profile.petName ? 'de ' + profile.petName : 'último pedido'}</button>
+            <button type="button" id="pet-quick-repeat-btn" class="btn-pet-repeat">Repetir ${profile.petName ? 'de ' + profile.petName : 'pedido'}</button>
+            <button type="button" id="pet-club-toggle" role="switch" aria-checked="${petClubActive ? 'true' : 'false'}" class="pet-club-toggle ${petClubActive ? 'active' : ''}">Clube -10%</button>
             <div class="pet-size-pills" role="radiogroup" aria-label="Porte do Pet">
               <button type="button" role="radio" aria-checked="${currSize === 'Pequeno' ? 'true' : 'false'}" class="pet-size-chip ${currSize === 'Pequeno' ? 'active' : ''}" data-petsize="Pequeno" aria-label="Porte Pequeno">P</button>
               <button type="button" role="radio" aria-checked="${currSize === 'Médio' ? 'true' : 'false'}" class="pet-size-chip ${currSize === 'Médio' ? 'active' : ''}" data-petsize="Médio" aria-label="Porte Médio">M</button>
@@ -547,6 +644,13 @@
         }
         openCartDrawer();
       });
+      slot.querySelector('#pet-club-toggle').addEventListener('click', () => {
+        petClubActive = !petClubActive;
+        renderVerticalContextSlot();
+        renderCatalog();
+        renderCart();
+        showToast(petClubActive ? 'Clube Pet ativo: 10% OFF aplicado!' : 'Preços avulsos restaurados.');
+      });
       slot.querySelectorAll('.pet-size-chip').forEach(btn => {
         btn.addEventListener('click', () => {
           slot.querySelectorAll('.pet-size-chip').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-checked', 'false'); });
@@ -563,9 +667,16 @@
 
     if (hasMech('variant-picker')) {
       slot.classList.remove('hidden');
-      slot.innerHTML = `<div class="container context-compact-row" style="justify-content:flex-end; padding-top:4px;">
-        <button type="button" id="open-size-guide-btn" class="pill-btn">Guia de Medidas (cm)</button>
-      </div>`;
+      slot.innerHTML = `
+        <div class="fashion-announce-bar">Frete grátis &gt; R$ 199 • Tecido Tech • 1ª Troca Grátis</div>
+        <div class="fashion-tech-bar">
+          <div class="fashion-tech-chips">
+            <span class="fashion-tech-chip">Antiodor</span>
+            <span class="fashion-tech-chip">Térmico</span>
+            <span class="fashion-tech-chip">Não Amassa</span>
+          </div>
+          <button type="button" id="open-size-guide-btn" class="pill-btn" style="flex-shrink:0;">Provador / cm</button>
+        </div>`;
       slot.querySelector('#open-size-guide-btn').addEventListener('click', openSizeGuideModal);
       return;
     }
@@ -573,15 +684,56 @@
     if (hasMech('occasion-card-message')) {
       const occMod = window.VitrineMechanics['occasion-card-message'];
       const occasions = occMod ? occMod.OCCASIONS : ['Todas', 'Romântico', 'Aniversário', 'Agradecimento'];
+      const icons = { Todas: '✿', Romântico: '♥', Aniversário: '✦', Agradecimento: '❀' };
       slot.classList.remove('hidden');
-      slot.innerHTML = `<div class="context-compact-row container" role="radiogroup" aria-label="Ocasião do presente">
-        ${occasions.map(o => `<button type="button" role="radio" aria-checked="${o === activeOccasion ? 'true' : 'false'}" class="pill-btn ${o === activeOccasion ? 'active' : ''}" data-occ="${o}">${o}</button>`).join('')}
-      </div>`;
+      slot.innerHTML = `
+        <div class="floral-trust-strip">
+          <span>Entrega Expressa Hoje (até 3h)</span>
+          <span>Cartão Dedicatória Grátis</span>
+        </div>
+        <div class="floral-stories-row" role="radiogroup" aria-label="Ocasião do presente">
+          ${occasions.map(o => `<button type="button" role="radio" aria-checked="${o === activeOccasion ? 'true' : 'false'}" class="floral-story-btn ${o === activeOccasion ? 'active' : ''}" data-occ="${o}">
+            <span class="floral-story-dot" aria-hidden="true">${icons[o] || '✿'}</span><span>${o}</span>
+          </button>`).join('')}
+        </div>`;
       slot.querySelectorAll('[data-occ]').forEach(btn => {
         btn.addEventListener('click', () => {
           activeOccasion = btn.dataset.occ;
           renderVerticalContextSlot();
           renderCatalog();
+        });
+      });
+      return;
+    }
+
+    if (vKey === 'padaria' || vKey === 'lanchonete') {
+      const featured = (state.items || []).filter(i => !i.paused).slice(0, 3);
+      const railTitle = vKey === 'padaria' ? 'Fornadas Mais Pedidas' : 'Destaques na Brasa';
+      const railTag = vKey === 'padaria' ? 'Fornada 08h / 16h' : 'Entrega Expressa';
+      slot.classList.remove('hidden');
+      slot.innerHTML = `
+        <div class="express-highlights-wrap">
+          <div class="container">
+            <div class="express-rail-head">
+              <span>${railTitle}</span>
+              <span class="mono">${railTag}</span>
+            </div>
+            <div class="express-rail-scroll">
+              ${featured.map(it => `<div class="rail-mini-card">
+                <div class="rail-mini-art">${renderRichItemArt(vKey, it)}</div>
+                <div class="rail-mini-info">
+                  <div class="rail-mini-name">${it.name}</div>
+                  <div class="rail-mini-price mono">${formatBrl(it.price)}</div>
+                </div>
+                <button type="button" class="mini-add-btn rail-add-btn" data-id="${it.id}" aria-label="Pedir ${it.name}">+</button>
+              </div>`).join('')}
+            </div>
+          </div>
+        </div>`;
+      slot.querySelectorAll('.rail-add-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const it = (state.items || []).find(i => i.id === btn.dataset.id);
+          if (it) addItemToCart(it, 1);
         });
       });
       return;
@@ -655,6 +807,7 @@
           <div class="quick-tags">${templates.map(t => `<button type="button" class="quick-tag-btn card-tpl-btn" data-txt="${t.text}">+ ${t.occasion}</button>`).join('')}</div>
           <input type="text" id="cake-message" maxlength="160" class="text-input" placeholder="Escreva sua mensagem..." />
           <div class="char-counter-row"><span>Opcional</span><span id="card-char-count" class="mono" aria-live="polite">0/160</span></div>
+          <div id="card-live-preview" class="floral-card-preview">Sua dedicatória aparecerá aqui como no cartão impresso.</div>
         </div>
         <button type="button" id="surprise-gift-switch" role="switch" aria-checked="${surpriseGiftFlag ? 'true' : 'false'}" class="deposit-switch-btn surprise-switch-btn ${surpriseGiftFlag ? 'active' : ''}">
           <span>Presente surpresa (não revelar meu nome)</span>
@@ -662,16 +815,25 @@
         </button>`;
       const msgEl = box.querySelector('#cake-message');
       const cntEl = box.querySelector('#card-char-count');
-      msgEl.addEventListener('input', () => { cntEl.textContent = `${msgEl.value.length}/160`; });
+      const prevEl = box.querySelector('#card-live-preview');
+      const syncPreview = () => {
+        cntEl.textContent = `${msgEl.value.length}/160`;
+        const txt = msgEl.value.trim();
+        prevEl.textContent = txt
+          ? (surpriseGiftFlag ? `"${txt}" — Presente Surpresa (sem remetente)` : `"${txt}"`)
+          : 'Sua dedicatória aparecerá aqui como no cartão impresso.';
+      };
+      msgEl.addEventListener('input', syncPreview);
       box.querySelectorAll('.card-tpl-btn').forEach(b => b.addEventListener('click', () => {
         msgEl.value = b.dataset.txt;
-        cntEl.textContent = `${msgEl.value.length}/160`;
+        syncPreview();
       }));
       const surBtn = box.querySelector('#surprise-gift-switch');
       surBtn.addEventListener('click', () => {
         surpriseGiftFlag = !surpriseGiftFlag;
         surBtn.classList.toggle('active', surpriseGiftFlag);
         surBtn.setAttribute('aria-checked', surpriseGiftFlag ? 'true' : 'false');
+        syncPreview();
       });
       return;
     }
@@ -921,6 +1083,8 @@
       surpriseGiftFlag = false;
       manualThemeOverride = null;
       selectedFipeVehicle = null;
+      petClubActive = false;
+      selectedBarberFilter = 'Todos';
       routeInfo = null;
       document.getElementById('coupon-input').value = '';
       store.saveState(state);
@@ -967,13 +1131,19 @@
 
   function renderCatalog() {
     const q = (document.getElementById('search-input').value || '').toLowerCase();
+    const verticalKey = state.vertical || state.id || 'lanchonete';
     let list = (state.items || []).filter(item => {
       if (item.paused) return false;
       const matchCat = activeCategory === 'Todos' || item.category === activeCategory;
       const matchText = !q || item.name.toLowerCase().includes(q) || (item.description || '').toLowerCase().includes(q) || (item.sku || '').toLowerCase().includes(q);
+      if (hasMech('slot-picker') && selectedBarberFilter !== 'Todos') {
+        if (!String(item.barber || '').includes(selectedBarberFilter)) return false;
+      }
       if (hasMech('occasion-card-message') && activeOccasion !== 'Todas') {
         const occHay = `${item.name} ${item.description} ${item.category} ${item.yieldLabel || ''}`.toLowerCase();
-        if (activeOccasion === 'Romântico' && !/rosa|orqu[ií]dea|buqu[eê]/i.test(occHay)) return matchCat && matchText;
+        if (activeOccasion === 'Romântico' && !/rosa|orqu[ií]dea|buqu[eê]/i.test(occHay)) return false;
+        if (activeOccasion === 'Aniversário' && !/girassol|buqu[eê]|orqu[ií]dea/i.test(occHay)) return false;
+        if (activeOccasion === 'Agradecimento' && !/jiboia|orqu[ií]dea|cesta/i.test(occHay)) return false;
       }
       return matchCat && matchText;
     });
@@ -984,18 +1154,22 @@
 
     const grid = document.getElementById('catalog-grid');
     if (!list.length) {
-      grid.innerHTML = '<div class="cart-empty">Nenhum item encontrado.</div>';
+      grid.innerHTML = '<div class="cart-empty">Nenhum item encontrado para este filtro.</div>';
       return;
     }
 
     const layoutMode = state.layout?.catalog || state.layoutMode || 'list-thumb';
-    const emblem = NICHE_EMBLEMS[state.vertical || state.id] || NICHE_EMBLEMS.lanchonete;
+    const emblem = NICHE_EMBLEMS[verticalKey] || NICHE_EMBLEMS.lanchonete;
     const petMod = window.VitrineMechanics['autoship-reminder'];
     const inspMod = window.VitrineMechanics['inspection-checklist'];
     const petProfile = store.loadCustomerProfile();
 
     grid.innerHTML = list.map(item => {
-      const visualContent = item.photoDataUrl ? `<img src="${item.photoDataUrl}" alt="${item.name}" />` : emblem;
+      const swatches = verticalKey === 'moda' ? getItemSwatches(item) : [];
+      const currSwatch = swatches.length ? (selectedSwatchMap[item.id] || swatches[0]) : null;
+      if (currSwatch) selectedSwatchMap[item.id] = currSwatch;
+      const richArt = !item.photoDataUrl ? renderRichItemArt(verticalKey, item, { swatchHex: currSwatch?.hex }) : '';
+      const visualContent = item.photoDataUrl ? `<img src="${item.photoDataUrl}" alt="${item.name}" />` : (richArt || emblem);
 
       if (layoutMode === 'agenda-slots') {
         const slots = Array.isArray(item.slots) && item.slots.length ? item.slots : (state.scheduleWindows || ['09:30', '14:00']);
@@ -1026,11 +1200,18 @@
         const sizes = Array.isArray(item.sizes) && item.sizes.length ? item.sizes : ['P', 'M', 'G'];
         const currSize = selectedSizeMap[item.id] || sizes[0];
         selectedSizeMap[item.id] = currSize;
+        const swatchesHtml = swatches.length
+          ? `<div class="swatch-dots-row" role="radiogroup" aria-label="Cores de ${item.name}">${swatches.map(sw =>
+              `<button type="button" role="radio" aria-checked="${sw.name === currSwatch?.name ? 'true' : 'false'}" class="swatch-dot-btn ${sw.name === currSwatch?.name ? 'active' : ''}" data-item="${item.id}" data-sw="${sw.name}" aria-label="${sw.name}"><span class="swatch-circle" style="background:${sw.hex}"></span></button>`
+            ).join('')}</div>`
+          : '';
         return `<article class="fashion-card" data-open-id="${item.id}">
-          <div class="fashion-visual">${visualContent}</div>
+          <div class="fashion-visual card-art-svg">${visualContent}</div>
           <div class="fashion-body">
-            ${item.colorTag ? `<span class="fashion-color-tag">${item.colorTag}</span>` : ''}
+            ${currSwatch ? `<span class="fashion-color-tag">${currSwatch.name}</span>` : (item.colorTag ? `<span class="fashion-color-tag">${item.colorTag}</span>` : '')}
             <h3>${item.name}</h3>
+            <span class="fashion-fabric-tag">${item.category} • Tech Respirável</span>
+            ${swatchesHtml}
             <div class="size-chips-row" role="radiogroup" aria-label="Tamanhos de ${item.name}">
               ${sizes.map(sz => `<button type="button" role="radio" aria-checked="${sz === currSize ? 'true' : 'false'}" class="size-chip ${sz === currSize ? 'active' : ''}" data-item="${item.id}" data-size="${sz}">${sz}</button>`).join('')}
             </div>
@@ -1042,7 +1223,7 @@
 
       if (layoutMode === 'bakery-editorial' || layoutMode === 'editorial-grid' || layoutMode === 'botanical-editorial') {
         return `<article class="bakery-card" data-open-id="${item.id}">
-          <div class="bakery-top-art">${visualContent}</div>
+          <div class="bakery-top-art card-art-svg">${visualContent}</div>
           <div class="bakery-body">
             ${item.yieldLabel ? `<span class="bakery-yield">${item.yieldLabel}</span>` : ''}
             <h3>${item.name}</h3>
@@ -1056,7 +1237,8 @@
         const packs = Array.isArray(item.packOptions) ? item.packOptions : [];
         const pIdx = selectedPackIdxMap[item.id] ?? item.defaultPackIdx ?? 0;
         const activePack = packs[pIdx] || null;
-        const dispPrice = activePack ? activePack.price : item.price;
+        const baseP = activePack ? activePack.price : item.price;
+        const dispPrice = petClubActive ? Number((baseP * 0.9).toFixed(2)) : baseP;
         let durationBadge = item.cycleLabel || '';
         if (hasMech('autoship-reminder') && petMod && activePack) {
           const kg = petMod.extractKgFromLabel(activePack.label);
@@ -1157,6 +1339,19 @@
       });
     });
 
+    grid.querySelectorAll('.swatch-dot-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const it = (state.items || []).find(i => i.id === btn.dataset.item);
+        const listSw = it ? getItemSwatches(it) : [];
+        const chosen = listSw.find(s => s.name === btn.dataset.sw);
+        if (chosen) {
+          selectedSwatchMap[btn.dataset.item] = chosen;
+          renderCatalog();
+        }
+      });
+    });
+
     grid.querySelectorAll('.add-btn, .card-inc-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1164,12 +1359,20 @@
         if (!item) return;
         const packs = Array.isArray(item.packOptions) ? item.packOptions : [];
         const pIdx = selectedPackIdxMap[item.id] ?? item.defaultPackIdx ?? 0;
-        const pack = packs[pIdx] || null;
+        let pack = packs[pIdx] || null;
+        let itemToAdd = item;
+        if (petClubActive && verticalKey === 'petshop') {
+          if (pack) pack = { ...pack, label: `${pack.label} (Clube -10%)`, price: Number((pack.price * 0.9).toFixed(2)) };
+          else itemToAdd = { ...item, price: Number((item.price * 0.9).toFixed(2)) };
+        }
         let variant = '';
         if (selectedSlotMap[item.id]) variant = `Horário ${selectedSlotMap[item.id]}`;
-        else if (selectedSizeMap[item.id]) variant = `Tam. ${selectedSizeMap[item.id]}`;
+        else if (selectedSizeMap[item.id]) {
+          const sw = selectedSwatchMap[item.id];
+          variant = sw ? `Cor ${sw.name} • Tam. ${selectedSizeMap[item.id]}` : `Tam. ${selectedSizeMap[item.id]}`;
+        }
 
-        addItemToCart(item, 1, [], '', variant, pack);
+        addItemToCart(itemToAdd, 1, [], '', variant, pack);
         // Fluxo expresso (3-4 toques) na Barbearia via slot-picker
         if (hasMech('slot-picker')) {
           openCartDrawer(2);
@@ -1724,6 +1927,8 @@
 
     document.getElementById('close-size-guide-btn').addEventListener('click', closeSizeGuideModal);
     document.getElementById('size-guide-backdrop').addEventListener('click', closeSizeGuideModal);
+    document.getElementById('fit-height-cm').addEventListener('input', updateVirtualFitRecommendation);
+    document.getElementById('fit-weight-kg').addEventListener('input', updateVirtualFitRecommendation);
 
     document.getElementById('close-fipe-est-btn').addEventListener('click', closeFipeEstimatorModal);
     document.getElementById('fipe-estimator-backdrop').addEventListener('click', closeFipeEstimatorModal);

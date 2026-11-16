@@ -679,3 +679,136 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn, .pack-chip, .slot-chip, 
   border: 1px solid var(--brand-border-tint);
 }
 
+/* ==========================================================================
+   VitrineZap v13.0 — Arquiteturas Distintas por Categoria (Mobile-First UX)
+   ========================================================================== */
+.card-art-svg svg { display: block; margin: 0 auto; }
+.bakery-top-art { height: 96px; padding: 6px; }
+.fashion-visual { height: 108px; padding: 8px; }
+.food-thumb-wrap { background: var(--brand-surface-tint); }
+
+/* 1. BARBEARIA (Grooming Funnel: Barbers + Day Ribbon) */
+.barber-funnel-stage { background: #141210; border-bottom: 1px solid #44382C; padding: 6px 0 8px; }
+.barber-step-track {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  font-size: 0.7rem; font-weight: 700; color: #FBBF24; letter-spacing: 0.04em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.barber-avatars-row, .barber-days-row {
+  display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px;
+}
+.barber-avatars-row::-webkit-scrollbar, .barber-days-row::-webkit-scrollbar { display: none; }
+.barber-avatar-pill {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; min-width: 44px;
+  padding: 4px 10px 4px 5px; border: 1px solid #44382C; background: #1D1916; color: #F5EFE6;
+  border-radius: 2px; font-size: 0.76rem; font-weight: 700; white-space: nowrap; cursor: pointer; flex-shrink: 0;
+}
+.barber-avatar-pill.active { background: #D97706; color: #141210; border-color: #FBBF24; }
+.barber-avatar-circle {
+  width: 28px; height: 28px; border-radius: 99px; background: #29231E; color: #FBBF24;
+  display: grid; place-items: center; font-size: 0.7rem; font-weight: 800; border: 1px solid #785626;
+}
+.barber-avatar-pill.active .barber-avatar-circle { background: #141210; color: #FBBF24; border-color: #141210; }
+.barber-day-pill {
+  min-height: 44px; min-width: 64px; padding: 4px 10px; border: 1px solid #44382C;
+  background: #191613; color: #D6CBC0; border-radius: 2px; font-family: var(--font-mono);
+  font-size: 0.72rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
+}
+.barber-day-pill.active { background: #292118; color: #FBBF24; border-color: #D97706; }
+[data-ds="heritage-grooming"] .toolbar-top { display: none; }
+
+/* 2. MODA (Tech Apparel: Announcement + Benefit Strip + Swatches) */
+.fashion-announce-bar {
+  background: #09090B; color: #FFFFFF; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.08em; text-align: center; padding: 5px 10px; text-transform: uppercase;
+}
+.fashion-tech-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 4px 12px;
+  border-bottom: 1px solid #E4E4E7; background: #FAFAFA;
+}
+.fashion-tech-chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; font-size: 0.68rem; font-weight: 700; color: #18181B; }
+.fashion-tech-chip { background: #FFFFFF; border: 1px solid #D4D4D8; padding: 4px 7px; white-space: nowrap; }
+.swatch-dots-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0; margin-bottom: 2px; }
+.swatch-dot-btn {
+  min-width: 44px; min-height: 44px; border: 0; background: transparent; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer; position: relative;
+}
+.swatch-circle {
+  width: 22px; height: 22px; border-radius: 99px; border: 2px solid #D4D4D8; display: block;
+}
+.swatch-dot-btn.active .swatch-circle { border: 2px solid #09090B; box-shadow: 0 0 0 2px #FFFFFF inset; }
+.fashion-fabric-tag { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #52525B; }
+.virtual-fitter-box {
+  background: var(--surface-subtle); border: 1px solid var(--hairline); padding: 10px;
+  margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;
+}
+.fit-recommendation-pill {
+  background: var(--brand-surface-tint); border: 1px solid var(--brand-border-tint);
+  color: var(--brand-ink-accent); padding: 6px 10px; font-size: 0.8rem; font-weight: 600;
+}
+[data-ds="minimal-runway"] .store-meta-strip { display: none; }
+
+/* 3. PADARIA & LANCHONETE (Express Merchant Rail) */
+.express-highlights-wrap { padding: 6px 0 4px; background: var(--canvas); border-bottom: 1px solid var(--hairline); }
+.express-rail-head {
+  display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; font-weight: 800;
+  color: var(--brand-ink-accent); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;
+}
+.express-rail-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.express-rail-scroll::-webkit-scrollbar { display: none; }
+.rail-mini-card {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  background: var(--surface-card); border: 1px solid var(--hairline); border-radius: var(--radius-md);
+  padding: 5px 8px; min-width: 205px; box-shadow: var(--shadow-sm);
+}
+.rail-mini-art { width: 42px; height: 42px; flex-shrink: 0; display: grid; place-items: center; }
+.rail-mini-art svg { width: 40px; height: 40px; }
+.rail-mini-info { flex: 1; min-width: 0; }
+.rail-mini-name { font-size: 0.74rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rail-mini-price { font-size: 0.74rem; font-weight: 800; color: var(--brand-ink-accent); }
+
+/* 4. FLORICULTURA (Occasion Stories + Postal Trust + Card Preview) */
+.floral-trust-strip {
+  background: #14532D; color: #FFFFFF; font-size: 0.7rem; font-weight: 700;
+  padding: 4px 12px; display: flex; justify-content: space-between; align-items: center; gap: 6px;
+}
+.floral-stories-row {
+  display: flex; gap: 8px; overflow-x: auto; padding: 6px 12px; scrollbar-width: none;
+  background: #F6FAF7; border-bottom: 1px solid #BFD8C4;
+}
+.floral-stories-row::-webkit-scrollbar { display: none; }
+.floral-story-btn {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 4px 12px 4px 6px;
+  border: 1px solid #BFD8C4; background: #FFFFFF; color: #132A1C; border-radius: 14px 4px 14px 4px;
+  font-size: 0.76rem; font-weight: 700; flex-shrink: 0; cursor: pointer;
+}
+.floral-story-btn.active { background: #166534; color: #FFFFFF; border-color: #14532D; }
+.floral-story-dot {
+  width: 28px; height: 28px; border-radius: 99px; background: #ECFDF3;
+  display: grid; place-items: center; font-size: 0.78rem; color: #14532D; border: 1px solid #A7F3D0;
+}
+.floral-card-preview {
+  background: #FFFBEB; border: 1px dashed #B45309; border-radius: 12px 3px 12px 3px;
+  padding: 10px 12px; font-family: Georgia, serif; font-style: italic; font-size: 0.84rem;
+  color: #451A03; margin-top: 6px;
+}
+
+/* 5. OFICINA (Carbon Vehicle Health Telemetry HUD + Live Mileage Slider) */
+.dvi-cockpit-stage { background: #0B1018; border-bottom: 1px solid #2A3950; padding: 6px 0; }
+.dvi-cockpit-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; }
+.dvi-km-row { display: flex; align-items: center; gap: 8px; }
+.dvi-km-slider { flex: 1; min-height: 44px; accent-color: #38BDF8; cursor: pointer; }
+.dvi-predict-chip {
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+  color: #7DD3FC; background: #12263A; border: 1px solid #254D70; padding: 3px 8px; border-radius: 4px;
+}
+[data-ds="precision-telemetry"] .store-meta-strip { display: none; }
+
+/* 6. PET SHOP (Club -10% Switch + Meu Pet) */
+.pet-club-toggle {
+  min-height: 44px; min-width: 44px; padding: 4px 10px; border: 1px solid #0F766E;
+  background: #F0FDF9; color: #0F2E28; border-radius: 99px; font-size: 0.74rem; font-weight: 700; cursor: pointer;
+}
+.pet-club-toggle.active { background: #0F766E; color: #FFFFFF; }
+
+
