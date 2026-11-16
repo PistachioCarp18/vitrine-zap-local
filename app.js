@@ -22,6 +22,13 @@
   let paymentMethod = 'Pix';
   let activeCouponCode = '';
 
+  const NICHE_EMBLEMS = {
+    lanchonete: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11h18"/><path d="M5 11a7 7 0 0 1 14 0"/><path d="M4 15h16a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1a1 1 0 0 1 1-1z"/></svg>',
+    padaria: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>',
+    petshop: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg>',
+    oficina: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+  };
+
   function loadInitialState() {
     const params = new URLSearchParams(window.location.search);
     const shared = params.get('loja');
@@ -51,17 +58,23 @@
     document.documentElement.setAttribute('data-theme', theme);
   }
 
-  function getCategoryIconSvg() {
-    return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>';
-  }
-
   function applyTheme() {
-    document.documentElement.style.setProperty('--brand-primary', state.primaryColor || '#0F766E');
+    const root = document.documentElement;
+    root.style.setProperty('--brand-primary', state.primaryColor || '#D9480F');
+    if (state.canvasColor) root.style.setProperty('--canvas', state.canvasColor);
+    if (state.inkColor) root.style.setProperty('--text-primary', state.inkColor);
+
+    const emblem = NICHE_EMBLEMS[state.id] || NICHE_EMBLEMS.lanchonete;
+    document.getElementById('brand-mark-icon').innerHTML = emblem;
+    document.getElementById('hero-emblem').innerHTML = emblem;
+
+    document.getElementById('art-direction-tag').textContent = `${state.artDirection || 'Vitrine Direta'} • Zero Taxa`;
     document.getElementById('store-title').textContent = state.storeName;
     document.getElementById('topbar-store-name').textContent = state.storeName;
     document.getElementById('store-tagline').textContent = state.tagline || '';
     document.getElementById('store-neighborhood').textContent = state.neighborhood || 'Sorocaba-SP';
     document.getElementById('cart-title').textContent = state.mode === 'orcamento' ? 'Orçamento / OS' : 'Seu Pedido';
+    document.getElementById('hero-eta').textContent = state.etaLabel || '30 min';
 
     const openHour = state.openHour || '08:00';
     const closeHour = state.closeHour || '22:00';
@@ -69,11 +82,33 @@
     const isOpen = isStoreOpenNow(openHour, closeHour);
     const statusPill = document.getElementById('store-status-pill');
     statusPill.classList.toggle('closed', !isOpen);
-    document.getElementById('store-status-text').textContent = isOpen ? 'Aberto agora' : 'Fechado (Aceita agendamento)';
+    document.getElementById('store-status-text').textContent = isOpen ? 'Aberto agora' : 'Fechado (Agendamento)';
 
     const activeItems = (state.items || []).filter(i => !i.paused);
-    document.getElementById('hero-delivery-fee').textContent = Number(state.deliveryFee || 0) > 0 ? formatBrl(state.deliveryFee) : 'Grátis / Retirada';
-    document.getElementById('hero-item-count').textContent = `${activeItems.length} itens`;
+    document.getElementById('hero-delivery-fee').textContent = Number(state.deliveryFee || 0) > 0 ? formatBrl(state.deliveryFee) : 'Grátis';
+    document.getElementById('hero-item-count').textContent = String(activeItems.length);
+
+    const promo = (state.coupons || [])[0];
+    const heroCouponBtn = document.getElementById('hero-coupon-pill');
+    if (promo) {
+      const label = promo.type === 'percent' ? `${promo.value}% OFF` : `${formatBrl(promo.value)} OFF`;
+      document.getElementById('hero-coupon-text').textContent = `Cupom ${promo.code} (${label}) — Aplicar`;
+      heroCouponBtn.classList.remove('hidden');
+      heroCouponBtn.dataset.code = promo.code;
+    } else {
+      heroCouponBtn.classList.add('hidden');
+    }
+
+    const tagsWrap = document.getElementById('quick-tags-wrap');
+    const tags = state.quickTags || ['Sem cebola', 'Nota Fiscal'];
+    tagsWrap.innerHTML = tags.map(t => `<button type="button" class="quick-tag-btn" data-tag="${t}">+ ${t}</button>`).join('');
+    tagsWrap.querySelectorAll('.quick-tag-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const input = document.getElementById('cust-notes');
+        const curr = input.value.trim();
+        input.value = curr ? `${curr}, ${btn.dataset.tag}` : btn.dataset.tag;
+      });
+    });
 
     const banner = document.getElementById('pitch-banner');
     const bannerText = document.getElementById('pitch-banner-text');
@@ -115,17 +150,22 @@
       document.getElementById('coupon-input').value = '';
       store.saveState(state);
       renderAll();
-      showToast(`Vitrine alterada para ${preset.label}`);
+      showToast(`Identidade visual alterada para ${preset.artDirection}`);
     });
   }
 
   function renderCategories() {
     const activeItems = (state.items || []).filter(i => !i.paused);
-    const cats = ['Todos', ...new Set(activeItems.map(i => i.category))];
+    const counts = activeItems.reduce((acc, i) => {
+      acc[i.category] = (acc[i.category] || 0) + 1;
+      return acc;
+    }, {});
+    const cats = ['Todos', ...Object.keys(counts)];
     const wrap = document.getElementById('category-pills');
-    wrap.innerHTML = cats.map(c =>
-      `<button type="button" class="pill-btn ${c === activeCategory ? 'active' : ''}" data-cat="${c}">${c}</button>`
-    ).join('');
+    wrap.innerHTML = cats.map(c => {
+      const n = c === 'Todos' ? activeItems.length : counts[c];
+      return `<button type="button" class="pill-btn ${c === activeCategory ? 'active' : ''}" data-cat="${c}">${c} (${n})</button>`;
+    }).join('');
     wrap.querySelectorAll('.pill-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         activeCategory = btn.dataset.cat;
@@ -167,8 +207,10 @@
       return;
     }
 
-    grid.innerHTML = list.map(item => {
+    grid.innerHTML = list.map((item, idx) => {
       const inCart = cart.find(c => c.id === item.id);
+      const isFeatured = idx === 0 && activeCategory === 'Todos' && !q && sortMode === 'featured';
+      const numLabel = String(idx + 1).padStart(2, '0');
       const actionHtml = inCart
         ? `<div class="qty-inline">
              <button type="button" class="card-dec-btn" data-id="${item.id}" aria-label="Remover 1">-</button>
@@ -178,9 +220,9 @@
         : `<button type="button" class="btn btn-primary btn-sm add-btn" data-id="${item.id}">Adicionar</button>`;
 
       return `
-        <article class="item-card">
+        <article class="item-card ${isFeatured ? 'item-card--featured' : ''}">
           <div class="item-visual">
-            <span class="item-cat-tag">${getCategoryIconSvg()}<span>${item.category}</span></span>
+            <span class="item-cat-tag"><span class="item-index">${numLabel}</span><span>${item.category}</span></span>
             ${item.badge ? `<span class="item-badge">${item.badge}</span>` : ''}
           </div>
           <div class="item-body">
@@ -244,7 +286,7 @@
     }
 
     if (!cart.length) {
-      wrap.innerHTML = '<div class="cart-empty">Selecione itens no catálogo para montar seu pedido ou orçamento.</div>';
+      wrap.innerHTML = '<div class="cart-empty">Selecione itens na vitrine para montar seu pedido ou orçamento.</div>';
       document.getElementById('pix-box').classList.add('hidden');
       return;
     }
@@ -387,7 +429,7 @@
     document.getElementById('cfg-delivery').value = Number(state.deliveryFee || 0);
     document.getElementById('cfg-open').value = state.openHour || '08:00';
     document.getElementById('cfg-close').value = state.closeHour || '22:00';
-    document.getElementById('cfg-color').value = state.primaryColor || '#0F766E';
+    document.getElementById('cfg-color').value = state.primaryColor || '#D9480F';
 
     const shareUrl = buildShareableUrl();
     document.getElementById('store-counter-qr').innerHTML = renderQrSvg(shareUrl, 132);
@@ -397,13 +439,23 @@
       <div class="admin-item-row">
         <div>
           <strong>${item.name}</strong> <span class="cart-row-sub">(${item.category}${item.paused ? ' • Pausado' : ''})</span>
-          <div class="cart-row-sub mono">${formatBrl(item.price)}</div>
         </div>
         <div class="inline-actions">
+          <input type="number" step="0.01" min="0" class="inline-price-input mono" data-id="${item.id}" value="${Number(item.price).toFixed(2)}" aria-label="Preço de ${item.name}" />
           <button type="button" class="btn btn-secondary btn-xs toggle-pause-btn" data-id="${item.id}">${item.paused ? 'Ativar' : 'Pausar'}</button>
           <button type="button" class="btn btn-secondary btn-xs remove-item-btn" data-id="${item.id}">Remover</button>
         </div>
       </div>`).join('');
+
+    listEl.querySelectorAll('.inline-price-input').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const val = Math.max(0, Number(inp.value || 0));
+        state.items = (state.items || []).map(i => i.id === inp.dataset.id ? { ...i, price: val } : i);
+        store.saveState(state);
+        renderCatalog();
+        showToast('Preço atualizado na vitrine.');
+      });
+    });
 
     listEl.querySelectorAll('.toggle-pause-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -445,11 +497,34 @@
     renderAdminPanel();
   }
 
+  function applyCouponCode(code) {
+    const clean = String(code || '').trim().toUpperCase();
+    if (!clean) {
+      activeCouponCode = '';
+      renderCart();
+      return;
+    }
+    const rawSubtotal = cart.reduce((acc, i) => acc + Number(i.qty || 0) * Number(i.price || 0), 0);
+    const { applied } = resolveCouponDiscount(rawSubtotal || 100, clean, state.coupons || []);
+    if (!applied) {
+      showToast('Cupom não encontrado nesta loja.');
+      return;
+    }
+    activeCouponCode = applied.code;
+    document.getElementById('coupon-input').value = applied.code;
+    renderCart();
+    showToast(`Cupom ${applied.code} aplicado ao carrinho.`);
+  }
+
   function bindEvents() {
     document.getElementById('search-input').addEventListener('input', renderCatalog);
     document.getElementById('sort-select').addEventListener('change', (e) => {
       sortMode = e.target.value;
       renderCatalog();
+    });
+
+    document.getElementById('hero-coupon-pill').addEventListener('click', (e) => {
+      applyCouponCode(e.currentTarget.dataset.code);
     });
 
     document.getElementById('theme-toggle-btn').addEventListener('click', () => {
@@ -460,21 +535,7 @@
     });
 
     document.getElementById('apply-coupon-btn').addEventListener('click', () => {
-      const code = document.getElementById('coupon-input').value.trim().toUpperCase();
-      if (!code) {
-        activeCouponCode = '';
-        renderCart();
-        return;
-      }
-      const rawSubtotal = cart.reduce((acc, i) => acc + Number(i.qty || 0) * Number(i.price || 0), 0);
-      const { applied } = resolveCouponDiscount(rawSubtotal || 100, code, state.coupons || []);
-      if (!applied) {
-        showToast('Cupom não encontrado nesta loja.');
-        return;
-      }
-      activeCouponCode = applied.code;
-      renderCart();
-      showToast(`Cupom ${applied.code} aplicado.`);
+      applyCouponCode(document.getElementById('coupon-input').value);
     });
 
     document.getElementById('clear-cart-btn').addEventListener('click', () => {

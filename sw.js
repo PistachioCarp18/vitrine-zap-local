@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vitrine-zap-v4';
+const CACHE_NAME = 'vitrine-zap-v5';
 const ASSETS = [
   './',
   './index.html',

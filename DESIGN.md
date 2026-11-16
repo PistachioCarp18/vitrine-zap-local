@@ -1,34 +1,26 @@
 ---
 product: VitrineZap Local
-version: 3.0.0
-squad_owner: ux-ui-design-squad
-benchmarks:
-  - Stripe Checkout & Dashboard (hierarquia tipografica, bordas 1px, tabulares)
-  - Shopify Polaris (tokens semanticos, KPI cards, acoes primarias)
-  - Mercado Libre Andes UI (checkout mobile 3 cliques, segmented controls, sticky bar)
-  - Linear (densidade limpa, zero emojis na UI, icones SVG uniformes, WCAG AA)
+version: 5.0.0
+cycles_completed: 30
+squad_owner: ux-ui-design-squad + innovation-squad + research-squad + frontend-squad
+aesthetic_direction: Bespoke Niche-Adaptive Editorial (Anti-Generic)
 ---
 
-# DESIGN.md — VitrineZap Local v3.0 (Commercial Pro Edition)
+# DESIGN.md — VitrineZap Local v5.0 (30 Ciclos • Originalidade & Direção de Arte)
 
-## 1. Paleta Semântica
-- **Canvas:** `#F6F8FB` (`--canvas`)
-- **Surface Card:** `#FFFFFF` (`--surface-card`)
-- **Surface Muted:** `#F1F5F9` (`--surface-muted`)
-- **Hairline Border:** `#E2E8F0` (`--hairline`)
-- **Brand Primary (White-Label):** `#0F766E` (`--brand-primary`, customizável por loja)
-- **Text Primary:** `#0F172A` (`--text-primary`)
-- **Text Muted:** `#475569` (`--text-muted`)
-- **WhatsApp CTA:** `#16A34A` / hover `#15803D` (`--whatsapp`)
-- **Success / Warning / Danger:** `#059669`, `#D97706`, `#DC2626`
+## 1. Princípio Anti-Genérico
+Em vez de um único template azul/verde igual para todo mundo, o **VitrineZap Local v5.0** adapta **canvas, tinta, acento, textura e ilustração SVG vetorial** ao DNA de cada comércio:
+- **Lanchonete (`Ember Craft`):** Canvas papel quente `#FBF8F3`, tinta `#1C1410`, acento brasa `#D9480F`.
+- **Padaria (`Boulangerie`):** Canvas linho `#F9F4EC`, tinta `#2D1E14`, acento mel `#B45309`.
+- **Pet Shop (`Modernist Care`):** Canvas menta suave `#F3F8F6`, tinta `#132A24`, acento cobalto `#1D4ED8`.
+- **Oficina (`Swiss Garage`):** Canvas pedra técnica `#F1F3F5`, tinta `#0F172A`, acento sinal `#EA580C`.
 
-## 2. Tipografia
-- **Display / Headings:** `'Plus Jakarta Sans', system-ui, sans-serif` (`26px` hero, `18px` section, `15px` card title)
-- **Body / UI:** `'Inter', system-ui, sans-serif` (`14px` base, `13px` secondary)
-- **Tabular / Codes / Prices:** `'JetBrains Mono', ui-monospace, monospace` com `font-variant-numeric: tabular-nums`
+## 2. Tipografia Expressiva
+- **Display Editorial:** `'Fraunces', Georgia, serif` para títulos de vitrine e números de destaque (`01`, `02`).
+- **UI & Estrutura:** `'Plus Jakarta Sans'` + `'Inter'`.
+- **Telemetria, Preços & Pix:** `'JetBrains Mono'` com `tabular-nums`.
 
-## 3. Regras de Qualidade Visual (WCAG AA + Zero Amadorismo)
-- **Zero emojis crus** nos controles, botões ou cabeçalhos: usar ícones SVG vetoriais uniformes (`16px` / `18px`, `stroke-width: 2`).
-- **Controles segmentados** para `Retirada vs Entrega` e **pills de pagamento** (`Pix`, `Cartão`, `Dinheiro`).
-- **Stepper inline (`- 1 +`)** diretamente no card do produto quando adicionado ao carrinho.
-- **Painel do Dono em abas** (`Resumo & Pedidos`, `Catálogo`, `Configurações & QR da Loja`) com KPIs e QR Code de balcão imprimível 100% offline.
+## 3. Componentes Autorais
+- **Hero Editorial Assimétrico** com selo do bairro, cupom clicável em 1 clique e cartão de identidade da loja.
+- **Spotlight Card ("Destaque da Casa")** no primeiro item da vitrine com ilustração SVG autoral por categoria.
+- **Checkout Dock / Drawer Mobile** sem rolagens bruscas + **Edição Inline de Preço e Cupons** no Painel do Dono.
