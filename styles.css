@@ -36,7 +36,7 @@
 [data-archetype="fashion-editorial"] { --canvas: #FFFFFF; --surface-muted: #F4F4F5; --surface-subtle: #FAFAFA; --hairline: #E4E4E7; }
 [data-archetype="botanical-warm"] { --canvas: #F6FAF6; --surface-muted: #E2F0E4; --surface-subtle: #FAFCFA; --hairline: #CFE4D2; }
 
-[data-theme="dark"] {
+[data-theme="dark"]:not([data-ds="precision-telemetry"]):not([data-ds="heritage-grooming"]) {
   --canvas: #0B1120 !important;
   --surface-card: #111827 !important;
   --surface-muted: #1E293B !important;
@@ -551,3 +551,131 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn, .pack-chip, .slot-chip, 
   .print-only { display: block !important; margin-top: 16px; font-size: 0.9rem; color: #0F172A; }
   .print-pix-qr svg { width: 140px; height: 140px; margin-top: 8px; }
 }
+
+/* ==========================================================================
+   VitrineZap v12.0 — 7 Design Systems Distintos por Categoria ([data-ds])
+   Pesquisados & Validados pelo design-system-squad (WCAG AA >= 4.5:1)
+   ========================================================================== */
+[data-ds] h1, [data-ds] h2, [data-ds] h3, [data-ds] .brand-name {
+  font-family: var(--font-heading);
+  letter-spacing: var(--ds-heading-tracking, -0.02em);
+  font-weight: var(--ds-heading-weight, 700);
+}
+
+/* 1. Lanchonete — Express Craving Delivery */
+[data-ds="express-craving"] .topbar {
+  background: #B42318; color: #FFFFFF; border-bottom-color: #912018;
+}
+[data-ds="express-craving"] .topbar .brand-name,
+[data-ds="express-craving"] .topbar .topbar-city-pill { color: #FFFFFF; }
+[data-ds="express-craving"] .topbar .brand-mark { background: #FFFFFF; color: #B42318; border-radius: 10px; }
+[data-ds="express-craving"] .food-card { border-radius: 14px; box-shadow: 0 4px 14px rgba(180, 35, 24, 0.08); }
+
+/* 2. Padaria — Warm Artisanal Atelier */
+[data-ds="artisanal-atelier"] .topbar {
+  background: #F7EFE2; border-bottom: 2px solid #DECBB4;
+}
+[data-ds="artisanal-atelier"] .brand-mark { border-radius: 9999px; }
+[data-ds="artisanal-atelier"] .bakery-card {
+  border-radius: 10px; border: 1px solid #DECBB4; box-shadow: 0 2px 8px rgba(94, 70, 54, 0.07);
+}
+[data-ds="artisanal-atelier"] .bakery-cta,
+[data-ds="artisanal-atelier"] .pill-btn { border-radius: 9999px; }
+
+/* 3. Pet Shop — Friendly Rounded Club */
+[data-ds="playful-club"] .topbar {
+  background: #0F766E; color: #FFFFFF; border-bottom: 0; border-radius: 0 0 18px 18px;
+}
+[data-ds="playful-club"] .topbar .brand-name,
+[data-ds="playful-club"] .topbar .topbar-city-pill { color: #FFFFFF; }
+[data-ds="playful-club"] .topbar .brand-mark { background: #FFFFFF; color: #0F766E; border-radius: 9999px; }
+[data-ds="playful-club"] .pet-card,
+[data-ds="playful-club"] .pet-reorder-card {
+  border-radius: 22px; border: 2px solid #99F6E4; box-shadow: 0 6px 16px rgba(15, 118, 110, 0.09);
+}
+
+/* 4. Oficina — Carbon Precision Telemetry (Dark Blueprint) */
+[data-ds="precision-telemetry"] { --success-ink: #6EE7B7; }
+[data-ds="precision-telemetry"] .topbar {
+  background: #0F141C; border-bottom: 2px solid #0284C7;
+}
+[data-ds="precision-telemetry"] .topbar .brand-name { text-transform: uppercase; letter-spacing: 0.04em; }
+[data-ds="precision-telemetry"] .auto-card {
+  background: #11161F; border: 1px solid #2A3950; border-left: 4px solid #0284C7;
+  border-radius: 4px; box-shadow: none;
+}
+[data-ds="precision-telemetry"] .auto-vehicle-bar { background: #0B1018; border-bottom-color: #2A3950; }
+[data-ds="precision-telemetry"] .btn,
+[data-ds="precision-telemetry"] .pill-btn,
+[data-ds="precision-telemetry"] .text-input,
+[data-ds="precision-telemetry"] .select-input,
+[data-ds="precision-telemetry"] .select-compact { border-radius: 4px; }
+[data-ds="precision-telemetry"] .sev-crit { background: #450A0A; color: #FECACA; }
+[data-ds="precision-telemetry"] .sev-warn { background: #451A03; color: #FDE68A; }
+[data-ds="precision-telemetry"] .sev-ok { background: #064E3B; color: #A7F3D0; }
+
+/* 5. Barbearia — Obsidian & Brass Heritage Ledger */
+[data-ds="heritage-grooming"] { --success-ink: #6EE7B7; }
+[data-ds="heritage-grooming"] .topbar {
+  background: #191613; border-bottom: 2px solid #D97706;
+}
+[data-ds="heritage-grooming"] .brand-mark { border-radius: 2px; border: 1px solid #FBBF24; }
+[data-ds="heritage-grooming"] .agenda-card {
+  background: #1D1916; border: 1px solid #44382C; border-radius: 2px; box-shadow: none;
+}
+[data-ds="heritage-grooming"] .slot-chip,
+[data-ds="heritage-grooming"] .btn,
+[data-ds="heritage-grooming"] .pill-btn,
+[data-ds="heritage-grooming"] .text-input,
+[data-ds="heritage-grooming"] .select-input,
+[data-ds="heritage-grooming"] .select-compact { border-radius: 2px; }
+[data-ds="heritage-grooming"] .mini-add-btn { border-radius: 2px; }
+
+/* 6. Moda — Stark Monochrome Runway Gallery (0px Sharp Editorial) */
+[data-ds="minimal-runway"] .topbar {
+  background: #FFFFFF; border-bottom: 1px solid #18181B;
+}
+[data-ds="minimal-runway"] .brand-name { text-transform: uppercase; letter-spacing: 0.08em; }
+[data-ds="minimal-runway"] .brand-mark { border-radius: 0; }
+[data-ds="minimal-runway"] .fashion-card,
+[data-ds="minimal-runway"] .fashion-visual,
+[data-ds="minimal-runway"] .size-chip,
+[data-ds="minimal-runway"] .bakery-cta,
+[data-ds="minimal-runway"] .pill-btn,
+[data-ds="minimal-runway"] .btn,
+[data-ds="minimal-runway"] .text-input,
+[data-ds="minimal-runway"] .select-input,
+[data-ds="minimal-runway"] .select-compact,
+[data-ds="minimal-runway"] .mobile-cart-bar { border-radius: 0px !important; box-shadow: none; }
+[data-ds="minimal-runway"] .fashion-card { border: 1px solid #18181B; }
+
+/* 7. Floricultura — Botanical Conservatory (Asymmetrical Leaf Corners) */
+[data-ds="botanical-conservatory"] .topbar {
+  background: #EDF5EF; border-bottom: 1px solid #BFD8C4;
+}
+[data-ds="botanical-conservatory"] .brand-mark { border-radius: 12px 2px 12px 2px; }
+[data-ds="botanical-conservatory"] .bakery-card {
+  border-radius: 18px 4px 18px 4px; border: 1px solid #BFD8C4; box-shadow: 0 4px 14px rgba(20, 83, 45, 0.06);
+}
+[data-ds="botanical-conservatory"] .bakery-cta,
+[data-ds="botanical-conservatory"] .pill-btn { border-radius: 14px 4px 14px 4px; }
+
+/* Oficina Compact Vehicle Bar + FIPE KM Estimator Modal */
+.auto-vehicle-grid-v12 { display: grid; grid-template-columns: 1.2fr 0.8fr auto; gap: 6px; align-items: center; }
+.fipe-open-btn { min-height: 44px; padding: 0 10px; font-size: 0.76rem; font-weight: 700; white-space: nowrap; }
+.fipe-cascade-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px; }
+.fipe-est-result {
+  background: var(--surface-subtle); border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+  padding: 10px; margin-bottom: 10px; font-size: 0.82rem;
+}
+.fipe-srv-row {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 6px 0; border-bottom: 1px solid var(--hairline); font-size: 0.78rem;
+}
+.fipe-srv-row:last-child { border-bottom: 0; }
+.ds-badge-chip {
+  display: inline-flex; align-items: center; padding: 2px 8px; font-size: 0.72rem; font-weight: 700;
+  border-radius: var(--radius-sm); background: var(--brand-surface-tint); color: var(--brand-ink-accent);
+  border: 1px solid var(--brand-border-tint);
+}
+

@@ -395,6 +395,35 @@
     <div id="size-guide-body"></div>
   </section>
 
+  <!-- Modal Oficina: Catálogo FIPE Cascata + Estimador Preditivo de Manutenção por KM -->
+  <div id="fipe-estimator-backdrop" class="sheet-backdrop hidden no-print" aria-hidden="true"></div>
+  <section id="fipe-estimator-modal" class="item-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="fipe-est-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="modal-head">
+      <div>
+        <span class="section-eyebrow">Catálogo FIPE + Predição por KM</span>
+        <h2 id="fipe-est-title">Simulador de Revisão por Veículo</h2>
+      </div>
+      <button id="close-fipe-est-btn" class="btn btn-secondary btn-icon" type="button" aria-label="Fechar simulador FIPE">✕</button>
+    </div>
+    <div class="fipe-cascade-grid">
+      <label class="field-label">Marca (Tabela FIPE)
+        <select id="fipe-brand-select" class="select-input"><option value="">Carregando marcas...</option></select>
+      </label>
+      <label class="field-label">Modelo
+        <select id="fipe-model-select" class="select-input" disabled><option value="">Selecione a marca</option></select>
+      </label>
+      <label class="field-label">Ano / Combustível
+        <select id="fipe-year-select" class="select-input" disabled><option value="">Selecione o modelo</option></select>
+      </label>
+      <label class="field-label">Quilometragem Atual (km)
+        <input type="number" id="fipe-km-input" class="text-input mono" min="1000" step="1000" value="40000" aria-label="Quilometragem atual" />
+      </label>
+    </div>
+    <div id="fipe-est-result" class="fipe-est-result"></div>
+    <button type="button" id="fipe-add-pack-btn" class="btn btn-primary full-width hidden">+ Incluir Pacote Previsto na OS</button>
+  </section>
+
   <!-- Barra Flutuante Inferior Mobile (Sempre na Zona do Polegar) -->
   <button id="mobile-cart-bar" class="mobile-cart-bar no-print" type="button">
     <span class="mobile-bar-left">
@@ -408,7 +437,9 @@
 
   <script src="./src/integrations.js"></script>
   <script src="./src/geo-apis.js"></script>
+  <script src="./src/category-apis.js"></script>
   <script src="./src/qrcode.js"></script>
+  <script src="./src/brand/design-systems.js"></script>
   <script src="./src/brand/brand-engine.js"></script>
   <script src="./src/store.js"></script>
   <script src="./src/presets.js"></script>

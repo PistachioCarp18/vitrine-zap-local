@@ -21,6 +21,17 @@
     searchFipeVehicles,
   } = window.VitrineGeoApis;
   const {
+    fetchFipeBrands,
+    fetchFipeModels,
+    fetchFipeYears,
+    fetchFipeVehicleDetail,
+    estimateMaintenanceByVehicleAndMileage,
+    inferPetSizeFromBreed,
+    fetchDogBreedsCatalog,
+    fetchUpcomingHolidaysBR,
+  } = window.VitrineCategoryApis;
+  const { getDesignSystemForCategory } = window.VitrineDesignSystems;
+  const {
     generateBrandTokens,
     validateBrandConfig,
     encodeMagicHash,
@@ -56,6 +67,11 @@
   let pendingPhotoDataUrl = '';
   let routeInfo = null;
   let weatherInfo = null;
+  let holidayInfo = null;
+  let dogBreedsList = [];
+  let selectedFipeVehicle = null;
+  let lastMaintenanceEstimate = null;
+  let manualThemeOverride = null;
   const selectedPackIdxMap = {};
   const selectedSlotMap = {};
   const selectedSizeMap = {};
@@ -185,7 +201,8 @@
     const modalOpen = !document.getElementById('item-modal').classList.contains('hidden');
     const studioOpen = !document.getElementById('merchant-studio-modal').classList.contains('hidden');
     const guideOpen = !document.getElementById('size-guide-modal').classList.contains('hidden');
-    document.body.classList.toggle('sheet-lock', drawerOpen || modalOpen || studioOpen || guideOpen);
+    const fipeOpen = !document.getElementById('fipe-estimator-modal').classList.contains('hidden');
+    document.body.classList.toggle('sheet-lock', drawerOpen || modalOpen || studioOpen || guideOpen || fipeOpen);
   }
 
   function setWizardStep(step) {
@@ -243,6 +260,75 @@
   function closeSizeGuideModal() {
     document.getElementById('size-guide-backdrop').classList.add('hidden');
     document.getElementById('size-guide-modal').classList.add('hidden');
+    syncBodyScrollLock();
+  }
+
+  function renderFipeEstimateBox() {
+    const km = Number(document.getElementById('fipe-km-input')?.value || 40000);
+    const veh = selectedFipeVehicle || {
+      brand: 'Veículo',
+      model: document.getElementById('quick-veh-model')?.value || 'Chevrolet Onix 1.0 Turbo',
+      year: 2022,
+      fuel: 'Flex',
+      fipePriceNumber: 76500,
+      fipePriceBrl: 'R$ 76.500,00',
+      source: 'offline-fipe',
+    };
+    const est = estimateMaintenanceByVehicleAndMileage({
+      vehicleName: `${veh.brand} ${veh.model}`.trim(),
+      fipePriceNumber: veh.fipePriceNumber,
+      fuel: veh.fuel,
+      year: veh.year,
+      mileageKm: km,
+    });
+    lastMaintenanceEstimate = { veh, est };
+
+    const outEl = document.getElementById('fipe-est-result');
+    const addBtn = document.getElementById('fipe-add-pack-btn');
+    if (outEl) {
+      outEl.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:6px;">
+          <strong>${est.vehicleName} (${veh.year})</strong>
+          <span class="ds-badge-chip mono">${veh.fipePriceBrl || ''}</span>
+        </div>
+        <div class="cart-row-sub" style="margin-bottom:8px;">
+          Porte/Fator: <strong>${est.tierLabel}</strong> • ${est.milestoneLabel}
+        </div>
+        ${est.recommendedServices.map(s => `
+          <div class="fipe-srv-row">
+            <span>${s.name}</span>
+            <strong class="mono">${formatBrl(s.avgPrice)}</strong>
+          </div>`).join('')}
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-weight:700;">
+          <span>Faixa Estimada (${km.toLocaleString('pt-BR')} km):</span>
+          <span class="mono">${formatBrl(est.totalMin)} – ${formatBrl(est.totalMax)}</span>
+        </div>`;
+    }
+    if (addBtn) {
+      addBtn.classList.remove('hidden');
+      addBtn.textContent = `+ Incluir Revisão Prevista (${formatBrl(est.totalAvg)}) na OS`;
+    }
+  }
+
+  async function openFipeEstimatorModal() {
+    document.getElementById('fipe-estimator-backdrop').classList.remove('hidden');
+    document.getElementById('fipe-estimator-modal').classList.remove('hidden');
+    syncBodyScrollLock();
+    pushOverlayHistory('fipe-est');
+
+    const brandSel = document.getElementById('fipe-brand-select');
+    if (brandSel && brandSel.dataset.loaded !== '1') {
+      const { brands } = await fetchFipeBrands();
+      brandSel.innerHTML = '<option value="">Selecione a marca...</option>' +
+        brands.slice(0, 60).map(b => `<option value="${b.codigo}">${b.nome}</option>`).join('');
+      brandSel.dataset.loaded = '1';
+    }
+    renderFipeEstimateBox();
+  }
+
+  function closeFipeEstimatorModal() {
+    document.getElementById('fipe-estimator-backdrop').classList.add('hidden');
+    document.getElementById('fipe-estimator-modal').classList.add('hidden');
     syncBodyScrollLock();
   }
 
@@ -421,12 +507,14 @@
       slot.classList.remove('hidden');
       slot.innerHTML = `
         <div class="auto-vehicle-bar">
-          <div class="container auto-vehicle-grid">
+          <div class="container auto-vehicle-grid-v12">
             <input type="text" id="quick-veh-model" list="fipe-vehicles-list" class="text-input compact-input" placeholder="Veículo (Ex: Onix 1.0)" aria-label="Modelo do veículo" />
             <input type="text" id="quick-veh-plate" class="text-input compact-input mono" placeholder="Placa / KM" aria-label="Placa ou quilometragem" />
+            <button type="button" id="open-fipe-est-btn" class="btn btn-primary fipe-open-btn">FIPE + KM</button>
           </div>
           <datalist id="fipe-vehicles-list"></datalist>
         </div>`;
+      slot.querySelector('#open-fipe-est-btn').addEventListener('click', openFipeEstimatorModal);
       return;
     }
 
@@ -606,19 +694,24 @@
 
     if (hasMech('autoship-reminder')) {
       const profile = store.loadCustomerProfile();
+      const breeds = dogBreedsList.length ? dogBreedsList : [{ name: 'Shih Tzu' }, { name: 'Beagle' }, { name: 'Golden Retriever' }];
       box.classList.remove('hidden');
       box.innerHTML = `
         <div class="domain-grid-2">
           <label class="field-label">Nome do Pet<input type="text" id="pet-name" class="text-input" value="${profile.petName || ''}" placeholder="Ex: Thor" /></label>
-          <label class="field-label">Porte
-            <select id="pet-size" class="select-input">
-              <option value="Pequeno" ${profile.petSize === 'Pequeno' ? 'selected' : ''}>Pequeno</option>
-              <option value="Médio" ${profile.petSize === 'Médio' ? 'selected' : ''}>Médio</option>
-              <option value="Grande" ${profile.petSize === 'Grande' ? 'selected' : ''}>Grande</option>
-            </select>
+          <label class="field-label">Raça (API Pet)
+            <input type="text" id="pet-breed" list="dog-breeds-list" class="text-input" placeholder="Ex: Golden Retriever" />
+            <datalist id="dog-breeds-list">${breeds.map(b => `<option value="${b.name}"></option>`).join('')}</datalist>
           </label>
         </div>
         <div class="domain-grid-2">
+          <label class="field-label">Porte (Ajusta Ração)
+            <select id="pet-size" class="select-input">
+              <option value="Pequeno" ${profile.petSize === 'Pequeno' ? 'selected' : ''}>Pequeno (120g/dia)</option>
+              <option value="Médio" ${profile.petSize === 'Médio' ? 'selected' : ''}>Médio (250g/dia)</option>
+              <option value="Grande" ${profile.petSize === 'Grande' ? 'selected' : ''}>Grande (450g/dia)</option>
+            </select>
+          </label>
           <label class="field-label">Lembrete recompra
             <select id="pet-remind-days" class="select-input">
               <option value="30">Em 30 dias</option>
@@ -627,10 +720,19 @@
               <option value="">Sem lembrete</option>
             </select>
           </label>
-          <div class="field-label" style="justify-content:flex-end;">
-            <button type="button" id="download-pet-ics-btn" class="btn btn-secondary btn-sm">Lembrete (.ics)</button>
-          </div>
-        </div>`;
+        </div>
+        <button type="button" id="download-pet-ics-btn" class="btn btn-secondary btn-sm full-width">Salvar Lembrete na Agenda (.ics)</button>`;
+      box.querySelector('#pet-breed').addEventListener('change', (e) => {
+        const info = inferPetSizeFromBreed(e.target.value);
+        const sel = document.getElementById('pet-size');
+        if (sel && info.size) {
+          sel.value = info.size;
+          const prev = store.loadCustomerProfile();
+          store.saveCustomerProfile({ ...prev, petSize: info.size });
+          renderCatalog();
+          showToast(`Raça ${info.name}: porte ${info.size} (${info.weightKg}) aplicado.`);
+        }
+      });
       box.querySelector('#download-pet-ics-btn').addEventListener('click', () => {
         const autoMod = window.VitrineMechanics['autoship-reminder'];
         const days = Number(document.getElementById('pet-remind-days').value || 30);
@@ -672,10 +774,17 @@
 
   function applyTheme() {
     const root = document.documentElement;
+    const verticalKey = state.vertical || state.id || 'lanchonete';
+    const ds = getDesignSystemForCategory(verticalKey);
     const archetype = state.brandArchetype || 'high-energy-food';
     const layoutMode = state.layout?.catalog || state.layoutMode || 'food-list';
     root.setAttribute('data-archetype', archetype);
+    root.setAttribute('data-ds', ds.dsId);
+    document.body.setAttribute('data-ds', ds.dsId);
     document.body.setAttribute('data-layout', layoutMode);
+
+    const activeScheme = manualThemeOverride || ds.colorScheme || 'light';
+    root.setAttribute('data-theme', activeScheme);
 
     const brandInput = {
       color: { seed: state.color?.seed || state.primaryColor || '#B42318' },
@@ -683,24 +792,34 @@
       shape: state.shape || { radius: 'soft', density: 'regular' },
     };
     const tokens = generateBrandTokens(brandInput);
-    const isDark = root.getAttribute('data-theme') === 'dark';
+    const surf = ds.surfaces || {};
 
-    root.style.setProperty('--brand-primary', tokens.semantics.primary);
-    root.style.setProperty('--brand-on-primary', tokens.semantics.onPrimary);
-    if (!isDark) {
-      root.style.setProperty('--brand-ink-accent', tokens.semantics.inkAccent);
-      root.style.setProperty('--brand-surface-tint', tokens.semantics.surfaceTint);
-      root.style.setProperty('--brand-border-tint', tokens.semantics.borderTint);
-    }
-    root.style.setProperty('--font-heading', tokens.vertical.fontHeading);
-    root.style.setProperty('--font-body', tokens.vertical.fontBody);
-    root.style.setProperty('--radius-sm', `${Math.max(4, Math.min(10, tokens.vertical.radii.sm))}px`);
-    root.style.setProperty('--radius-md', `${tokens.vertical.radii.md}px`);
-    root.style.setProperty('--radius-lg', `${tokens.vertical.radii.lg}px`);
+    root.style.setProperty('--canvas', surf.canvas || '#FFFFFF');
+    root.style.setProperty('--surface-card', surf.card || '#FFFFFF');
+    root.style.setProperty('--surface-muted', surf.muted || '#F1F5F9');
+    root.style.setProperty('--surface-subtle', surf.subtle || '#F8FAFC');
+    root.style.setProperty('--hairline', surf.hairline || 'rgba(15, 23, 42, 0.12)');
+    root.style.setProperty('--text-primary', surf.textPrimary || '#0F172A');
+    root.style.setProperty('--text-muted', surf.textMuted || '#334155');
+    root.style.setProperty('--shadow-sm', surf.shadowCard || '0 1px 3px rgba(15, 23, 42, 0.06)');
+
+    root.style.setProperty('--brand-primary', surf.primaryOverride || tokens.semantics.primary);
+    root.style.setProperty('--brand-on-primary', surf.onPrimaryOverride || tokens.semantics.onPrimary);
+    root.style.setProperty('--brand-ink-accent', surf.inkAccentOverride || tokens.semantics.inkAccent);
+    root.style.setProperty('--brand-surface-tint', surf.surfaceTintOverride || tokens.semantics.surfaceTint);
+    root.style.setProperty('--brand-border-tint', surf.borderTintOverride || tokens.semantics.borderTint);
+
+    root.style.setProperty('--font-heading', ds.fontHeading || tokens.vertical.fontHeading);
+    root.style.setProperty('--font-body', ds.fontBody || tokens.vertical.fontBody);
+    root.style.setProperty('--ds-heading-weight', ds.headingWeight || '700');
+    root.style.setProperty('--ds-heading-tracking', ds.letterSpacingHeading || '-0.02em');
+    root.style.setProperty('--radius-sm', ds.controlRadius || tokens.vertical.radii.sm || '8px');
+    root.style.setProperty('--radius-md', ds.cardRadius || tokens.vertical.radii.md || '12px');
+    root.style.setProperty('--radius-lg', tokens.vertical.radii.lg || '18px');
 
     const wcagBadge = document.getElementById('wcag-badge');
     if (wcagBadge) {
-      wcagBadge.textContent = `${tokens.semantics.wcagAA ? 'WCAG AA' : 'Contraste'} ${tokens.semantics.contrastWithSurface}:1`;
+      wcagBadge.textContent = `${ds.label} • WCAG AA ${tokens.semantics.contrastWithSurface}:1`;
     }
 
     const name = state.identity?.name || state.storeName || 'VitrineZap';
@@ -726,7 +845,9 @@
       : (modules.agendamento && !modules.freteKm
         ? 'Agendamento direto pelo WhatsApp'
         : (Number(state.deliveryFee || 0) > 0 ? `Entrega ${formatBrl(state.deliveryFee)}${freeTxt}` : 'Retirada no local'));
-    document.getElementById('store-meta-text').textContent = `${state.rating || '4.9'} • ${state.etaLabel || 'Hoje'} • ${delivTxt}`;
+    const holidayTag = (holidayInfo?.nextHoliday && (verticalKey === 'floricultura' || verticalKey === 'barbearia'))
+      ? ` • Próx: ${holidayInfo.nextHoliday.name}` : '';
+    document.getElementById('store-meta-text').textContent = `${state.rating || '4.9'} • ${state.etaLabel || 'Hoje'} • ${delivTxt}${holidayTag}`;
 
     const promo = (state.coupons || [])[0];
     const heroCouponBtn = document.getElementById('hero-coupon-pill');
@@ -798,10 +919,13 @@
       splitPeople = 1;
       payDeposit50Flag = false;
       surpriseGiftFlag = false;
+      manualThemeOverride = null;
+      selectedFipeVehicle = null;
       routeInfo = null;
       document.getElementById('coupon-input').value = '';
       store.saveState(state);
       await loadMechanicsOnDemand(activeMechanics);
+      initOpenApisBackground();
       renderAll();
       window.scrollTo({ top: 0 });
       showToast(`Vertical carregada: ${preset.storeName}`);
@@ -1520,11 +1644,18 @@
 
   async function initOpenApisBackground() {
     weatherInfo = await fetchSorocabaWeather(undefined, state.geo || {});
+    holidayInfo = await fetchUpcomingHolidaysBR();
+    const vKey = state.vertical || state.id;
+    if (vKey === 'petshop') {
+      const cat = await fetchDogBreedsCatalog();
+      dogBreedsList = cat.breeds || [];
+    }
     const dl = document.getElementById('fipe-vehicles-list');
     if (dl) {
       const vehicles = await searchFipeVehicles('');
       dl.innerHTML = vehicles.map(v => `<option value="${v}"></option>`).join('');
     }
+    applyTheme();
   }
 
   function bindEvents() {
@@ -1533,6 +1664,7 @@
     initOpenApisBackground();
 
     window.addEventListener('popstate', () => {
+      closeFipeEstimatorModal();
       closeSizeGuideModal();
       closeItemModal();
       closeStudioModal();
@@ -1593,8 +1725,70 @@
     document.getElementById('close-size-guide-btn').addEventListener('click', closeSizeGuideModal);
     document.getElementById('size-guide-backdrop').addEventListener('click', closeSizeGuideModal);
 
+    document.getElementById('close-fipe-est-btn').addEventListener('click', closeFipeEstimatorModal);
+    document.getElementById('fipe-estimator-backdrop').addEventListener('click', closeFipeEstimatorModal);
+    document.getElementById('fipe-brand-select').addEventListener('change', async (e) => {
+      const brandCode = e.target.value;
+      const modSel = document.getElementById('fipe-model-select');
+      const yrSel = document.getElementById('fipe-year-select');
+      yrSel.innerHTML = '<option value="">Selecione o modelo</option>';
+      yrSel.disabled = true;
+      if (!brandCode) { modSel.disabled = true; return; }
+      modSel.disabled = false;
+      modSel.innerHTML = '<option value="">Carregando modelos...</option>';
+      const { models } = await fetchFipeModels(brandCode);
+      modSel.innerHTML = '<option value="">Selecione o modelo...</option>' +
+        models.slice(0, 80).map(m => `<option value="${m.codigo}">${m.nome}</option>`).join('');
+    });
+    document.getElementById('fipe-model-select').addEventListener('change', async (e) => {
+      const brandCode = document.getElementById('fipe-brand-select').value;
+      const modelCode = e.target.value;
+      const yrSel = document.getElementById('fipe-year-select');
+      if (!modelCode) { yrSel.disabled = true; return; }
+      yrSel.disabled = false;
+      yrSel.innerHTML = '<option value="">Carregando anos...</option>';
+      const { years } = await fetchFipeYears(brandCode, modelCode);
+      yrSel.innerHTML = '<option value="">Selecione o ano...</option>' +
+        years.map(y => `<option value="${y.codigo}">${y.nome}</option>`).join('');
+    });
+    document.getElementById('fipe-year-select').addEventListener('change', async (e) => {
+      const brandCode = document.getElementById('fipe-brand-select').value;
+      const modelCode = document.getElementById('fipe-model-select').value;
+      const yearCode = e.target.value;
+      if (!yearCode) return;
+      selectedFipeVehicle = await fetchFipeVehicleDetail(brandCode, modelCode, yearCode);
+      const qEl = document.getElementById('quick-veh-model');
+      if (qEl && selectedFipeVehicle) {
+        qEl.value = `${selectedFipeVehicle.brand} ${selectedFipeVehicle.model} (${selectedFipeVehicle.year})`;
+      }
+      renderFipeEstimateBox();
+    });
+    document.getElementById('fipe-km-input').addEventListener('input', renderFipeEstimateBox);
+    document.getElementById('fipe-add-pack-btn').addEventListener('click', () => {
+      if (!lastMaintenanceEstimate) return;
+      const { veh, est } = lastMaintenanceEstimate;
+      addItemToCart({
+        id: `os-pred-${Date.now()}`,
+        sku: 'OS-PRED',
+        category: 'Revisão Preventiva',
+        name: `${est.milestoneLabel} — ${est.vehicleName}`,
+        price: est.totalAvg,
+        partsPrice: Number((est.totalAvg * 0.62).toFixed(2)),
+        laborPrice: Number((est.totalAvg * 0.38).toFixed(2)),
+        severity: est.mileageKm >= 60000 ? 'critico' : 'atencao',
+      }, 1);
+      const qp = document.getElementById('quick-veh-plate');
+      if (qp && !qp.value) qp.value = `${est.mileageKm.toLocaleString('pt-BR')} km`;
+      const qm = document.getElementById('quick-veh-model');
+      if (qm && !qm.value) qm.value = `${veh.brand} ${veh.model}`;
+      closeFipeEstimatorModal();
+      openCartDrawer(1);
+      showToast('Pacote preditivo adicionado à OS!');
+    });
+
     document.getElementById('theme-toggle-btn').addEventListener('click', () => {
       const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      manualThemeOverride = next;
       document.documentElement.setAttribute('data-theme', next);
       window.localStorage.setItem('vitrine_theme', next);
       applyTheme();
