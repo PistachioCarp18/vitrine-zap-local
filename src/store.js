@@ -12,6 +12,7 @@
       id: state.id || 'custom',
       domainMode: state.domainMode || 'food-delivery',
       brandArchetype: state.brandArchetype || 'high-energy-food',
+      layoutMode: state.layoutMode || 'food-list',
       storeName: state.storeName || '',
       neighborhood: state.neighborhood || '',
       tagline: state.tagline || '',
@@ -19,7 +20,7 @@
       pixKey: state.pixKey || '',
       deliveryFee: Number(state.deliveryFee || 0),
       freeDeliveryThreshold: Number(state.freeDeliveryThreshold || 0),
-      primaryColor: state.primaryColor || '#0F766E',
+      primaryColor: state.primaryColor || '#EA1D2C',
       logoInitials: state.logoInitials || '',
       openHour: state.openHour || '08:00',
       closeHour: state.closeHour || '22:00',
@@ -33,8 +34,7 @@
         price: Number(i.price || 0),
         badge: i.badge || '',
         prepTime: i.prepTime || '',
-        kind: i.kind || '',
-        cycleLabel: i.cycleLabel || '',
+        sku: i.sku || '',
         paused: Boolean(i.paused),
       })),
     };
@@ -73,9 +73,6 @@
     }
   }
 
-  /**
-   * Hidratacao segura de Magic Brand URL (?name=...&phone=...&pix=...&color=...&archetype=...&niche=...)
-   */
   function parseBrandUrlParams(searchString) {
     const raw = String(searchString || '').trim();
     if (!raw) return null;
@@ -83,7 +80,7 @@
     const hasMagic = ['name', 'phone', 'pix', 'color', 'archetype', 'niche', 'tagline'].some(k => params.has(k));
     if (!hasMagic) return null;
 
-    const cleanHex = (val) => (/^#?[0-9a-fA-F]{3,6}$/.test(String(val || '').trim())
+    const cleanHex = (val) => (/^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(String(val || '').trim())
       ? (val.trim().startsWith('#') ? val.trim() : `#${val.trim()}`)
       : undefined);
 
@@ -120,7 +117,7 @@
   }
 
   function createStore(storageAdapter, keys = {}) {
-    const stateKey = keys.stateKey || 'vitrine_zap_local_state_v7';
+    const stateKey = keys.stateKey || 'vitrine_zap_local_state_v8';
     const historyKey = keys.historyKey || 'vitrine_zap_order_history_v1';
     const customerKey = keys.customerKey || 'vitrine_zap_customer_profile_v1';
     const lastOrderKey = keys.lastOrderKey || 'vitrine_zap_last_cart_v1';
@@ -140,9 +137,9 @@
     function loadCustomerProfile() {
       try {
         const raw = storageAdapter.getItem(customerKey);
-        return raw ? JSON.parse(raw) : { name: '', phone: '', address: '', petName: '', petSize: 'Medio' };
+        return raw ? JSON.parse(raw) : { name: '', phone: '', address: '', petName: '', petSize: 'Médio' };
       } catch {
-        return { name: '', phone: '', address: '', petName: '', petSize: 'Medio' };
+        return { name: '', phone: '', address: '', petName: '', petSize: 'Médio' };
       }
     }
 
@@ -163,20 +160,15 @@
       }
     }
 
+    function getLastOrder() {
+      return { items: loadLastCart(), record: loadHistory()[0] || null };
+    }
+
     function loadHistory() {
       try {
         const raw = storageAdapter.getItem(historyKey);
         return raw ? JSON.parse(raw) : [];
       } catch { return []; }
-    }
-
-    function getLastOrder() {
-      const items = loadLastCart();
-      const history = loadHistory();
-      return {
-        items,
-        record: history[0] || null,
-      };
     }
 
     function recordOrder(entry) {

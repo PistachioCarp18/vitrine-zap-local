@@ -50,10 +50,6 @@
     return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
   }
 
-  /**
-   * Motor Matematico de Auto-Contraste WCAG AA (ux-ui-design-squad)
-   * Calcula luminancia relativa L = 0.2126R + 0.7152G + 0.0722B e tokens derivados.
-   */
   function computeAccessibleBrandTokens(hexColor, surfaceHex = '#FFFFFF') {
     const primary = normalizeHexColor(hexColor, '#0F766E');
     const r = parseInt(primary.slice(1, 3), 16);
@@ -67,7 +63,7 @@
     ).toFixed(4));
 
     const contrastWithWhite = (1.0 + 0.05) / (luminance + 0.05);
-    const darkLum = 0.0199; // #0F172A relative luminance
+    const darkLum = 0.0199;
     const contrastWithDark = (luminance + 0.05) / (darkLum + 0.05);
 
     const useDarkText = contrastWithDark >= contrastWithWhite;
@@ -82,14 +78,11 @@
     const mix = (a, c, ratio) => Math.round(a * ratio + c * (1 - ratio));
     const toHex = (nr, ng, nb) => '#' + [nr, ng, nb].map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase();
 
-    const surfaceTint = toHex(mix(r, sr, 0.08), mix(g, sg, 0.08), mix(b, sb, 0.08));
-    const borderTint = toHex(mix(r, sr, 0.26), mix(g, sg, 0.26), mix(b, sb, 0.26));
-
     return {
       primary,
       onPrimary,
-      surfaceTint,
-      borderTint,
+      surfaceTint: toHex(mix(r, sr, 0.08), mix(g, sg, 0.08), mix(b, sb, 0.08)),
+      borderTint: toHex(mix(r, sr, 0.26), mix(g, sg, 0.26), mix(b, sb, 0.26)),
       luminance,
       contrastRatio,
       wcagAA: contrastRatio >= 4.5,
@@ -130,14 +123,13 @@
     if (!code || subtotal <= 0) return { applied: null, discountAmount: 0 };
     const found = (couponsList || []).find(c => String(c.code || '').toUpperCase() === code);
     if (!found) return { applied: null, discountAmount: 0 };
-    let discountAmount = 0;
-    if (found.type === 'percent') {
-      discountAmount = (subtotal * Number(found.value || 0)) / 100;
-    } else {
-      discountAmount = Number(found.value || 0);
-    }
-    discountAmount = Math.min(subtotal, Math.max(0, Number(discountAmount.toFixed(2))));
-    return { applied: found, discountAmount };
+    const discountAmount = found.type === 'percent'
+      ? (subtotal * Number(found.value || 0)) / 100
+      : Number(found.value || 0);
+    return {
+      applied: found,
+      discountAmount: Math.min(subtotal, Math.max(0, Number(discountAmount.toFixed(2)))),
+    };
   }
 
   function calculateFreeDeliveryProgress(subtotal, threshold = 0, baseDeliveryFee = 0) {
@@ -163,8 +155,25 @@
     const t = Math.max(0, Number(total || 0));
     const r = Math.min(1, Math.max(0, Number(ratio)));
     const deposit = Number((t * r).toFixed(2));
-    const balance = Number((t - deposit).toFixed(2));
-    return { deposit, balance };
+    return { deposit, balance: Number((t - deposit).toFixed(2)) };
+  }
+
+  function formatBrl(value) {
+    return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  /**
+   * Calculadora de Divisao de Conta (Split Bill) — innovation-squad
+   */
+  function calculateSplitBill(total, peopleCount = 1) {
+    const people = Math.max(1, Math.min(20, Math.floor(Number(peopleCount || 1))));
+    const safeTotal = Math.max(0, Number(total || 0));
+    const perPerson = Number((safeTotal / people).toFixed(2));
+    return {
+      peopleCount: people,
+      perPerson,
+      perPersonFormatted: formatBrl(perPerson),
+    };
   }
 
   function calculateCartTotals(items, deliveryFee = 0, discount = 0) {
@@ -189,10 +198,6 @@
     };
   }
 
-  function formatBrl(value) {
-    return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  }
-
   function normalizeBrPhone(phone) {
     const digits = String(phone || '').replace(/\D/g, '');
     if (!digits) return '';
@@ -212,9 +217,22 @@
   }
 
   /**
-   * Gera URL compartilhavel compacta (?name=...&phone=...&pix=...&color=...&archetype=...&niche=...)
-   * Compativel com limite de bytes do QR Code SVG offline (v1..v14 <= 450 bytes).
+   * Avalia string de horario ("18:00 - 23:30") para badge inteligente Mobile-First.
    */
+  function evaluateStoreOpenStatus(hoursString = '08:00 - 22:00', nowDate = new Date()) {
+    const parts = String(hoursString || '08:00 - 22:00').split('-').map(s => s.trim());
+    const openHour = /^\d{2}:\d{2}$/.test(parts[0] || '') ? parts[0] : '08:00';
+    const closeHour = /^\d{2}:\d{2}$/.test(parts[1] || '') ? parts[1] : '22:00';
+    const isOpen = isStoreOpenNow(openHour, closeHour, nowDate);
+    return {
+      isOpen,
+      openHour,
+      closeHour,
+      statusLabel: isOpen ? 'Aberto' : `Fechado • Abre às ${openHour}`,
+      actionLabel: isOpen ? 'Pedido imediato' : 'Agendar pedido',
+    };
+  }
+
   function buildShareableBrandUrl(baseUrl, config = {}) {
     const url = new URL(baseUrl);
     url.search = '';
@@ -230,10 +248,6 @@
     return url.toString();
   }
 
-  /**
-   * Monta link wa.me polimorfico adaptado aos 4 domainModes:
-   * food-delivery | scheduled-order | recurring-pet | service-quote
-   */
   function buildWhatsAppOrderUrl({
     storeName,
     storeWhatsapp,
@@ -248,6 +262,7 @@
     couponCode = '',
     paymentMethod = 'Pix',
     changeFor = '',
+    splitPeople = 1,
     mode = 'pedido',
     domainMode = 'food-delivery',
     scheduleDate = '',
@@ -275,14 +290,10 @@
       'service-quote': `*PRE-ORCAMENTO TECNICO - ${storeName}*`,
     };
     const header = isServiceQuote
-      ? (headerMap['service-quote'])
+      ? headerMap['service-quote']
       : (headerMap[domainMode] || `*NOVO PEDIDO - ${storeName}*`);
 
-    const lines = [
-      header,
-      '',
-      `*Cliente:* ${customerName || 'Nao informado'}`,
-    ];
+    const lines = [header, '', `*Cliente:* ${customerName || 'Nao informado'}`];
     if (customerPhone) lines.push(`*Contato:* ${customerPhone}`);
 
     if (domainMode === 'scheduled-order') {
@@ -318,8 +329,9 @@
         : 0;
       const unitTotal = Number(item.price || 0) + extrasSum;
       const lineTotal = Number(item.qty || 0) * unitTotal;
-      const kindTag = isServiceQuote && item.kind ? ` [${item.kind}]` : '';
-      lines.push(`${idx + 1}. ${item.qty}x ${item.name}${kindTag} — ${formatBrl(lineTotal)}`);
+      const skuPrefix = isServiceQuote && item.sku ? `[${item.sku}] ` : '';
+      const packTag = item.selectedPack ? ` (${item.selectedPack})` : '';
+      lines.push(`${idx + 1}. ${skuPrefix}${item.qty}x ${item.name}${packTag} — ${formatBrl(lineTotal)}`);
       if (item.selectedVariant) lines.push(`   Opcao: ${item.selectedVariant}`);
       if (extrasSum > 0 && Array.isArray(item.selectedExtras)) {
         lines.push(`   + Adicionais: ${item.selectedExtras.map(e => e.name).join(', ')}`);
@@ -336,6 +348,11 @@
     }
     lines.push(`*Total:* ${formatBrl(totals.total)}`);
 
+    if (Number(splitPeople) > 1) {
+      const split = calculateSplitBill(totals.total, splitPeople);
+      lines.push(`*Divisao da conta (${split.peopleCount} pessoas):* ${split.perPersonFormatted} / pessoa`);
+    }
+
     if (domainMode === 'scheduled-order' && payDeposit50) {
       const { deposit, balance } = calculateDepositAmount(totals.total, 0.5);
       lines.push(`*Sinal Pix (50%):* ${formatBrl(deposit)}`);
@@ -346,9 +363,7 @@
     if (paymentMethod === 'Dinheiro' && changeFor) {
       lines.push(`*Troco para:* ${changeFor}`);
     }
-    if (isServiceQuote) {
-      lines.push('*Validade deste pre-orcamento:* 7 dias');
-    }
+    if (isServiceQuote) lines.push('*Validade deste pre-orcamento:* 7 dias');
     if (notes) lines.push(`*Observacoes:* ${notes}`);
 
     const text = lines.join('\n');
@@ -366,10 +381,12 @@
     resolveCouponDiscount,
     calculateFreeDeliveryProgress,
     calculateDepositAmount,
+    calculateSplitBill,
     calculateCartTotals,
     formatBrl,
     normalizeBrPhone,
     isStoreOpenNow,
+    evaluateStoreOpenStatus,
     buildShareableBrandUrl,
     buildWhatsAppOrderUrl,
   };
