@@ -404,3 +404,13 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn { touch-action: manipulat
   .print-only { display: block !important; margin-top: 16px; font-size: 0.9rem; color: #0F172A; }
   .print-pix-qr svg { width: 140px; height: 140px; margin-top: 8px; }
 }
+
+/* Etapa 3 v9.0: Geo-Routing & CEP Lookup UI */
+.address-geo-wrap { display: flex; flex-direction: column; gap: 4px; }
+.cep-gps-row { display: grid; grid-template-columns: 1fr auto auto; gap: 6px; align-items: center; }
+.route-preview-card { margin-top: 6px; padding: 10px; border: 1px solid var(--brand-border-tint); background: var(--brand-surface-tint); border-radius: var(--radius-sm); }
+.route-preview-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.route-svg-box { color: var(--brand-primary); background: var(--surface-card); border-radius: 6px; padding: 2px; border: 1px solid var(--hairline); }
+.route-nav-links { display: flex; gap: 8px; margin-top: 8px; }
+.route-nav-links a { flex: 1; text-decoration: none; }
+.weather-pill { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: var(--surface-muted); color: var(--text-muted); margin-bottom: 8px; }

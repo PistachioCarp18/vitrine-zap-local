@@ -15,6 +15,13 @@
     buildWhatsAppOrderUrl,
   } = window.VitrineIntegrations;
   const { renderQrSvg } = window.VitrineQrCode;
+  const {
+    SOROCABA_STORES_COORDS,
+    lookupBrazilianCep,
+    calculateRouteAndDeliveryFee,
+    fetchSorocabaWeather,
+    searchFipeVehicles,
+  } = window.VitrineGeoApis;
   const { createStore, decodeStoreConfig, parseBrandUrlParams, exportOrdersCsv } = window.VitrineStore;
   const { NICHE_PRESETS } = window.VitrinePresets;
 
@@ -29,6 +36,8 @@
   let splitPeople = 1;
   let wizardStep = 1;
   let pendingPhotoDataUrl = '';
+  let routeInfo = null;
+  let weatherInfo = null;
   const selectedPackIdxMap = {};
   let modalState = { item: null, qty: 1, selectedExtras: [], selectedVariant: '' };
 
@@ -317,7 +326,7 @@
         .map(s => `<button type="button" class="quick-tag-btn symp-btn" data-symp="${s}">${s}</button>`).join('');
       box.innerHTML = `
         <div class="domain-grid-2">
-          <label class="field-label">Veículo / Modelo *<input type="text" id="veh-model" class="text-input" value="${qModel}" placeholder="Ex: Onix 1.0" /></label>
+          <label class="field-label">Veículo / Modelo *<input type="text" id="veh-model" list="fipe-vehicles-list" class="text-input" value="${qModel}" placeholder="Ex: Onix 1.0" /></label>
           <label class="field-label">Placa / KM<input type="text" id="veh-plate" class="text-input mono" value="${qPlate}" placeholder="ABC-1D23" /></label>
         </div>
         <div class="field-label">Sintoma Relatado
@@ -611,7 +620,8 @@
   function getTotalsWithPromos() {
     const dm = state.domainMode || 'food-delivery';
     const rawSubtotal = cart.reduce((acc, item) => acc + Number(item.qty || 0) * getItemUnitPrice(item), 0);
-    const freeProg = calculateFreeDeliveryProgress(rawSubtotal, state.freeDeliveryThreshold || 0, state.deliveryFee || 0);
+    const dynamicBaseFee = routeInfo ? Number(routeInfo.deliveryFee) : Number(state.deliveryFee || 0);
+    const freeProg = calculateFreeDeliveryProgress(rawSubtotal, state.freeDeliveryThreshold || 0, dynamicBaseFee);
     const fee = (deliveryMode === 'Entrega' && dm !== 'service-quote') ? freeProg.effectiveDeliveryFee : 0;
     const { applied, discountAmount } = resolveCouponDiscount(rawSubtotal, activeCouponCode, state.coupons || []);
     const totals = calculateCartTotals(cart, fee, discountAmount);
@@ -729,6 +739,7 @@
       discount: totals.discount,
       couponCode: applied ? applied.code : '',
       items: cart,
+      routeInfo,
       mode: state.mode,
       domainMode: dm,
       scheduleDate: valOf('sched-date'),
@@ -808,6 +819,7 @@
     document.getElementById('stat-today-count').textContent = String(summary.count);
     document.getElementById('stat-today-total').textContent = formatBrl(summary.totalRevenue);
     document.getElementById('stat-today-avg').textContent = formatBrl(summary.avgTicket);
+    document.getElementById('studio-weather-badge').textContent = weatherInfo ? `☁️ ${weatherInfo.label}` : '☁️ Sorocaba (Open-Meteo)';
     document.getElementById('studio-pitch-callout').textContent = state.pitchTip || '';
 
     document.getElementById('cfg-name').value = state.storeName || '';
@@ -927,9 +939,67 @@
     });
   }
 
+  async function resolveGeoDelivery(customerCoords) {
+    if (!customerCoords) return;
+    const storeCoords = SOROCABA_STORES_COORDS[state.id] || SOROCABA_STORES_COORDS.lanchonete;
+    routeInfo = await calculateRouteAndDeliveryFee(storeCoords, customerCoords, {
+      baseFee: Math.max(4, Number(state.deliveryFee || 4)),
+    });
+    const card = document.getElementById('route-preview-card');
+    card.classList.remove('hidden');
+    document.getElementById('route-distance-label').textContent = `${routeInfo.distanceKm} km • ~${routeInfo.durationMinutes} min`;
+    document.getElementById('route-fee-source').textContent = `Frete calculado: ${formatBrl(routeInfo.deliveryFee)} (${routeInfo.source})`;
+    document.getElementById('route-svg-path').setAttribute('d', routeInfo.polylineSvgPath);
+    document.getElementById('route-gmaps-link').href = routeInfo.googleMapsUrl;
+    document.getElementById('route-waze-link').href = routeInfo.wazeUrl;
+    renderCart();
+  }
+
+  async function initOpenApisBackground() {
+    weatherInfo = await fetchSorocabaWeather();
+    const dl = document.getElementById('fipe-vehicles-list');
+    if (dl) {
+      const vehicles = await searchFipeVehicles('');
+      dl.innerHTML = vehicles.map(v => `<option value="${v}"></option>`).join('');
+    }
+  }
+
   function bindEvents() {
     bindVisualViewportFix();
     setupVoiceDictation();
+    initOpenApisBackground();
+
+    document.getElementById('lookup-cep-btn').addEventListener('click', async () => {
+      try {
+        const res = await lookupBrazilianCep(document.getElementById('cust-cep').value);
+        const addrEl = document.getElementById('cust-address');
+        addrEl.value = `${res.street}${res.neighborhood ? ', ' + res.neighborhood : ''} — ${res.city}/${res.state}`;
+        if (res.coords) {
+          await resolveGeoDelivery(res.coords);
+          showToast(`CEP encontrado (${res.source}): rota ${routeInfo.distanceKm} km`);
+        } else {
+          showToast(`Endereço preenchido (${res.source}).`);
+        }
+      } catch (err) {
+        showToast(err.message || 'CEP inválido.');
+      }
+    });
+
+    document.getElementById('use-gps-btn').addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        showToast('GPS indisponível neste dispositivo.');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          document.getElementById('cust-address').value = `GPS (${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}) — Sorocaba`;
+          await resolveGeoDelivery(coords);
+          showToast(`Rota GPS calculada: ${routeInfo.distanceKm} km`);
+        },
+        () => showToast('Permita acesso à localização ou informe o CEP.')
+      );
+    });
 
     document.getElementById('search-input').addEventListener('input', renderCatalog);
     document.getElementById('sort-select').addEventListener('change', (e) => { sortMode = e.target.value; renderCatalog(); });

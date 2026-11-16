@@ -44,9 +44,10 @@
   <!-- Barra Rápida de Veículo/Placa (Apenas Oficina Técnica auto-blueprint) -->
   <section id="auto-vehicle-bar" class="auto-vehicle-bar hidden no-print">
     <div class="container auto-vehicle-grid">
-      <input type="text" id="quick-veh-model" class="text-input compact-input" placeholder="Veículo (Ex: Onix 1.0 2021)" aria-label="Modelo do veículo" />
+      <input type="text" id="quick-veh-model" list="fipe-vehicles-list" class="text-input compact-input" placeholder="Veículo FIPE (Ex: Onix 1.0)" aria-label="Modelo do veículo" />
       <input type="text" id="quick-veh-plate" class="text-input compact-input mono" placeholder="Placa / KM" aria-label="Placa ou KM" />
     </div>
+    <datalist id="fipe-vehicles-list"></datalist>
   </section>
 
   <!-- Card de Recompra Instantânea (Apenas Pet Shop pet-recurring) -->
@@ -167,9 +168,34 @@
           <label class="field-label">Seu WhatsApp
             <input type="tel" id="cust-phone" class="text-input mono" placeholder="(15) 99999-9999" />
           </label>
-          <label id="address-wrap" class="field-label hidden">Endereço Completo
-            <input type="text" id="cust-address" class="text-input" placeholder="Rua, número e bairro" />
-          </label>
+          <div id="address-wrap" class="address-geo-wrap hidden">
+            <label class="field-label">CEP ou Localização GPS (Cálculo automático de entrega)</label>
+            <div class="cep-gps-row">
+              <input type="text" id="cust-cep" class="text-input mono" inputmode="numeric" maxlength="9" placeholder="CEP (ex: 18016-300)" aria-label="CEP" />
+              <button type="button" id="lookup-cep-btn" class="btn btn-secondary btn-sm">Buscar</button>
+              <button type="button" id="use-gps-btn" class="btn btn-secondary btn-sm">📍 Usar Meu GPS</button>
+            </div>
+            <label class="field-label" style="margin-top:6px;">Endereço Completo
+              <input type="text" id="cust-address" class="text-input" placeholder="Rua, número e bairro" />
+            </label>
+            <div id="route-preview-card" class="route-preview-card hidden">
+              <div class="route-preview-top">
+                <div>
+                  <strong id="route-distance-label" class="mono">0.0 km • ~0 min</strong>
+                  <span id="route-fee-source" class="cart-row-sub" style="display:block;">OSRM / Sorocaba</span>
+                </div>
+                <svg class="route-svg-box" viewBox="0 0 180 56" width="110" height="36" aria-hidden="true">
+                  <path id="route-svg-path" d="M8,48 L172,8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <circle cx="8" cy="48" r="4" fill="currentColor" />
+                  <circle cx="172" cy="8" r="4" fill="#16A34A" />
+                </svg>
+              </div>
+              <div class="route-nav-links">
+                <a id="route-gmaps-link" href="#" target="_blank" rel="noopener" class="btn btn-secondary btn-xs">Google Maps</a>
+                <a id="route-waze-link" href="#" target="_blank" rel="noopener" class="btn btn-secondary btn-xs">Waze</a>
+              </div>
+            </div>
+          </div>
 
           <!-- Container Polimórfico Dinâmico (Somente os campos do nicho ativo) -->
           <div id="dynamic-domain-fields" class="domain-block hidden"></div>
@@ -235,6 +261,7 @@
     </div>
 
     <!-- PitchTip exclusivo para o Lojista (Nunca aparece na vitrine do comprador!) -->
+    <div id="studio-weather-badge" class="weather-pill"></div>
     <div id="studio-pitch-callout" class="pitch-callout"></div>
 
     <div class="admin-tabs" role="tablist">
@@ -381,6 +408,7 @@
   <div id="toast-container" class="toast-container no-print" aria-live="polite"></div>
 
   <script src="./src/integrations.js"></script>
+  <script src="./src/geo-apis.js"></script>
   <script src="./src/qrcode.js"></script>
   <script src="./src/store.js"></script>
   <script src="./src/presets.js"></script>

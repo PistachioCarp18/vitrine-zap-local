@@ -162,9 +162,6 @@
     return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
-  /**
-   * Calculadora de Divisao de Conta (Split Bill) — innovation-squad
-   */
   function calculateSplitBill(total, peopleCount = 1) {
     const people = Math.max(1, Math.min(20, Math.floor(Number(peopleCount || 1))));
     const safeTotal = Math.max(0, Number(total || 0));
@@ -216,9 +213,6 @@
     return nowMins >= start || nowMins <= end;
   }
 
-  /**
-   * Avalia string de horario ("18:00 - 23:30") para badge inteligente Mobile-First.
-   */
   function evaluateStoreOpenStatus(hoursString = '08:00 - 22:00', nowDate = new Date()) {
     const parts = String(hoursString || '08:00 - 22:00').split('-').map(s => s.trim());
     const openHour = /^\d{2}:\d{2}$/.test(parts[0] || '') ? parts[0] : '08:00';
@@ -263,6 +257,7 @@
     paymentMethod = 'Pix',
     changeFor = '',
     splitPeople = 1,
+    routeInfo = null,
     mode = 'pedido',
     domainMode = 'food-delivery',
     scheduleDate = '',
@@ -307,9 +302,7 @@
       if (petName || petSize) {
         lines.push(`*Pet:* ${petName || 'Pet'} (Porte: ${petSize || 'Nao informado'})`);
       }
-      if (petRemindDays) {
-        lines.push(`*Lembrete de recompra:* a cada ${petRemindDays} dias`);
-      }
+      if (petRemindDays) lines.push(`*Lembrete de recompra:* a cada ${petRemindDays} dias`);
     }
 
     if (isServiceQuote) {
@@ -362,6 +355,11 @@
     lines.push(`*Pagamento:* ${paymentMethod}`);
     if (paymentMethod === 'Dinheiro' && changeFor) {
       lines.push(`*Troco para:* ${changeFor}`);
+    }
+    if (!isServiceQuote && deliveryMode === 'Entrega' && routeInfo && routeInfo.googleMapsUrl) {
+      lines.push('', `*Rota Motoboy (${routeInfo.distanceKm} km • ~${routeInfo.durationMinutes} min):*`);
+      lines.push(`Google Maps: ${routeInfo.googleMapsUrl}`);
+      if (routeInfo.wazeUrl) lines.push(`Waze: ${routeInfo.wazeUrl}`);
     }
     if (isServiceQuote) lines.push('*Validade deste pre-orcamento:* 7 dias');
     if (notes) lines.push(`*Observacoes:* ${notes}`);

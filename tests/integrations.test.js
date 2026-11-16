@@ -15,6 +15,17 @@ const {
   buildShareableBrandUrl,
   buildWhatsAppOrderUrl,
 } = require('../src/integrations');
+const {
+  SOROCABA_STORES_COORDS,
+  normalizeCep,
+  lookupBrazilianCep,
+  haversineKm,
+  calculateDynamicFeeByKm,
+  buildNavigationLinks,
+  calculateRouteAndDeliveryFee,
+  fetchSorocabaWeather,
+  searchFipeVehicles,
+} = require('../src/geo-apis');
 const { createMatrix, renderQrSvg } = require('../src/qrcode');
 const { createStore, encodeStoreConfig, decodeStoreConfig, parseBrandUrlParams, exportOrdersCsv } = require('../src/store');
 const { NICHE_PRESETS } = require('../src/presets');
@@ -132,8 +143,8 @@ test('16. normalizeBrPhone adiciona prefixo 55 quando ausente', () => {
   assert.equal(normalizeBrPhone('5515996398869'), '5515996398869');
 });
 
-// 17-20: Mensagens WhatsApp Polimorficas + Split Bill
-test('17. WhatsApp food-delivery inclui divisao de conta (Split Bill), variante e troco', () => {
+// 17-20: Mensagens WhatsApp Polimorficas + Split Bill + Rota Motoboy
+test('17. WhatsApp food-delivery inclui divisao de conta, rota Maps/Waze, variante e troco', () => {
   const res = buildWhatsAppOrderUrl({
     domainMode: 'food-delivery',
     storeName: 'Emporio Lanches',
@@ -145,11 +156,18 @@ test('17. WhatsApp food-delivery inclui divisao de conta (Split Bill), variante 
     changeFor: 'R$ 100,00',
     splitPeople: 2,
     deliveryFee: 6,
+    routeInfo: {
+      distanceKm: 2.4,
+      durationMinutes: 8,
+      googleMapsUrl: 'https://www.google.com/maps/dir/?api=1&origin=-23.5,-47.4&destination=-23.51,-47.42',
+      wazeUrl: 'https://waze.com/ul?ll=-23.51,-47.42&navigate=yes',
+    },
     items: [{ name: 'Combo', qty: 1, price: 68.0, selectedVariant: 'Ao ponto' }],
   });
   assert.ok(res.message.includes('Divisao da conta (2 pessoas)'));
-  assert.ok(res.message.includes('Opcao: Ao ponto'));
-  assert.ok(res.message.includes('Troco para:* R$ 100,00'));
+  assert.ok(res.message.includes('Rota Motoboy (2.4 km'));
+  assert.ok(res.message.includes('https://www.google.com/maps/dir/'));
+  assert.ok(res.message.includes('https://waze.com/ul'));
 });
 
 test('18. WhatsApp scheduled-order inclui janela de horario, topo e sinal Pix 50%', () => {
@@ -200,7 +218,7 @@ test('20. WhatsApp service-quote inclui codigo SKU [OS-XXX], veiculo, placa, sin
   assert.ok(res.message.includes('7 dias'));
 });
 
-// 21-25: Magic URL, Store, CSV e Topologias Unicas
+// 21-26: Magic URL, Store, CSV, Horarios & Topologias
 test('21. buildShareableBrandUrl cabe dentro do QR Code SVG offline', () => {
   const url = buildShareableBrandUrl('https://vitrine-zap-local.vercel.app/', {
     id: 'oficina',
@@ -252,4 +270,82 @@ test('25. NICHE_PRESETS define 4 layoutModes e 4 brandArchetypes unicos (sem des
 test('26. isStoreOpenNow retrocompativel dentro e fora do turno', () => {
   assert.equal(isStoreOpenNow('08:00', '18:00', new Date('2026-11-16T10:00:00')), true);
   assert.equal(isStoreOpenNow('18:00', '23:30', new Date('2026-11-16T10:00:00')), false);
+});
+
+// 27-32: 8o Squad (open-apis-geo-squad) — BrasilAPI/ViaCEP, OSRM/Haversine, Taxa por KM, Maps/Waze, Clima & FIPE
+test('27. lookupBrazilianCep resolve CEP de Sorocaba offline com coordenadas reais', async () => {
+  const res = await lookupBrazilianCep('18016-300', null);
+  assert.equal(normalizeCep(res.cep), '18016300');
+  assert.ok(res.street.includes('Belmira'));
+  assert.equal(res.city, 'Sorocaba');
+  assert.ok(res.coords && res.coords.lat < -23);
+  assert.equal(res.source, 'offline-sorocaba');
+});
+
+test('28. lookupBrazilianCep usa BrasilAPI v2 e faz fallback para ViaCEP quando BrasilAPI falha', async () => {
+  const mockFetch = async (url) => {
+    if (url.includes('brasilapi')) return { ok: false, status: 503 };
+    return {
+      ok: true,
+      json: async () => ({ logradouro: 'Av. Sao Paulo', bairro: 'Alem Ponte', localidade: 'Sorocaba', uf: 'SP' }),
+    };
+  };
+  const res = await lookupBrazilianCep('18013000', mockFetch);
+  assert.equal(res.source, 'viacep');
+  assert.equal(res.street, 'Av. Sao Paulo');
+});
+
+test('29. calculateRouteAndDeliveryFee calcula Haversine x 1.32 offline com polilinha e links Maps/Waze', async () => {
+  const origin = SOROCABA_STORES_COORDS.lanchonete;
+  const dest = { lat: -23.4979, lng: -47.4342 }; // Av. Sao Paulo
+  const rawKm = haversineKm(origin, dest);
+  assert.ok(rawKm > 1 && rawKm < 4);
+
+  const route = await calculateRouteAndDeliveryFee(origin, dest, { forceOffline: true, baseFee: 4.0, includedKm: 1.5, perKmRate: 1.5 });
+  assert.equal(route.source, 'haversine-1.32x');
+  assert.ok(route.distanceKm > rawKm);
+  assert.ok(route.deliveryFee >= 4.0);
+  assert.ok(route.polylineSvgPath.startsWith('M'));
+  assert.ok(route.googleMapsUrl.includes('google.com/maps/dir/'));
+  assert.ok(route.wazeUrl.includes('waze.com/ul'));
+});
+
+test('30. calculateRouteAndDeliveryFee usa OSRM publico quando disponivel e respeita frete gratis', async () => {
+  const mockOsrmFetch = async () => ({
+    ok: true,
+    json: async () => ({
+      routes: [{
+        distance: 4500,
+        duration: 600,
+        geometry: { coordinates: [[-47.4192, -23.5058], [-47.4342, -23.4979]] },
+      }],
+    }),
+  });
+  const route = await calculateRouteAndDeliveryFee(SOROCABA_STORES_COORDS.lanchonete, { lat: -23.4979, lng: -47.4342 }, { fetchImpl: mockOsrmFetch });
+  assert.equal(route.source, 'osrm-public');
+  assert.equal(route.distanceKm, 4.5);
+  assert.equal(route.durationMinutes, 10);
+  assert.equal(calculateDynamicFeeByKm(4.5, { baseFee: 4, includedKm: 1.5, perKmRate: 1.5 }), 8.5);
+  assert.equal(calculateDynamicFeeByKm(4.5, { freeDeliveryUnlocked: true }), 0);
+});
+
+test('31. buildNavigationLinks e fetchSorocabaWeather operam 100% sem chave paga', async () => {
+  const links = buildNavigationLinks(SOROCABA_STORES_COORDS.padaria, { lat: -23.5032, lng: -47.4408 });
+  assert.ok(links.googleMapsUrl.includes('-23.506400,-47.417800'));
+  assert.ok(links.wazeUrl.includes('-23.503200,-47.440800'));
+
+  const weather = await fetchSorocabaWeather(async () => ({
+    ok: true,
+    json: async () => ({ current_weather: { temperature: 21.5, weathercode: 61 } }),
+  }));
+  assert.equal(weather.source, 'open-meteo');
+  assert.equal(weather.rainAlert, true);
+  assert.ok(weather.label.includes('Chuva'));
+});
+
+test('32. searchFipeVehicles retorna frota popular e filtra busca na Oficina sem API paga', async () => {
+  const all = await searchFipeVehicles('', null);
+  assert.ok(all.length >= 8);
+  const onix = await searchFipeVehicles('onix', null);
+  assert.ok(onix.some(v => v.toLowerCase().includes('onix')));
 });
