@@ -78,11 +78,36 @@
     return { applied: found, discountAmount };
   }
 
+  /**
+   * Engenharia reversa iFood/Amazon: barra de progresso de Frete Gratis.
+   */
+  function calculateFreeDeliveryProgress(subtotal, threshold = 0, baseDeliveryFee = 0) {
+    const sub = Math.max(0, Number(subtotal || 0));
+    const goal = Math.max(0, Number(threshold || 0));
+    const fee = Math.max(0, Number(baseDeliveryFee || 0));
+    if (goal <= 0 || fee <= 0) {
+      return { enabled: false, unlocked: false, remaining: 0, percent: 100, effectiveDeliveryFee: fee };
+    }
+    const unlocked = sub >= goal;
+    const remaining = unlocked ? 0 : Number((goal - sub).toFixed(2));
+    const percent = Math.min(100, Math.round((sub / goal) * 100));
+    return {
+      enabled: true,
+      unlocked,
+      remaining,
+      percent,
+      effectiveDeliveryFee: unlocked ? 0 : fee,
+    };
+  }
+
   function calculateCartTotals(items, deliveryFee = 0, discount = 0) {
     const safeItems = Array.isArray(items) ? items : [];
     const subtotal = safeItems.reduce((acc, item) => {
       const qty = Math.max(0, Number(item.qty || 0));
-      const price = Math.max(0, Number(item.price || 0));
+      const extrasSum = Array.isArray(item.selectedExtras)
+        ? item.selectedExtras.reduce((s, ex) => s + Math.max(0, Number(ex.price || 0)), 0)
+        : 0;
+      const price = Math.max(0, Number(item.price || 0)) + extrasSum;
       return acc + qty * price;
     }, 0);
     const fee = Math.max(0, Number(deliveryFee || 0));
@@ -154,12 +179,24 @@
 
     lines.push('', '*Itens:*');
     (items || []).forEach((item, idx) => {
-      const lineTotal = Number(item.qty || 0) * Number(item.price || 0);
+      const extrasSum = Array.isArray(item.selectedExtras)
+        ? item.selectedExtras.reduce((s, ex) => s + Number(ex.price || 0), 0)
+        : 0;
+      const unitTotal = Number(item.price || 0) + extrasSum;
+      const lineTotal = Number(item.qty || 0) * unitTotal;
       lines.push(`${idx + 1}. ${item.qty}x ${item.name} — ${formatBrl(lineTotal)}`);
+      if (extrasSum > 0 && Array.isArray(item.selectedExtras)) {
+        lines.push(`   + Adicionais: ${item.selectedExtras.map(e => e.name).join(', ')}`);
+      }
+      if (item.itemNote) {
+        lines.push(`   Obs. item: ${item.itemNote}`);
+      }
     });
 
     lines.push('');
-    if (totals.deliveryFee > 0) lines.push(`Taxa de entrega: ${formatBrl(totals.deliveryFee)}`);
+    if (deliveryMode === 'Entrega') {
+      lines.push(totals.deliveryFee > 0 ? `Taxa de entrega: ${formatBrl(totals.deliveryFee)}` : 'Taxa de entrega: GRATIS');
+    }
     if (totals.discount > 0) {
       lines.push(`Desconto${couponCode ? ` (${couponCode})` : ''}: -${formatBrl(totals.discount)}`);
     }
@@ -182,6 +219,7 @@
     crc16Ccitt,
     generatePixBrCode,
     resolveCouponDiscount,
+    calculateFreeDeliveryProgress,
     calculateCartTotals,
     formatBrl,
     normalizeBrPhone,

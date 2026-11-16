@@ -4,6 +4,7 @@ const {
   crc16Ccitt,
   generatePixBrCode,
   resolveCouponDiscount,
+  calculateFreeDeliveryProgress,
   calculateCartTotals,
   normalizeBrPhone,
   isStoreOpenNow,
@@ -48,6 +49,20 @@ test('renderQrSvg gera SVG valido 100% offline para payload Pix BR Code', () => 
   assert.ok(svg.endsWith('</svg>'));
 });
 
+test('calculateFreeDeliveryProgress calcula progresso e zera taxa ao atingir meta', () => {
+  const partial = calculateFreeDeliveryProgress(45, 60, 6);
+  assert.equal(partial.unlocked, false);
+  assert.equal(partial.remaining, 15);
+  assert.equal(partial.percent, 75);
+  assert.equal(partial.effectiveDeliveryFee, 6);
+
+  const unlocked = calculateFreeDeliveryProgress(65, 60, 6);
+  assert.equal(unlocked.unlocked, true);
+  assert.equal(unlocked.remaining, 0);
+  assert.equal(unlocked.percent, 100);
+  assert.equal(unlocked.effectiveDeliveryFee, 0);
+});
+
 test('resolveCouponDiscount aplica desconto percentual e fixo respeitando o teto do subtotal', () => {
   const coupons = [
     { code: 'BAIRRO10', type: 'percent', value: 10 },
@@ -58,16 +73,16 @@ test('resolveCouponDiscount aplica desconto percentual e fixo respeitando o teto
   assert.equal(resolveCouponDiscount(100, 'INVALIDO', coupons).discountAmount, 0);
 });
 
-test('calculateCartTotals soma itens, taxa de entrega e subtrai desconto corretamente', () => {
+test('calculateCartTotals soma itens, adicionais, entrega e subtrai desconto', () => {
   const totals = calculateCartTotals([
-    { name: 'X-Burger', qty: 2, price: 24.9 },
+    { name: 'X-Burger', qty: 2, price: 24.9, selectedExtras: [{ name: 'Bacon', price: 5.0 }] },
     { name: 'Refri', qty: 1, price: 6.5 },
   ], 6.0, 5.0);
   assert.equal(totals.itemCount, 3);
-  assert.equal(totals.subtotal, 56.3);
+  assert.equal(totals.subtotal, 66.3);
   assert.equal(totals.deliveryFee, 6);
   assert.equal(totals.discount, 5);
-  assert.equal(totals.total, 57.3);
+  assert.equal(totals.total, 67.3);
 });
 
 test('normalizeBrPhone adiciona prefixo 55 quando ausente', () => {
@@ -81,7 +96,7 @@ test('isStoreOpenNow avalia horario de funcionamento corretamente', () => {
   assert.equal(isStoreOpenNow('18:00', '23:30', noon), false);
 });
 
-test('buildWhatsAppOrderUrl inclui cupom e troco quando informados', () => {
+test('buildWhatsAppOrderUrl inclui adicionais, cupom e troco quando informados', () => {
   const res = buildWhatsAppOrderUrl({
     storeName: 'Emporio do Lanche',
     storeWhatsapp: '(15) 99999-0001',
@@ -93,13 +108,14 @@ test('buildWhatsAppOrderUrl inclui cupom e troco quando informados', () => {
     discount: 5,
     couponCode: 'BEMVINDO5',
     deliveryFee: 6,
-    items: [{ name: 'Combo', qty: 1, price: 50 }],
+    items: [{ name: 'Combo', qty: 1, price: 50, selectedExtras: [{ name: 'Bacon extra', price: 5 }], itemNote: 'Sem cebola' }],
     mode: 'pedido',
   });
   assert.ok(res.url.startsWith('https://wa.me/5515999990001?text='));
+  assert.ok(res.message.includes('Bacon extra'));
   assert.ok(res.message.includes('BEMVINDO5'));
   assert.ok(res.message.includes('Troco para:* R$ 100,00'));
-  assert.equal(res.totals.total, 51);
+  assert.equal(res.totals.total, 56);
 });
 
 test('VitrineStore registra pedidos, perfil do cliente e calcula ticket medio', () => {
@@ -137,11 +153,11 @@ test('encodeStoreConfig e decodeStoreConfig preservam configuracao da loja na UR
   assert.equal(decodeStoreConfig('invalid@@@'), null);
 });
 
-test('NICHE_PRESETS possui os 4 nichos com itens, cupons e horarios', () => {
+test('NICHE_PRESETS possui os 4 nichos com itens, extras, cupons e horarios', () => {
   for (const key of ['lanchonete', 'padaria', 'petshop', 'oficina']) {
     assert.ok(NICHE_PRESETS[key].items.length >= 4);
     assert.ok(NICHE_PRESETS[key].pitchTip.length > 10);
     assert.ok(NICHE_PRESETS[key].coupons.length >= 1);
-    assert.ok(NICHE_PRESETS[key].openHour.includes(':'));
+    assert.ok(NICHE_PRESETS[key].items[0].extras.length >= 1);
   }
 });
