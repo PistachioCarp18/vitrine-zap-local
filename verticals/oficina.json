@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "vertical": "oficina",
+  "identity": {
+    "name": "Fort Center Auto",
+    "tagline": "Pré-Orçamento Técnico Digital & Triagem de Ordem de Serviço.",
+    "tone": "direto",
+    "logo": { "type": "monogram", "initials": "FC", "dataUri": null }
+  },
+  "color": { "seed": "#1D4ED8", "mode": "light", "accent": "mono" },
+  "type": { "stack": "mono", "scale": "compact" },
+  "shape": { "radius": "sharp", "elevation": "flat", "density": "compact" },
+  "layout": { "catalog": "checklist-table", "nav": "chips" },
+  "vocabulary": { "catalog": "Serviços & Peças", "cart": "Pré-Orçamento Técnico", "order": "Orçamento OS", "cta": "Enviar Orçamento no WhatsApp" },
+  "modules": { "freteKm": false, "splitBill": false, "sinalPix": false, "recompra": false, "agendamento": false, "osTecnica": true },
+  "geo": {
+    "city": "Sorocaba",
+    "state": "SP",
+    "neighborhood": "Vila Lucy",
+    "lat": -23.5019,
+    "lon": -47.4792,
+    "feeTable": []
+  },
+  "contact": { "whatsapp": "15996398869", "pixKey": "15996398869" },
+  "meta": { "rating": "4.9 (140+)", "etaLabel": "45 min bancada", "deliveryFee": 0.0, "freeDeliveryThreshold": 0.0, "openHour": "08:00", "closeHour": "18:00", "quoteValidityDays": 7 },
+  "symptoms": ["Barulho ao frear", "Revisão preventiva", "Luz de injeção acesa", "Vibração / Alinhamento"],
+  "coupons": [{ "code": "REVISAO10", "type": "percent", "value": 10 }],
+  "quickTags": ["Guardar peças trocadas", "Aprovar antes de executar", "Emitir NF-e"],
+  "pitchTip": "Ordem de Serviço blueprint com códigos [OS-XXX], separação Peça vs. Mão de Obra e garantia.",
+  "items": [
+    { "id": "ofi-1", "sku": "OS-REV-01", "category": "Revisão", "name": "Troca de Óleo 5W30 Sintético + Filtro", "description": "Até 4L óleo homologado + filtro de óleo + inspeção 18 pontos.", "partsPrice": 189.0, "laborPrice": 60.0, "price": 249.0, "warranty": "Garantia 90 dias", "prepTime": "45 min bancada" },
+    { "id": "ofi-2", "sku": "OS-SUSP-02", "category": "Suspensão", "name": "Alinhamento 3D + Balanceamento (4 rodas)", "description": "Geometria computadorizada com laudo técnico impresso.", "partsPrice": 20.0, "laborPrice": 119.0, "price": 139.0, "warranty": "Garantia 90 dias", "prepTime": "50 min bancada" },
+    { "id": "ofi-3", "sku": "OS-FREIO-03", "category": "Freios", "name": "Pastilhas de Freio Dianteiras + Sangria", "description": "Jogo dianteiro + inspeção de discos e fluido DOT4.", "partsPrice": 115.0, "laborPrice": 70.0, "price": 185.0, "warranty": "Garantia 90 dias", "prepTime": "60 min bancada" },
+    { "id": "ofi-4", "sku": "OS-DIAG-04", "category": "Diagnóstico", "name": "Scanner Eletrônico + Laudo de Injeção", "description": "Leitura completa de códigos DTC e parâmetros em tempo real.", "partsPrice": 0.0, "laborPrice": 95.0, "price": 95.0, "warranty": "Laudo técnico", "prepTime": "30 min bancada" }
+  ]
+}

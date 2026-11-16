@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "vertical": "padaria",
+  "identity": {
+    "name": "União Padaria & Atelier",
+    "tagline": "Encomendas artesanais com agendamento de horário e sinal 50% no Pix.",
+    "tone": "caloroso",
+    "logo": { "type": "monogram", "initials": "UP", "dataUri": null }
+  },
+  "color": { "seed": "#9A4204", "mode": "light", "accent": "analogous" },
+  "type": { "stack": "serif", "scale": "comfortable" },
+  "shape": { "radius": "soft", "elevation": "subtle", "density": "airy" },
+  "layout": { "catalog": "editorial-grid", "nav": "chips" },
+  "vocabulary": { "catalog": "Vitrine de Encomendas", "cart": "Sua Encomenda", "order": "Encomenda", "cta": "Reservar Encomenda no WhatsApp" },
+  "modules": { "freteKm": true, "splitBill": false, "sinalPix": true, "recompra": false, "agendamento": true, "osTecnica": false },
+  "geo": {
+    "city": "Sorocaba",
+    "state": "SP",
+    "neighborhood": "R. Belmira Loureiro",
+    "lat": -23.5064,
+    "lon": -47.4178,
+    "feeTable": [{ "upToKm": 1.5, "fee": 5.0 }, { "perExtraKm": 1.5 }]
+  },
+  "contact": { "whatsapp": "15998234575", "pixKey": "15998234575" },
+  "meta": { "rating": "4.9 (95+)", "etaLabel": "Fornadas 08h / 16h", "deliveryFee": 5.0, "freeDeliveryThreshold": 80.0, "openHour": "06:00", "closeHour": "20:30" },
+  "scheduleWindows": ["08:00 - 10:00 (Manhã)", "11:30 - 13:30 (Almoço)", "16:00 - 18:30 (Café)"],
+  "coupons": [{ "code": "BAIRRO10", "type": "percent", "value": 10 }],
+  "quickTags": ["Embalagem presente", "Velinha inclusa", "Fatiado na hora"],
+  "pitchTip": "Encomendas com agendamento por janela de horário, dizeres do bolo e cálculo de sinal 50% no Pix.",
+  "items": [
+    {
+      "id": "pad-1",
+      "category": "Bolos",
+      "name": "Bolo Brigadeiro Belga",
+      "description": "Massa úmida de cacau 50% com granulado belga.",
+      "yieldLabel": "Serve 15 fatias",
+      "price": 89.0,
+      "extras": [{ "id": "ex-topo", "name": "Topo de Bolo Personalizado", "price": 15.0 }, { "id": "ex-morango", "name": "Morangos Frescos", "price": 14.0 }]
+    },
+    { "id": "pad-2", "category": "Salgados", "name": "Cento de Salgados Fritos", "description": "Coxinha, bolinha de queijo, risole e kibe na hora.", "yieldLabel": "Serve 20 pessoas", "price": 79.0 },
+    { "id": "pad-3", "category": "Kits Café", "name": "Kit Café Condomínio", "description": "8 pães franceses, frios, pão de queijo, bolo e suco 1L.", "yieldLabel": "Para 4 pessoas", "price": 58.0 },
+    { "id": "pad-4", "category": "Pães", "name": "Pão Italiano Natural", "description": "Fermentação lenta 24h, casca crocante.", "yieldLabel": "Fornada 16h", "price": 22.0 }
+  ]
+}

@@ -16,6 +16,9 @@
     padaria: { lat: -23.5064, lng: -47.4178, label: 'R. Belmira Loureiro • Jd. Martinez' },
     petshop: { lat: -23.4979, lng: -47.4342, label: 'Av. São Paulo • Zona Leste' },
     oficina: { lat: -23.5019, lng: -47.4792, label: 'Av. Gen. Carneiro / Vila Lucy' },
+    barbearia: { lat: -23.4950, lng: -47.4480, label: 'Santa Rosália • Sorocaba-SP' },
+    moda: { lat: -23.5280, lng: -47.4650, label: 'Campolim • Sorocaba-SP' },
+    floricultura: { lat: -23.5110, lng: -47.4620, label: 'Mangal • Sorocaba-SP' },
   };
 
   const SOROCABA_CEP_OFFLINE_DICT = {
@@ -60,29 +63,37 @@
   }
 
   /**
-   * Consulta CEP: BrasilAPI v2 -> ViaCEP -> Dicionario Offline Sorocaba.
+   * Consulta CEP: BrasilAPI v2 -> ViaCEP -> Dicionario Offline Configuravel/Sorocaba.
    */
-  async function lookupBrazilianCep(cep, fetchImpl = (typeof fetch === 'function' ? fetch : null)) {
+  async function lookupBrazilianCep(cep, fetchImpl = (typeof fetch === 'function' ? fetch : null), geoConfig = {}) {
     const clean = normalizeCep(cep);
     if (clean.length !== 8) {
       throw new Error('CEP invalido. Informe 8 digitos.');
     }
+
+    const customDict = geoConfig && typeof geoConfig.offlineDictionary === 'object' ? geoConfig.offlineDictionary : {};
+    const mergedDict = { ...SOROCABA_CEP_OFFLINE_DICT, ...customDict };
+    const defaultCity = geoConfig?.city || 'Sorocaba';
+    const defaultState = geoConfig?.state || 'SP';
+    const fallbackCoords = (geoConfig && Number.isFinite(Number(geoConfig.lat)) && Number.isFinite(Number(geoConfig.lon || geoConfig.lng)))
+      ? { lat: Number(geoConfig.lat), lng: Number(geoConfig.lon ?? geoConfig.lng) }
+      : { lat: -23.5015, lng: -47.4526 };
 
     // 1. BrasilAPI v2 (inclui lat/lng quando disponivel)
     try {
       const data = await fetchJsonWithTimeout(fetchImpl, `https://brasilapi.com.br/api/cep/v2/${clean}`, 2200);
       const lat = Number(data?.location?.coordinates?.latitude);
       const lng = Number(data?.location?.coordinates?.longitude);
-      const dictCoords = SOROCABA_CEP_OFFLINE_DICT[clean]?.coords;
+      const dictCoords = mergedDict[clean]?.coords;
       const coords = (Number.isFinite(lat) && Number.isFinite(lng) && lat !== 0 && lng !== 0)
         ? { lat, lng }
-        : (dictCoords || (clean.startsWith('180') ? { lat: -23.5015, lng: -47.4526 } : null));
+        : (dictCoords || (clean.startsWith('180') ? fallbackCoords : fallbackCoords));
       return {
         cep: clean,
         street: data.street || '',
         neighborhood: data.neighborhood || '',
-        city: data.city || 'Sorocaba',
-        state: data.state || 'SP',
+        city: data.city || defaultCity,
+        state: data.state || defaultState,
         coords,
         source: 'brasilapi-v2',
       };
@@ -92,30 +103,42 @@
     try {
       const data = await fetchJsonWithTimeout(fetchImpl, `https://viacep.com.br/ws/${clean}/json/`, 2200);
       if (data && !data.erro) {
-        const dictCoords = SOROCABA_CEP_OFFLINE_DICT[clean]?.coords;
+        const dictCoords = mergedDict[clean]?.coords;
         return {
           cep: clean,
           street: data.logradouro || '',
           neighborhood: data.bairro || '',
-          city: data.localidade || 'Sorocaba',
-          state: data.uf || 'SP',
-          coords: dictCoords || (clean.startsWith('180') ? { lat: -23.5015, lng: -47.4526 } : null),
+          city: data.localidade || defaultCity,
+          state: data.uf || defaultState,
+          coords: dictCoords || (clean.startsWith('180') ? fallbackCoords : fallbackCoords),
           source: 'viacep',
         };
       }
     } catch { /* fallback offline */ }
 
-    // 3. Dicionario Offline Sorocaba
-    if (SOROCABA_CEP_OFFLINE_DICT[clean]) {
-      const entry = SOROCABA_CEP_OFFLINE_DICT[clean];
+    // 3. Dicionario Offline (Custom / Sorocaba)
+    if (mergedDict[clean]) {
+      const entry = mergedDict[clean];
       return {
         cep: clean,
         street: entry.street,
         neighborhood: entry.neighborhood,
-        city: entry.city,
-        state: entry.state,
-        coords: entry.coords,
-        source: 'offline-sorocaba',
+        city: entry.city || defaultCity,
+        state: entry.state || defaultState,
+        coords: entry.coords || fallbackCoords,
+        source: customDict[clean] ? 'offline-custom' : 'offline-sorocaba',
+      };
+    }
+
+    if (geoConfig && geoConfig.city && clean.length === 8) {
+      return {
+        cep: clean,
+        street: `Logradouro CEP ${clean.slice(0, 5)}-${clean.slice(5)}`,
+        neighborhood: geoConfig.neighborhood || 'Centro / Região Local',
+        city: defaultCity,
+        state: defaultState,
+        coords: fallbackCoords,
+        source: 'offline-store-region',
       };
     }
 
@@ -165,9 +188,23 @@
 
   function calculateDynamicFeeByKm(distanceKm, options = {}) {
     if (options.freeDeliveryUnlocked) return 0;
-    const baseFee = Number(options.baseFee ?? 4.0);
-    const includedKm = Number(options.includedKm ?? 1.5);
-    const perKmRate = Number(options.perKmRate ?? 1.5);
+    const feeTable = Array.isArray(options.feeTable) && options.feeTable.length
+      ? options.feeTable
+      : (Array.isArray(options.geo?.feeTable) ? options.geo.feeTable : null);
+    let baseFee = Number(options.baseFee ?? 4.0);
+    let includedKm = Number(options.includedKm ?? 1.5);
+    let perKmRate = Number(options.perKmRate ?? 1.5);
+    if (feeTable && feeTable.length) {
+      const tier = feeTable.find(t => Number.isFinite(Number(t.upToKm)) && Number.isFinite(Number(t.fee)));
+      const perExtra = feeTable.find(t => Number.isFinite(Number(t.perExtraKm)));
+      if (tier) {
+        includedKm = Number(tier.upToKm);
+        baseFee = Number(tier.fee);
+      }
+      if (perExtra) {
+        perKmRate = Number(perExtra.perExtraKm);
+      }
+    }
     const extraKm = Math.max(0, Number(distanceKm || 0) - includedKm);
     return Number((baseFee + extraKm * perKmRate).toFixed(2));
   }
@@ -230,11 +267,14 @@
   }
 
   /**
-   * Open-Meteo (100% gratuito sem API key) — Sorocaba (-23.5015, -47.4526)
+   * Open-Meteo (100% gratuito sem API key) — coordenada configuravel (default Sorocaba -23.5015, -47.4526)
    */
-  async function fetchSorocabaWeather(fetchImpl = (typeof fetch === 'function' ? fetch : null)) {
+  async function fetchSorocabaWeather(fetchImpl = (typeof fetch === 'function' ? fetch : null), geoConfig = {}) {
+    const lat = Number.isFinite(Number(geoConfig?.lat)) ? Number(geoConfig.lat) : -23.5015;
+    const lon = Number.isFinite(Number(geoConfig?.lon ?? geoConfig?.lng)) ? Number(geoConfig.lon ?? geoConfig.lng) : -47.4526;
+    const city = geoConfig?.city || 'Local';
     try {
-      const url = 'https://api.open-meteo.com/v1/forecast?latitude=-23.5015&longitude=-47.4526&current_weather=true';
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
       const data = await fetchJsonWithTimeout(fetchImpl, url, 2000);
       const cw = data?.current_weather;
       if (cw) {
@@ -243,12 +283,12 @@
           temperature: Number(cw.temperature),
           weathercode: Number(cw.weathercode || 0),
           rainAlert,
-          label: rainAlert ? `Chuva em Sorocaba (${cw.temperature}°C)` : `Sorocaba ${cw.temperature}°C`,
+          label: rainAlert ? `Chuva em ${city} (${cw.temperature}°C)` : `${city} ${cw.temperature}°C`,
           source: 'open-meteo',
         };
       }
     } catch { /* fallback */ }
-    return { temperature: 24, weathercode: 1, rainAlert: false, label: 'Sorocaba 24°C', source: 'offline' };
+    return { temperature: 24, weathercode: 1, rainAlert: false, label: `${city} 24°C`, source: 'offline' };
   }
 
   /**

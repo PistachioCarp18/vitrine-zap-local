@@ -94,7 +94,10 @@
       if (hex) out.primaryColor = hex;
     }
     if (params.get('archetype')) {
-      const allowed = ['high-energy-food', 'artisanal-warm', 'playful-soft', 'industrial-precision'];
+      const allowed = [
+        'high-energy-food', 'artisanal-warm', 'playful-soft', 'industrial-precision',
+        'barber-atelier', 'fashion-editorial', 'botanical-warm',
+      ];
       const arch = params.get('archetype').trim();
       if (allowed.includes(arch)) out.brandArchetype = arch;
     }

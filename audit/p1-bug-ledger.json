@@ -1,0 +1,896 @@
+{
+  "auditedAt": "2026-11-16T11:47:52.724Z",
+  "liveUrl": "https://vitrine-zap-local.vercel.app/",
+  "viewports": [
+    {
+      "viewport": "320x568",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "docOverflow": false,
+      "firstProductTop": 196,
+      "firstProductVisibleAboveFold": true,
+      "smallTargetsCount": 20,
+      "smallTargetsSample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 186,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "sub16Inputs": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "suspects": {
+        "petStripVisibleInLanchonete": false,
+        "padariaDepositVisibleInLanchonete": false,
+        "pixBoxVisibleEmpty": false,
+        "discountLabelText": "Desconto ()-R$ 0,00",
+        "demoBtnVisible": true,
+        "sorocabaMentionedInDom": true,
+        "thirdPartyBrandInHtml": true
+      },
+      "screenshot": "evidence/p1/home-320x568.png"
+    },
+    {
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "innerWidth": 360,
+      "docOverflow": false,
+      "firstProductTop": 196,
+      "firstProductVisibleAboveFold": true,
+      "smallTargetsCount": 20,
+      "smallTargetsSample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 226,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "sub16Inputs": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "suspects": {
+        "petStripVisibleInLanchonete": false,
+        "padariaDepositVisibleInLanchonete": false,
+        "pixBoxVisibleEmpty": false,
+        "discountLabelText": "Desconto ()-R$ 0,00",
+        "demoBtnVisible": true,
+        "sorocabaMentionedInDom": true,
+        "thirdPartyBrandInHtml": true
+      },
+      "screenshot": "evidence/p1/home-360x800.png"
+    },
+    {
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "docOverflow": false,
+      "firstProductTop": 196,
+      "firstProductVisibleAboveFold": true,
+      "smallTargetsCount": 20,
+      "smallTargetsSample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 256,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "sub16Inputs": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "suspects": {
+        "petStripVisibleInLanchonete": false,
+        "padariaDepositVisibleInLanchonete": false,
+        "pixBoxVisibleEmpty": false,
+        "discountLabelText": "Desconto ()-R$ 0,00",
+        "demoBtnVisible": true,
+        "sorocabaMentionedInDom": true,
+        "thirdPartyBrandInHtml": true
+      },
+      "screenshot": "evidence/p1/home-390x844.png"
+    },
+    {
+      "viewport": "412x915",
+      "scrollWidth": 412,
+      "innerWidth": 412,
+      "docOverflow": false,
+      "firstProductTop": 196,
+      "firstProductVisibleAboveFold": true,
+      "smallTargetsCount": 20,
+      "smallTargetsSample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 278,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "sub16Inputs": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "suspects": {
+        "petStripVisibleInLanchonete": false,
+        "padariaDepositVisibleInLanchonete": false,
+        "pixBoxVisibleEmpty": false,
+        "discountLabelText": "Desconto ()-R$ 0,00",
+        "demoBtnVisible": true,
+        "sorocabaMentionedInDom": true,
+        "thirdPartyBrandInHtml": true
+      },
+      "screenshot": "evidence/p1/home-412x915.png"
+    },
+    {
+      "viewport": "800x360",
+      "scrollWidth": 800,
+      "innerWidth": 800,
+      "docOverflow": false,
+      "firstProductTop": 196,
+      "firstProductVisibleAboveFold": true,
+      "smallTargetsCount": 20,
+      "smallTargetsSample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 666,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "sub16Inputs": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "suspects": {
+        "petStripVisibleInLanchonete": false,
+        "padariaDepositVisibleInLanchonete": false,
+        "pixBoxVisibleEmpty": false,
+        "discountLabelText": "Desconto ()-R$ 0,00",
+        "demoBtnVisible": true,
+        "sorocabaMentionedInDom": true,
+        "thirdPartyBrandInHtml": true
+      },
+      "screenshot": "evidence/p1/home-800x360.png"
+    }
+  ],
+  "journeyResult": {
+    "step1Check": {
+      "bodySheetLock": true,
+      "overscrollBehavior": "contain",
+      "padariaDepositHiddenInLanchonete": true,
+      "discountRowTextWhenHidden": "Desconto ()-R$ 0,00"
+    },
+    "afterCloseLock": {
+      "drawerOpen": false,
+      "sheetLock": false
+    },
+    "afterReopen": {
+      "drawerOpen": true,
+      "wizardStep1Visible": true
+    },
+    "routeCardData": {
+      "routeVisible": true,
+      "routeText": "0.3 km • ~3 min",
+      "routeSourceText": "Frete calculado: R$ 6,00 (osrm-public)",
+      "pixQrRendered": true
+    }
+  },
+  "axeSummary": {
+    "homeViolations": [
+      {
+        "id": "aria-required-children",
+        "impact": "critical",
+        "help": "Certain ARIA roles must contain particular children",
+        "nodes": 1
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": 8
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": 1
+      },
+      {
+        "id": "page-has-heading-one",
+        "impact": "moderate",
+        "help": "Page should contain a level-one heading",
+        "nodes": 1
+      }
+    ],
+    "cartViolations": [
+      {
+        "id": "aria-required-children",
+        "impact": "critical",
+        "help": "Certain ARIA roles must contain particular children",
+        "nodes": 1
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": 11
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": 1
+      },
+      {
+        "id": "label",
+        "impact": "critical",
+        "help": "Form elements must have labels",
+        "nodes": 1
+      }
+    ]
+  },
+  "offlineResult": {
+    "offlineReloadOk": true
+  },
+  "layoutDomFingerprints": {
+    "lanchonete": {
+      "bodyLayout": "food-list",
+      "archetype": "high-energy-food",
+      "gridComputedCols": "none",
+      "firstCardClass": "food-card",
+      "firstCardDomSkeleton": [
+        "DIV.food-card-info",
+        "SPAN.food-badge",
+        "H3.",
+        "P.food-desc",
+        "STRONG.food-price mono",
+        "DIV.food-thumb-wrap",
+        "svg.[object SVGAnimatedString]",
+        "path.[object SVGAnimatedString]",
+        "path.[object SVGAnimatedString]",
+        "path.[object SVGAnimatedString]",
+        "DIV.food-add-overlay",
+        "BUTTON.mini-add-btn add-btn"
+      ],
+      "hasAutoVehicleBar": false,
+      "hasPetReorderStrip": false
+    },
+    "padaria": {
+      "bodyLayout": "bakery-editorial",
+      "archetype": "artisanal-warm",
+      "gridComputedCols": "162px 162px",
+      "firstCardClass": "bakery-card",
+      "firstCardDomSkeleton": [
+        "DIV.bakery-top-art",
+        "svg.[object SVGAnimatedString]",
+        "path.[object SVGAnimatedString]",
+        "path.[object SVGAnimatedString]",
+        "line.[object SVGAnimatedString]",
+        "line.[object SVGAnimatedString]",
+        "line.[object SVGAnimatedString]",
+        "DIV.bakery-body",
+        "SPAN.bakery-yield",
+        "H3.",
+        "SPAN.bakery-price mono",
+        "BUTTON.bakery-cta add-btn"
+      ],
+      "hasAutoVehicleBar": false,
+      "hasPetReorderStrip": false
+    },
+    "petshop": {
+      "bodyLayout": "pet-recurring",
+      "archetype": "playful-soft",
+      "gridComputedCols": "none",
+      "firstCardClass": "pet-card",
+      "firstCardDomSkeleton": [
+        "DIV.pet-card-head",
+        "DIV.",
+        "H3.",
+        "P.food-desc",
+        "SPAN.pet-cycle-badge",
+        "DIV.pet-pack-chips",
+        "BUTTON.pack-chip ",
+        "BUTTON.pack-chip ",
+        "BUTTON.pack-chip active",
+        "DIV.pet-card-foot",
+        "STRONG.food-price mono",
+        "BUTTON.btn btn-primary btn-sm add-btn"
+      ],
+      "hasAutoVehicleBar": false,
+      "hasPetReorderStrip": true
+    },
+    "oficina": {
+      "bodyLayout": "auto-blueprint",
+      "archetype": "industrial-precision",
+      "gridComputedCols": "none",
+      "firstCardClass": "auto-card",
+      "firstCardDomSkeleton": [
+        "DIV.auto-card-top",
+        "SPAN.auto-sku",
+        "SPAN.auto-warranty",
+        "H3.",
+        "P.food-desc",
+        "DIV.auto-breakdown mono",
+        "SPAN.",
+        "SPAN.",
+        "SPAN.",
+        "DIV.auto-card-foot",
+        "STRONG.food-price mono",
+        "BUTTON.btn btn-primary btn-sm add-btn"
+      ],
+      "hasAutoVehicleBar": true,
+      "hasPetReorderStrip": false
+    }
+  },
+  "bugs": [
+    {
+      "id": "BUG-TOUCH-320x568",
+      "sev": "S2",
+      "cluster": "toque",
+      "title": "20 alvos interativos abaixo de 44x44px em 320x568",
+      "sample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 186,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "evidence": "evidence/p1/home-320x568.png"
+    },
+    {
+      "id": "BUG-IOS-ZOOM-320x568",
+      "sev": "S2",
+      "cluster": "teclado",
+      "title": "Inputs com font-size < 16px em 320x568 (causa auto-zoom no iOS Safari)",
+      "sample": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "evidence": "evidence/p1/home-320x568.png"
+    },
+    {
+      "id": "BUG-TOUCH-360x800",
+      "sev": "S2",
+      "cluster": "toque",
+      "title": "20 alvos interativos abaixo de 44x44px em 360x800",
+      "sample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 226,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "evidence": "evidence/p1/home-360x800.png"
+    },
+    {
+      "id": "BUG-IOS-ZOOM-360x800",
+      "sev": "S2",
+      "cluster": "teclado",
+      "title": "Inputs com font-size < 16px em 360x800 (causa auto-zoom no iOS Safari)",
+      "sample": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "evidence": "evidence/p1/home-360x800.png"
+    },
+    {
+      "id": "BUG-TOUCH-390x844",
+      "sev": "S2",
+      "cluster": "toque",
+      "title": "20 alvos interativos abaixo de 44x44px em 390x844",
+      "sample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 256,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "evidence": "evidence/p1/home-390x844.png"
+    },
+    {
+      "id": "BUG-IOS-ZOOM-390x844",
+      "sev": "S2",
+      "cluster": "teclado",
+      "title": "Inputs com font-size < 16px em 390x844 (causa auto-zoom no iOS Safari)",
+      "sample": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "evidence": "evidence/p1/home-390x844.png"
+    },
+    {
+      "id": "BUG-TOUCH-412x915",
+      "sev": "S2",
+      "cluster": "toque",
+      "title": "20 alvos interativos abaixo de 44x44px em 412x915",
+      "sample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 278,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "evidence": "evidence/p1/home-412x915.png"
+    },
+    {
+      "id": "BUG-IOS-ZOOM-412x915",
+      "sev": "S2",
+      "cluster": "teclado",
+      "title": "Inputs com font-size < 16px em 412x915 (causa auto-zoom no iOS Safari)",
+      "sample": [
+        {
+          "id": "sort-select",
+          "fontSize": "13px"
+        }
+      ],
+      "evidence": "evidence/p1/home-412x915.png"
+    },
+    {
+      "id": "BUG-TOUCH-800x360",
+      "sev": "S2",
+      "cluster": "toque",
+      "title": "20 alvos interativos abaixo de 44x44px em 800x360",
+      "sample": [
+        {
+          "id": "niche-switcher",
+          "text": "Lanchonete (iFood Style)\nPadar",
+          "w": 108,
+          "h": 36
+        },
+        {
+          "id": "open-studio-btn",
+          "text": "🎨 Demo",
+          "w": 77,
+          "h": 36
+        },
+        {
+          "id": "search-input",
+          "text": "Buscar",
+          "w": 666,
+          "h": 38
+        },
+        {
+          "id": "sort-select",
+          "text": "Destaques\nMenor Preço\nMaior Pr",
+          "w": 104,
+          "h": 38
+        },
+        {
+          "id": "pill-btn active",
+          "text": "Todos",
+          "w": 63,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Burgers",
+          "w": 74,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Combos",
+          "w": 76,
+          "h": 34
+        },
+        {
+          "id": "pill-btn ",
+          "text": "Porções",
+          "w": 75,
+          "h": 34
+        }
+      ],
+      "evidence": "evidence/p1/home-800x360.png"
+    },
+    {
+      "id": "BUG-AXE-AA",
+      "sev": "S2",
+      "cluster": "a11y",
+      "title": "Violações críticas/sérias detectadas pelo axe-core",
+      "evidence": "audit/p1-bug-ledger.json"
+    }
+  ]
+}

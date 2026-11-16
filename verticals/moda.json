@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0",
+  "vertical": "moda",
+  "identity": {
+    "name": "Studio Urbano Vestuário",
+    "tagline": "Moda casual local com grade de tamanhos e entrega no mesmo dia.",
+    "tone": "premium",
+    "logo": { "type": "monogram", "initials": "SU", "dataUri": null }
+  },
+  "color": { "seed": "#6D28D9", "mode": "light", "accent": "complementary" },
+  "type": { "stack": "geometric", "scale": "regular" },
+  "shape": { "radius": "soft", "elevation": "subtle", "density": "airy" },
+  "layout": { "catalog": "variant-grid", "nav": "chips" },
+  "vocabulary": { "catalog": "Coleção", "cart": "Sacola", "order": "Pedido", "cta": "Reservar Peças no WhatsApp" },
+  "modules": { "freteKm": true, "splitBill": false, "sinalPix": false, "recompra": false, "agendamento": false, "osTecnica": false },
+  "geo": {
+    "city": "Sorocaba",
+    "state": "SP",
+    "neighborhood": "Campolim",
+    "lat": -23.528,
+    "lon": -47.465,
+    "feeTable": [{ "upToKm": 2.0, "fee": 8.0 }, { "perExtraKm": 1.5 }]
+  },
+  "contact": { "whatsapp": "15991234567", "pixKey": "15991234567" },
+  "meta": { "rating": "4.9 (75+)", "etaLabel": "Entrega hoje", "deliveryFee": 8.0, "freeDeliveryThreshold": 199.0, "openHour": "09:30", "closeHour": "19:00" },
+  "coupons": [{ "code": "LOOK10", "type": "percent", "value": 10 }],
+  "quickTags": ["Embalar para presente", "Troca em 7 dias", "Experimentar em casa"],
+  "pitchTip": "Vertical Moda/Varejo: grade 2 colunas com chips de tamanho P/M/G/GG clicáveis direto no card.",
+  "items": [
+    { "id": "mod-1", "category": "Camisetas", "name": "Camiseta Heavy Pima Preta", "description": "Algodão peruano 220g, modelagem boxy.", "price": 119.0, "colorTag": "Preto Ônix", "sizes": ["P", "M", "G", "GG"], "prepTime": "Pronta entrega" },
+    { "id": "mod-2", "category": "Calças", "name": "Calça Cargo Sarja Areia", "description": "Cintura ajustável e bolsos utilitários.", "price": 189.0, "colorTag": "Areia", "sizes": ["38", "40", "42", "44"], "prepTime": "Pronta entrega" },
+    { "id": "mod-3", "category": "Jaquetas", "name": "Overshirt Linho Chumbo", "description": "Botões madrepérola, toque macio.", "price": 229.0, "colorTag": "Chumbo", "sizes": ["P", "M", "G"], "prepTime": "Pronta entrega" },
+    { "id": "mod-4", "category": "Acessórios", "name": "Boné Dad Hat Sarja", "description": "Fivela metálica regulável.", "price": 79.0, "colorTag": "Verde Musgo", "sizes": ["Único"], "prepTime": "Pronta entrega" }
+  ]
+}

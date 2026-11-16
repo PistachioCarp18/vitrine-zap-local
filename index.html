@@ -3,77 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#EA1D2C" />
+  <meta name="theme-color" content="#B42318" />
   <title>VitrineZap Local</title>
   <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body data-layout="food-list">
-  <!-- 1. Topbar Nativa Ultra-Compacta (52px) -->
+  <!-- 1. Topbar Nativa Ultra-Compacta (52px — Zero Botões Admin/Demo Vazados) -->
   <header class="topbar no-print">
     <div class="container topbar-inner">
       <div class="brand-cluster">
         <div class="brand-mark" id="brand-mark-icon" aria-hidden="true">EL</div>
         <div class="brand-text">
-          <strong class="brand-name" id="topbar-store-name">Empório Lanches</strong>
+          <h1 class="brand-name" id="topbar-store-name">Empório Lanches</h1>
           <span id="store-status-pill" class="status-pill"><span class="status-dot"></span><span id="store-status-text">Aberto</span></span>
         </div>
       </div>
 
       <div class="topbar-actions">
-        <label for="niche-switcher" class="sr-only">Trocar demonstração</label>
-        <select id="niche-switcher" class="select-compact" aria-label="Trocar demonstração"></select>
-        <button id="open-studio-btn" class="btn-studio" type="button" aria-label="Abrir Estúdio da Marca">
-          <span>🎨 Demo</span>
-        </button>
+        <span id="topbar-city-badge" class="topbar-city-pill">Sorocaba-SP</span>
       </div>
     </div>
   </header>
 
-  <!-- 2. Store Meta Strip Única (Sem Hero Gigante / Sem Vazamento de Metadados) -->
+  <!-- 2. Store Meta Strip Única (Zero Metadados Internos) -->
   <section class="store-meta-strip no-print" aria-label="Informações da loja">
     <div class="container store-meta-inner">
-      <span id="store-meta-text" class="store-meta-text">⭐ 4.9 (120+) • 🕒 25-35 min • 🛵 R$ 6,00 (Grátis &gt; R$ 45)</span>
+      <span id="store-meta-text" class="store-meta-text">4.9 (120+) • 25-35 min • Entrega R$ 6,00 (Grátis &gt; R$ 45)</span>
       <button type="button" id="hero-coupon-pill" class="coupon-chip hidden"></button>
     </div>
   </section>
 
-  <!-- Barra Rápida de Veículo/Placa (Apenas Oficina Técnica auto-blueprint) -->
-  <section id="auto-vehicle-bar" class="auto-vehicle-bar hidden no-print">
-    <div class="container auto-vehicle-grid">
-      <input type="text" id="quick-veh-model" list="fipe-vehicles-list" class="text-input compact-input" placeholder="Veículo FIPE (Ex: Onix 1.0)" aria-label="Modelo do veículo" />
-      <input type="text" id="quick-veh-plate" class="text-input compact-input mono" placeholder="Placa / KM" aria-label="Placa ou KM" />
-    </div>
-    <datalist id="fipe-vehicles-list"></datalist>
-  </section>
+  <!-- Slot Contextual Dinâmico (Só existe no DOM quando a vertical ativa o exige) -->
+  <section id="vertical-context-slot" class="vertical-context-slot hidden no-print" aria-live="polite"></section>
 
-  <!-- Card de Recompra Instantânea (Apenas Pet Shop pet-recurring) -->
-  <section id="pet-reorder-strip" class="pet-reorder-strip hidden no-print">
-    <div class="container pet-reorder-card">
-      <div class="pet-reorder-top">
-        <button type="button" id="pet-quick-repeat-btn" class="btn-pet-repeat">🐾 Repetir último pedido do seu Pet</button>
-        <div class="pet-size-pills" role="group" aria-label="Porte do Pet">
-          <button type="button" class="pet-size-chip active" data-petsize="Pequeno">P</button>
-          <button type="button" class="pet-size-chip" data-petsize="Médio">M</button>
-          <button type="button" class="pet-size-chip" data-petsize="Grande">G</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Sticky Search + Horizontal Category Bar + Vitrine -->
+  <!-- 3. Sticky Search + Category Bar + Vitrine -->
   <main class="container main-grid">
     <section id="catalog-section" class="catalog-panel no-print">
       <div class="sticky-filter-bar">
         <div class="toolbar-top">
           <div class="search-box">
-            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input id="search-input" type="search" class="text-input search-input" placeholder="Buscar produto ou serviço..." aria-label="Buscar" />
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="search-input" type="search" class="text-input search-input" placeholder="Buscar produto ou serviço..." aria-label="Buscar produto ou serviço" />
           </div>
-          <select id="sort-select" class="select-compact sort-select" aria-label="Ordenar">
+          <label for="sort-select" class="sr-only">Ordenar catálogo</label>
+          <select id="sort-select" class="select-compact sort-select" aria-label="Ordenar catálogo">
             <option value="featured">Destaques</option>
             <option value="price-asc">Menor Preço</option>
             <option value="price-desc">Maior Preço</option>
@@ -83,7 +57,13 @@
         <div id="category-pills" class="category-strip" role="tablist" aria-label="Categorias"></div>
       </div>
 
-      <div id="catalog-grid" class="catalog-grid"></div>
+      <h2 id="catalog-sr-heading" class="sr-only">Itens do catálogo</h2>
+      <div id="catalog-grid" class="catalog-grid" role="region" aria-labelledby="catalog-sr-heading"></div>
+
+      <footer class="buyer-footer no-print">
+        <span id="footer-store-info" class="footer-store-info">Atendimento direto sem intermediários</span>
+        <button id="open-studio-btn" class="btn-footer-studio" type="button">Área do Lojista &amp; Demos</button>
+      </footer>
     </section>
 
     <div id="cart-backdrop" class="sheet-backdrop hidden no-print" aria-hidden="true"></div>
@@ -97,62 +77,39 @@
           <span class="wizard-step-badge mono" id="wizard-step-label">Etapa 1/2</span>
         </div>
         <div class="cart-head-actions">
-          <button id="clear-cart-btn" class="btn btn-ghost btn-xs hidden" type="button">Limpar</button>
+          <button id="clear-cart-btn" class="btn btn-ghost btn-sm hidden" type="button">Limpar</button>
           <span id="cart-badge-count" class="cart-count mono">0</span>
-          <button id="close-cart-drawer-btn" class="btn btn-secondary btn-icon mobile-only-btn no-print" type="button" aria-label="Fechar gaveta">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <button id="close-cart-drawer-btn" class="btn btn-secondary btn-icon mobile-only-btn no-print" type="button" aria-label="Fechar sacola">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- ETAPA 1: Sacola & Revisão + Split Bill -->
+      <!-- ETAPA 1: Sacola & Módulos Exclusivos da Vertical -->
       <div id="checkout-step-1" class="wizard-pane">
-        <!-- Barra Frete Grátis (Apenas Lanchonete) -->
-        <div id="free-delivery-box" class="free-bar-card hidden no-print">
-          <div class="free-bar-top">
-            <span id="free-bar-text"></span>
-            <span id="free-bar-pct" class="mono">0%</span>
-          </div>
-          <div class="free-progress-track"><div id="free-progress-fill" class="free-progress-fill" style="width:0%"></div></div>
-        </div>
-
-        <!-- Sinal 50% (Apenas Padaria) -->
-        <label id="padaria-deposit-wrap" class="deposit-toggle-box hidden no-print">
-          <input type="checkbox" id="pay-deposit-50" />
-          <span>Pagar sinal de 50% via Pix agora (restante na retirada)</span>
-        </label>
-
+        <div id="cart-modules-top" class="no-print"></div>
         <div id="cart-items" class="cart-items"></div>
 
         <div class="coupon-row no-print">
+          <label for="coupon-input" class="sr-only">Cupom de desconto</label>
           <input type="text" id="coupon-input" class="text-input coupon-input mono" placeholder="Cupom (ex: BAIRRO10)" aria-label="Cupom de desconto" />
           <button type="button" id="apply-coupon-btn" class="btn btn-secondary btn-sm">Aplicar</button>
         </div>
 
-        <!-- Calculadora de Divisão de Conta (Split Bill) -->
-        <div id="split-bill-box" class="split-bill-box no-print">
-          <span class="split-label">Dividir entre:</span>
-          <div class="split-controls">
-            <button type="button" id="split-dec-btn" class="qty-btn" aria-label="Menos pessoas">-</button>
-            <strong id="split-people-val" class="mono">1</strong>
-            <span class="split-unit">pessoa(s)</span>
-            <button type="button" id="split-inc-btn" class="qty-btn" aria-label="Mais pessoas">+</button>
-          </div>
-          <strong id="split-per-person-val" class="mono split-amount">R$ 0,00</strong>
-        </div>
+        <div id="cart-split-slot" class="no-print"></div>
 
         <div class="totals-box">
           <div class="total-row"><span>Subtotal</span><strong id="subtotal-val" class="mono">R$ 0,00</strong></div>
           <div class="total-row" id="delivery-row"><span>Entrega</span><strong id="delivery-val" class="mono">R$ 0,00</strong></div>
-          <div class="total-row discount-row hidden" id="discount-row"><span>Desconto (<span id="discount-code-label"></span>)</span><strong id="discount-val" class="mono">-R$ 0,00</strong></div>
+          <div class="total-row discount-row hidden" id="discount-row"><span>Desconto <span id="discount-code-label"></span></span><strong id="discount-val" class="mono">-R$ 0,00</strong></div>
           <div class="total-row grand-total"><span>Total</span><strong id="total-val" class="mono">R$ 0,00</strong></div>
           <div id="deposit-summary-row" class="total-row deposit-row hidden"><span>Sinal 50% agora</span><strong id="deposit-val" class="mono">R$ 0,00</strong></div>
         </div>
 
-        <button type="button" id="wizard-next-btn" class="btn btn-primary full-width no-print">Continuar para Dados de Entrega →</button>
+        <button type="button" id="wizard-next-btn" class="btn btn-primary full-width no-print">Continuar para Dados →</button>
       </div>
 
-      <!-- ETAPA 2: Dados Rápidos & Envio (Renderiza somente campos do domainMode ativo) -->
+      <!-- ETAPA 2: Dados Rápidos & Envio -->
       <div id="checkout-step-2" class="wizard-pane hidden">
         <button type="button" id="wizard-back-btn" class="btn btn-ghost btn-sm wizard-back-btn no-print">← Voltar para itens</button>
 
@@ -169,11 +126,11 @@
             <input type="tel" id="cust-phone" class="text-input mono" placeholder="(15) 99999-9999" />
           </label>
           <div id="address-wrap" class="address-geo-wrap hidden">
-            <label class="field-label">CEP ou Localização GPS (Cálculo automático de entrega)</label>
+            <label for="cust-cep" class="field-label">CEP ou Localização GPS (Cálculo automático de entrega)</label>
             <div class="cep-gps-row">
               <input type="text" id="cust-cep" class="text-input mono" inputmode="numeric" maxlength="9" placeholder="CEP (ex: 18016-300)" aria-label="CEP" />
               <button type="button" id="lookup-cep-btn" class="btn btn-secondary btn-sm">Buscar</button>
-              <button type="button" id="use-gps-btn" class="btn btn-secondary btn-sm">📍 Usar Meu GPS</button>
+              <button type="button" id="use-gps-btn" class="btn btn-secondary btn-sm">GPS</button>
             </div>
             <label class="field-label" style="margin-top:6px;">Endereço Completo
               <input type="text" id="cust-address" class="text-input" placeholder="Rua, número e bairro" />
@@ -182,22 +139,21 @@
               <div class="route-preview-top">
                 <div>
                   <strong id="route-distance-label" class="mono">0.0 km • ~0 min</strong>
-                  <span id="route-fee-source" class="cart-row-sub" style="display:block;">OSRM / Sorocaba</span>
+                  <span id="route-fee-source" class="cart-row-sub" style="display:block;">Cálculo de rota local</span>
                 </div>
                 <svg class="route-svg-box" viewBox="0 0 180 56" width="110" height="36" aria-hidden="true">
                   <path id="route-svg-path" d="M8,48 L172,8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
                   <circle cx="8" cy="48" r="4" fill="currentColor" />
-                  <circle cx="172" cy="8" r="4" fill="#16A34A" />
+                  <circle cx="172" cy="8" r="4" fill="#15803D" />
                 </svg>
               </div>
               <div class="route-nav-links">
-                <a id="route-gmaps-link" href="#" target="_blank" rel="noopener" class="btn btn-secondary btn-xs">Google Maps</a>
-                <a id="route-waze-link" href="#" target="_blank" rel="noopener" class="btn btn-secondary btn-xs">Waze</a>
+                <a id="route-gmaps-link" href="#" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">Google Maps</a>
+                <a id="route-waze-link" href="#" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">Waze</a>
               </div>
             </div>
           </div>
 
-          <!-- Container Polimórfico Dinâmico (Somente os campos do nicho ativo) -->
           <div id="dynamic-domain-fields" class="domain-block hidden"></div>
 
           <div class="field-label">Forma de Pagamento
@@ -212,11 +168,12 @@
             <input type="text" id="cust-change" class="text-input mono" placeholder="Ex: R$ 100,00" />
           </label>
 
-          <div class="field-label">Observações / Detalhes
+          <div class="field-label">
+            <label for="cust-notes" class="field-label-text">Observações / Detalhes</label>
             <div id="quick-tags-wrap" class="quick-tags"></div>
             <div class="voice-input-row">
-              <input type="text" id="cust-notes" class="text-input" placeholder="Ex: Sem cebola ou detalhe..." />
-              <button type="button" id="voice-dictate-btn" class="btn btn-secondary btn-sm voice-btn" title="Ditar por voz">🎤 Falar</button>
+              <input type="text" id="cust-notes" class="text-input" placeholder="Ex: Sem cebola ou detalhe..." aria-label="Observações do pedido" />
+              <button type="button" id="voice-dictate-btn" class="btn btn-secondary btn-sm voice-btn" title="Ditar observação por voz">Falar</button>
             </div>
           </div>
         </div>
@@ -226,7 +183,7 @@
             <span id="send-wa-label">Enviar Pedido no WhatsApp</span>
           </button>
           <div class="secondary-actions">
-            <button id="gen-pix-btn" class="btn btn-secondary btn-sm" type="button">Pagar com Pix (QR Code)</button>
+            <button id="gen-pix-btn" class="btn btn-secondary btn-sm" type="button">Pagar com Pix</button>
             <button id="print-pdf-btn" class="btn btn-secondary btn-sm" type="button">Imprimir PDF</button>
           </div>
         </div>
@@ -237,7 +194,8 @@
             <strong id="pix-amount-badge" class="mono">R$ 0,00</strong>
           </div>
           <div id="pix-qr-svg" class="pix-qr-wrap"></div>
-          <textarea id="pix-code-output" class="pix-textarea mono" readonly rows="2"></textarea>
+          <label for="pix-code-output" class="sr-only">Código Pix Copia e Cola</label>
+          <textarea id="pix-code-output" class="pix-textarea mono" readonly rows="2" aria-label="Código Pix Copia e Cola"></textarea>
           <button id="copy-pix-btn" class="btn btn-primary btn-sm full-width" type="button">Copiar Código Pix</button>
         </div>
       </div>
@@ -246,38 +204,43 @@
     </aside>
   </main>
 
-  <!-- 5. Estúdio da Marca & Painel do Lojista ISOLADO (Modal/Drawer Dedicado) -->
+  <!-- 5. Estúdio da Marca & Painel do Lojista ISOLADO (Brand Engine v2) -->
   <div id="studio-backdrop" class="sheet-backdrop hidden no-print" aria-hidden="true"></div>
   <section id="merchant-studio-modal" class="studio-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="studio-title">
     <div class="studio-head">
       <div>
-        <span class="section-eyebrow">Estúdio da Marca & Painel do Lojista</span>
-        <h2 id="studio-title">Modo Apresentação</h2>
+        <span class="section-eyebrow">Motor White-Label Camaleão v2</span>
+        <h2 id="studio-title">Estúdio da Marca &amp; Demos</h2>
       </div>
       <div class="inline-actions">
-        <button id="theme-toggle-btn" class="btn btn-secondary btn-sm" type="button">Tema ◐</button>
+        <button id="theme-toggle-btn" class="btn btn-secondary btn-sm" type="button">Tema</button>
         <button id="close-studio-btn" class="btn btn-secondary btn-icon" type="button" aria-label="Fechar Estúdio">✕</button>
       </div>
     </div>
 
-    <!-- PitchTip exclusivo para o Lojista (Nunca aparece na vitrine do comprador!) -->
+    <div class="studio-vertical-bar">
+      <label for="niche-switcher" class="field-label" style="flex:1;">Trocar Vertical / Demonstração
+        <select id="niche-switcher" class="select-input"></select>
+      </label>
+    </div>
+
     <div id="studio-weather-badge" class="weather-pill"></div>
     <div id="studio-pitch-callout" class="pitch-callout"></div>
 
     <div class="admin-tabs" role="tablist">
-      <button type="button" class="tab-btn active" data-tab="settings">Marca & QR</button>
-      <button type="button" class="tab-btn" data-tab="catalog">Produtos & Foto</button>
-      <button type="button" class="tab-btn" data-tab="overview">Pedidos & KPIs</button>
+      <button type="button" class="tab-btn active" data-tab="settings" role="tab" aria-selected="true">Marca &amp; QR</button>
+      <button type="button" class="tab-btn" data-tab="catalog" role="tab" aria-selected="false">Produtos &amp; Foto</button>
+      <button type="button" class="tab-btn" data-tab="overview" role="tab" aria-selected="false">Pedidos &amp; KPIs</button>
     </div>
 
     <div class="tab-pane active" data-pane="settings">
       <div class="share-banner">
         <div class="share-info">
-          <h3>Link Mágico & Display de Balcão</h3>
-          <p>Envie o link com a marca personalizada no WhatsApp ou imprima o display de mesa.</p>
+          <h3>Link Mágico Seguro &amp; Display de Balcão</h3>
+          <p>O link usa hash privado (#brand=...) sem expor chave Pix na URL nem no servidor.</p>
           <div class="share-actions">
             <button type="button" id="copy-store-link-btn" class="btn btn-primary btn-sm">Copiar Magic Link</button>
-            <button type="button" id="print-table-tent-btn" class="btn btn-secondary btn-sm">Imprimir Display QR de Balcão</button>
+            <button type="button" id="print-table-tent-btn" class="btn btn-secondary btn-sm">Display QR Balcão</button>
           </div>
         </div>
         <div class="share-qr-box">
@@ -287,14 +250,32 @@
 
       <form id="store-config-form" class="form-grid">
         <label>Nome da Empresa<input type="text" id="cfg-name" class="text-input" required /></label>
-        <label>Bairro / Cidade<input type="text" id="cfg-neighborhood" class="text-input" /></label>
+        <label>Cidade / Bairro<input type="text" id="cfg-neighborhood" class="text-input" /></label>
         <label>Tagline<input type="text" id="cfg-tagline" class="text-input" /></label>
-        <label>Arquétipo Visual
-          <select id="cfg-archetype" class="select-input">
-            <option value="high-energy-food">High Energy Food (iFood)</option>
-            <option value="artisanal-warm">Artisanal Warm (Confeitaria)</option>
-            <option value="playful-soft">Playful Soft (Pet Shop)</option>
-            <option value="industrial-precision">Industrial Precision (Oficina OS)</option>
+        <label>Layout do Catálogo
+          <select id="cfg-layout" class="select-input">
+            <option value="list-thumb">Lista Compacta (Delivery)</option>
+            <option value="editorial-grid">Grid Editorial 2 Colunas</option>
+            <option value="pet-packs">Pacotes &amp; Recorrência</option>
+            <option value="checklist-table">Ordem de Serviço Técnica</option>
+            <option value="agenda-slots">Agenda &amp; Horários</option>
+            <option value="variant-grid">Grade de Tamanhos (Varejo)</option>
+            <option value="botanical-editorial">Editorial Botânico</option>
+          </select>
+        </label>
+        <label>Tipografia (Local/Offline)
+          <select id="cfg-typestack" class="select-input">
+            <option value="geometric">Geométrica Moderna</option>
+            <option value="humanist">Humanista Suave</option>
+            <option value="serif">Editorial Clássica (Serif)</option>
+            <option value="mono">Técnica / Precisão (Mono)</option>
+          </select>
+        </label>
+        <label>Raio dos Cards
+          <select id="cfg-radius" class="select-input">
+            <option value="sharp">Reto / Precisão (4px)</option>
+            <option value="soft">Suave Equilibrado (12px)</option>
+            <option value="round">Arredondado Orgânico (20px)</option>
           </select>
         </label>
         <label>WhatsApp (DDD)<input type="tel" id="cfg-whatsapp" class="text-input mono" required /></label>
@@ -305,7 +286,7 @@
         <label>Fecha às<input type="time" id="cfg-close" class="text-input mono" /></label>
         <label>Cor Principal
           <div class="color-picker-row">
-            <input type="color" id="cfg-color" class="color-input" />
+            <input type="color" id="cfg-color" class="color-input" aria-label="Cor principal da marca" />
             <span id="wcag-badge" class="wcag-pill mono">AA</span>
           </div>
         </label>
@@ -319,7 +300,7 @@
 
     <div class="tab-pane" data-pane="catalog">
       <form id="add-item-form" class="form-grid">
-        <label>Categoria<input type="text" id="item-category" class="text-input" placeholder="Ex: Burgers, Revisão" required /></label>
+        <label>Categoria<input type="text" id="item-category" class="text-input" placeholder="Ex: Burgers, Cortes" required /></label>
         <label>Nome do Item<input type="text" id="item-name" class="text-input" required /></label>
         <label>Preço (R$)<input type="number" step="0.01" min="0" id="item-price" class="text-input mono" required /></label>
         <label>Prazo / Rendimento<input type="text" id="item-prep" class="text-input" placeholder="Ex: 20 min" /></label>
@@ -351,12 +332,12 @@
     </div>
   </section>
 
-  <!-- Placa Display Imprimível de Balcão (Table Tent) -->
+  <!-- Placa Display Imprimível de Balcão (Sem H1 duplicado) -->
   <section id="print-table-tent" class="print-table-tent" aria-hidden="true">
     <div class="tent-card">
       <p class="tent-eyebrow">PEÇA SEM FILAS PELO CELULAR</p>
-      <h1 id="tent-store-name">Empório Lanches</h1>
-      <p id="tent-store-sub">Aponte a câmera para acessar nosso cardápio direto no WhatsApp</p>
+      <h2 id="tent-store-name">Empório Lanches</h2>
+      <p id="tent-store-sub">Aponte a câmera para acessar nosso catálogo direto no WhatsApp</p>
       <div id="tent-qr-wrap" class="tent-qr-wrap"></div>
       <p id="tent-store-phone" class="mono"></p>
     </div>
@@ -371,16 +352,16 @@
         <span id="modal-item-cat" class="section-eyebrow">Categoria</span>
         <h2 id="modal-item-title">Item</h2>
       </div>
-      <button id="close-item-modal-btn" class="btn btn-secondary btn-icon" type="button" aria-label="Fechar">✕</button>
+      <button id="close-item-modal-btn" class="btn btn-secondary btn-icon" type="button" aria-label="Fechar detalhes">✕</button>
     </div>
     <div id="modal-item-photo" class="modal-photo-wrap hidden"></div>
     <p id="modal-item-desc" class="modal-desc"></p>
     <div id="modal-variants-wrap" class="modal-extras hidden">
-      <h4 id="modal-variant-label">Opção</h4>
+      <h3 id="modal-variant-label" class="modal-sub-h">Opção</h3>
       <div id="modal-variants-list" class="variant-pills"></div>
     </div>
     <div id="modal-extras-wrap" class="modal-extras hidden">
-      <h4>Adicionais opcionais</h4>
+      <h3 class="modal-sub-h">Adicionais opcionais</h3>
       <div id="modal-extras-list" class="extras-list"></div>
     </div>
     <label class="field-label modal-note-field">Observação neste item
@@ -388,9 +369,9 @@
     </label>
     <div class="modal-footer">
       <div class="qty-inline modal-qty">
-        <button type="button" id="modal-dec-btn" aria-label="Diminuir">-</button>
+        <button type="button" id="modal-dec-btn" aria-label="Diminuir quantidade">-</button>
         <span id="modal-qty-val" class="mono">1</span>
-        <button type="button" id="modal-inc-btn" aria-label="Aumentar">+</button>
+        <button type="button" id="modal-inc-btn" aria-label="Aumentar quantidade">+</button>
       </div>
       <button type="button" id="modal-add-btn" class="btn btn-primary modal-cta">Adicionar • R$ 0,00</button>
     </div>
@@ -410,6 +391,7 @@
   <script src="./src/integrations.js"></script>
   <script src="./src/geo-apis.js"></script>
   <script src="./src/qrcode.js"></script>
+  <script src="./src/brand/brand-engine.js"></script>
   <script src="./src/store.js"></script>
   <script src="./src/presets.js"></script>
   <script src="./app.js"></script>

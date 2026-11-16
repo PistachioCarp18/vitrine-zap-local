@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "vertical": "petshop",
+  "identity": {
+    "name": "Amigo Fiel Pet",
+    "tagline": "Rações com escolha de pacote direto no card e recompra mensal em 1 toque.",
+    "tone": "divertido",
+    "logo": { "type": "monogram", "initials": "AF", "dataUri": null }
+  },
+  "color": { "seed": "#0F766E", "mode": "light", "accent": "analogous" },
+  "type": { "stack": "humanist", "scale": "regular" },
+  "shape": { "radius": "round", "elevation": "subtle", "density": "regular" },
+  "layout": { "catalog": "pet-packs", "nav": "chips" },
+  "vocabulary": { "catalog": "Produtos Pet", "cart": "Sacola do Pet", "order": "Pedido Pet", "cta": "Pedir & Agendar Lembrete" },
+  "modules": { "freteKm": true, "splitBill": false, "sinalPix": false, "recompra": true, "agendamento": false, "osTecnica": false },
+  "geo": {
+    "city": "Sorocaba",
+    "state": "SP",
+    "neighborhood": "Av. São Paulo • Zona Leste",
+    "lat": -23.4979,
+    "lon": -47.4342,
+    "feeTable": [{ "upToKm": 1.5, "fee": 7.0 }, { "perExtraKm": 1.5 }]
+  },
+  "contact": { "whatsapp": "15999990003", "pixKey": "15999990003" },
+  "meta": { "rating": "4.8 (80+)", "etaLabel": "Entrega Hoje", "deliveryFee": 7.0, "freeDeliveryThreshold": 120.0, "openHour": "08:30", "closeHour": "19:00" },
+  "coupons": [{ "code": "BAIRRO10", "type": "percent", "value": 10 }],
+  "quickTags": ["Deixar na portaria", "Perfume suave", "Buscar com Táxi Dog"],
+  "pitchTip": "Recompra em 1 toque no topo, seletor de porte P/M/G e pesos clicáveis direto no card.",
+  "items": [
+    {
+      "id": "pet-1",
+      "category": "Rações",
+      "name": "Ração Super Premium Cães Adultos",
+      "description": "Alta digestibilidade, pele e pelos saudáveis. Escolha o pacote:",
+      "price": 169.9,
+      "cycleLabel": "Dura ~30 dias",
+      "packOptions": [{ "label": "1kg", "price": 28.9 }, { "label": "3kg", "price": 69.9 }, { "label": "15kg (-15%)", "price": 169.9 }],
+      "defaultPackIdx": 2,
+      "extras": [{ "id": "ex-sache", "name": "Kit 3 Sachês Gourmet", "price": 12.0 }]
+    },
+    {
+      "id": "pet-2",
+      "category": "Banho & Tosa",
+      "name": "Banho & Tosa Higiênica",
+      "description": "Banho morno, hidratação, corte de unhas e limpeza de ouvidos.",
+      "price": 65.0,
+      "cycleLabel": "Ciclo 15 dias",
+      "packOptions": [{ "label": "Porte P", "price": 65.0 }, { "label": "Porte M", "price": 82.0 }, { "label": "Porte G", "price": 105.0 }],
+      "defaultPackIdx": 0
+    },
+    { "id": "pet-3", "category": "Higiene", "name": "Tapete Higiênico Super Absorção", "description": "Fitas adesivas reforçadas e neutralizador de odores.", "price": 49.9, "cycleLabel": "Dura ~30 dias", "packOptions": [{ "label": "15 un.", "price": 29.9 }, { "label": "30 un.", "price": 49.9 }], "defaultPackIdx": 1 },
+    { "id": "pet-4", "category": "Saúde", "name": "Antipulgas & Carrapatos Palatável", "description": "Proteção mensal em comprimido mastigável.", "price": 74.0, "cycleLabel": "Proteção 30 dias" }
+  ]
+}

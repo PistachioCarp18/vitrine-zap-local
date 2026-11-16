@@ -1,0 +1,22 @@
+{
+  "evaluatedAt": "2026-11-16T11:48:30Z",
+  "versionEvaluated": "v9.0",
+  "gateThreshold": 80,
+  "minDimensionThreshold": 12,
+  "scores": {
+    "G1_estrutura": { "score": 15, "max": 20, "tag": "[O]", "notes": "DOM skeleton difere entre food-card, bakery-card (grid 162px 162px), pet-card e auto-card; porem acoplado a ifs no app.js sem schema extensivel." },
+    "G2_vocabulario": { "score": 13, "max": 20, "tag": "[O]", "notes": "Vocabulario parcial nos cards, mas HTML estatico tem termos food/Sorocaba ('Sua Sacola', 'Desconto ()', 'OSRM / Sorocaba')." },
+    "G3_identidade": { "score": 11, "max": 20, "tag": "[O]", "notes": "REPROVADO (< 12): #EA1D2C+branco falha WCAG AA no axe (8 nos), depende de Google Fonts CDN, sem brand.schema.json e Magic Link usa ?query em vez de #hash sem Pix." },
+    "G4_modulos": { "score": 12, "max": 20, "tag": "[O]", "notes": "Runtime oculta modulos de outros nichos, mas eles continuam no HTML estatico e botoes Demo ficam na topbar do comprador." },
+    "G5_prova": { "score": 14, "max": 20, "tag": "[O]", "notes": "4 verticais locais coerentes; faltam 2-3 verticais nao-alimentacao (Barbearia, Moda/Varejo, Floricultura/Estetica) e matriz 8 marcas." }
+  },
+  "totalScore": 65,
+  "passedGate": false,
+  "hardcodedFindings": [
+    "Cidade/coordenadas 'Sorocaba' fixas em src/geo-apis.js, src/presets.js, index.html ('OSRM / Sorocaba') e app.js",
+    "Rotulos com marca de terceiro '(iFood)' / '(iFood Style)' em index.html e src/presets.js",
+    "Fonte externa fonts.googleapis.com no index.html (violacao offline-first estrito)",
+    "Chave Pix incluida no Magic Link (buildShareableBrandUrl) em query string"
+  ],
+  "domFingerprintsRef": "audit/p1-bug-ledger.json#layoutDomFingerprints"
+}

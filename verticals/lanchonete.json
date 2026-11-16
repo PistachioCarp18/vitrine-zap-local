@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0",
+  "vertical": "lanchonete",
+  "identity": {
+    "name": "Empório Lanches",
+    "tagline": "Burgers na brasa direto no WhatsApp, sem taxa de aplicativo.",
+    "tone": "direto",
+    "logo": { "type": "monogram", "initials": "EL", "dataUri": null }
+  },
+  "color": { "seed": "#D92D20", "mode": "light", "accent": "analogous" },
+  "type": { "stack": "geometric", "scale": "regular" },
+  "shape": { "radius": "soft", "elevation": "subtle", "density": "regular" },
+  "layout": { "catalog": "list-thumb", "nav": "chips" },
+  "vocabulary": { "catalog": "Cardápio", "cart": "Sacola", "order": "Pedido", "cta": "Enviar pedido no WhatsApp" },
+  "modules": { "freteKm": true, "splitBill": true, "sinalPix": false, "recompra": false, "agendamento": false, "osTecnica": false },
+  "geo": {
+    "city": "Sorocaba",
+    "state": "SP",
+    "neighborhood": "Jardim Martinez",
+    "lat": -23.5058,
+    "lon": -47.4192,
+    "feeTable": [{ "upToKm": 1.5, "fee": 4.0 }, { "perExtraKm": 1.5 }]
+  },
+  "contact": { "whatsapp": "15998066213", "pixKey": "15998066213" },
+  "meta": { "rating": "4.9 (120+)", "etaLabel": "25-35 min", "deliveryFee": 6.0, "freeDeliveryThreshold": 45.0, "openHour": "18:00", "closeHour": "23:30" },
+  "coupons": [{ "code": "BAIRRO10", "type": "percent", "value": 10 }, { "code": "BEMVINDO5", "type": "fixed", "value": 5 }],
+  "quickTags": ["Sem cebola", "Maionese à parte", "Caprichar no molho"],
+  "pitchTip": "Entrega grátis acima de R$ 45, ponto da carne, adicionais pagos, divisor de conta e cálculo de rota.",
+  "items": [
+    {
+      "id": "lan-1",
+      "category": "Burgers",
+      "name": "X-Martinez Bacon Artesanal",
+      "description": "Blend 160g na brasa, cheddar cremoso, bacon crocante e maionese verde no brioche.",
+      "price": 32.9,
+      "badge": "Mais Pedido",
+      "prepTime": "20 min",
+      "variants": ["Ao ponto (suculento)", "Bem passado", "Mal passado"],
+      "variantLabel": "Ponto da carne",
+      "extras": [{ "id": "ex-bacon", "name": "Bacon extra crocante", "price": 5.0 }, { "id": "ex-cheddar", "name": "Cheddar duplo", "price": 4.5 }]
+    },
+    {
+      "id": "lan-2",
+      "category": "Combos",
+      "name": "Combo Casal Clássico",
+      "description": "2 X-Salada artesanais + fritas rústicas médias + 2 refrigerantes lata 350ml.",
+      "price": 68.0,
+      "badge": "Frete Grátis",
+      "prepTime": "25 min",
+      "extras": [{ "id": "ex-ched-batata", "name": "Cheddar e bacon nas fritas", "price": 8.0 }]
+    },
+    { "id": "lan-3", "category": "Porções", "name": "Batata Rústica Cheddar & Bacon", "description": "Porção 400g crocante com cobertura generosa de cheddar e bacon.", "price": 29.5, "prepTime": "15 min" },
+    { "id": "lan-4", "category": "Bebidas", "name": "Coca-Cola Lata 350ml", "description": "Gelada, pronta para acompanhar seu pedido.", "price": 6.5, "prepTime": "Imediato" },
+    { "id": "lan-5", "category": "Sobremesas", "name": "Brownie Quente com Doce de Leite", "description": "Fatia artesanal macia com cobertura cremosa.", "price": 14.9, "badge": "Novidade", "prepTime": "10 min" }
+  ]
+}

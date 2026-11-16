@@ -1,0 +1,200 @@
+{
+  "verifiedAt": "2026-11-16T12:14:47.225Z",
+  "viewports": [
+    {
+      "viewport": "320x568",
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "docOverflow": false,
+      "firstProductTop": 228,
+      "smallTargetsCount": 0,
+      "smallTargetsSample": [],
+      "sub16Inputs": [],
+      "hasH1": true,
+      "demoInTopbar": false,
+      "petReorderInDom": false,
+      "autoVehInDom": false,
+      "discountParensEmpty": false
+    },
+    {
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "innerWidth": 360,
+      "docOverflow": false,
+      "firstProductTop": 228,
+      "smallTargetsCount": 0,
+      "smallTargetsSample": [],
+      "sub16Inputs": [],
+      "hasH1": true,
+      "demoInTopbar": false,
+      "petReorderInDom": false,
+      "autoVehInDom": false,
+      "discountParensEmpty": false
+    },
+    {
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "docOverflow": false,
+      "firstProductTop": 228,
+      "smallTargetsCount": 0,
+      "smallTargetsSample": [],
+      "sub16Inputs": [],
+      "hasH1": true,
+      "demoInTopbar": false,
+      "petReorderInDom": false,
+      "autoVehInDom": false,
+      "discountParensEmpty": false
+    },
+    {
+      "viewport": "412x915",
+      "scrollWidth": 412,
+      "innerWidth": 412,
+      "docOverflow": false,
+      "firstProductTop": 228,
+      "smallTargetsCount": 0,
+      "smallTargetsSample": [],
+      "sub16Inputs": [],
+      "hasH1": true,
+      "demoInTopbar": false,
+      "petReorderInDom": false,
+      "autoVehInDom": false,
+      "discountParensEmpty": false
+    },
+    {
+      "viewport": "800x360",
+      "scrollWidth": 800,
+      "innerWidth": 800,
+      "docOverflow": false,
+      "firstProductTop": 228,
+      "smallTargetsCount": 0,
+      "smallTargetsSample": [],
+      "sub16Inputs": [],
+      "hasH1": true,
+      "demoInTopbar": false,
+      "petReorderInDom": false,
+      "autoVehInDom": false,
+      "discountParensEmpty": false
+    }
+  ],
+  "axeSummary": {
+    "homeViolations": [],
+    "cartViolations": []
+  },
+  "journeyResult": {
+    "stepCheck": {
+      "bodySheetLock": true,
+      "routeVisible": true,
+      "routeText": "5.85 km • ~9 min",
+      "pixQrRendered": true
+    },
+    "magicCheck": {
+      "title": "Barb Zero",
+      "layout": "agenda-slots"
+    }
+  },
+  "offlineResult": {
+    "offlineReloadOk": true
+  },
+  "cdnFontRequests": [],
+  "consoleErrors": [
+    {
+      "viewport": "320x568",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    }
+  ],
+  "layoutDomFingerprints": {
+    "lanchonete": {
+      "layout": "list-thumb",
+      "archetype": "high-energy-food",
+      "firstCardClass": "food-card",
+      "gridCols": "none",
+      "hasAutoVehBar": false,
+      "hasPetReorder": false,
+      "hasSlotChips": false,
+      "hasSizeChips": false,
+      "hasSplitBillInDom": true,
+      "primaryBg": "rgb(217, 45, 32)",
+      "headingFont": "system-ui, -apple-system, \"Segoe UI\", Arial, sans-serif"
+    },
+    "padaria": {
+      "layout": "editorial-grid",
+      "archetype": "artisanal-warm",
+      "firstCardClass": "bakery-card",
+      "gridCols": "163px 163px",
+      "hasAutoVehBar": false,
+      "hasPetReorder": false,
+      "hasSlotChips": false,
+      "hasSizeChips": false,
+      "hasSplitBillInDom": false,
+      "primaryBg": "rgb(154, 66, 4)",
+      "headingFont": "Georgia, \"Times New Roman\", Cambria, serif"
+    },
+    "petshop": {
+      "layout": "pet-packs",
+      "archetype": "playful-soft",
+      "firstCardClass": "pet-card",
+      "gridCols": "none",
+      "hasAutoVehBar": false,
+      "hasPetReorder": true,
+      "hasSlotChips": false,
+      "hasSizeChips": false,
+      "hasSplitBillInDom": false,
+      "primaryBg": "rgb(15, 118, 110)",
+      "headingFont": "\"Segoe UI\", \"Trebuchet MS\", system-ui, sans-serif"
+    },
+    "oficina": {
+      "layout": "checklist-table",
+      "archetype": "industrial-precision",
+      "firstCardClass": "auto-card",
+      "gridCols": "none",
+      "hasAutoVehBar": true,
+      "hasPetReorder": false,
+      "hasSlotChips": false,
+      "hasSizeChips": false,
+      "hasSplitBillInDom": false,
+      "primaryBg": "rgb(29, 78, 216)",
+      "headingFont": "ui-monospace, \"Cascadia Mono\", Consolas, \"Courier New\", monospace"
+    },
+    "barbearia": {
+      "layout": "agenda-slots",
+      "archetype": "barber-atelier",
+      "firstCardClass": "agenda-card",
+      "gridCols": "none",
+      "hasAutoVehBar": false,
+      "hasPetReorder": false,
+      "hasSlotChips": true,
+      "hasSizeChips": false,
+      "hasSplitBillInDom": false,
+      "primaryBg": "rgb(30, 41, 59)",
+      "headingFont": "Georgia, \"Times New Roman\", Cambria, serif"
+    },
+    "moda": {
+      "layout": "variant-grid",
+      "archetype": "fashion-editorial",
+      "firstCardClass": "fashion-card",
+      "gridCols": "163px 163px",
+      "hasAutoVehBar": false,
+      "hasPetReorder": false,
+      "hasSlotChips": false,
+      "hasSizeChips": true,
+      "hasSplitBillInDom": false,
+      "primaryBg": "rgb(109, 40, 217)",
+      "headingFont": "system-ui, -apple-system, \"Segoe UI\", Arial, sans-serif"
+    },
+    "floricultura": {
+      "layout": "editorial-grid",
+      "archetype": "botanical-warm",
+      "firstCardClass": "bakery-card",
+      "gridCols": "163px 163px",
+      "hasAutoVehBar": false,
+      "hasPetReorder": false,
+      "hasSlotChips": false,
+      "hasSizeChips": false,
+      "hasSplitBillInDom": false,
+      "primaryBg": "rgb(4, 120, 87)",
+      "headingFont": "Georgia, \"Times New Roman\", Cambria, serif"
+    }
+  },
+  "bugs": []
+}

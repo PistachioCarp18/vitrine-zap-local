@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "vertical": "floricultura",
+  "identity": {
+    "name": "Flora & Jardim Botânico",
+    "tagline": "Buquês frescos montados na hora com entrega agendada e cartão dedicatória.",
+    "tone": "caloroso",
+    "logo": { "type": "monogram", "initials": "FJ", "dataUri": null }
+  },
+  "color": { "seed": "#047857", "mode": "light", "accent": "analogous" },
+  "type": { "stack": "serif", "scale": "comfortable" },
+  "shape": { "radius": "soft", "elevation": "subtle", "density": "airy" },
+  "layout": { "catalog": "editorial-grid", "nav": "chips" },
+  "vocabulary": { "catalog": "Arranjos & Plantas", "cart": "Cesta Floral", "order": "Pedido Floral", "cta": "Enviar Encomenda no WhatsApp" },
+  "modules": { "freteKm": true, "splitBill": false, "sinalPix": true, "recompra": false, "agendamento": true, "osTecnica": false },
+  "geo": {
+    "city": "Sorocaba",
+    "state": "SP",
+    "neighborhood": "Mangal",
+    "lat": -23.511,
+    "lon": -47.462,
+    "feeTable": [{ "upToKm": 2.0, "fee": 9.0 }, { "perExtraKm": 2.0 }]
+  },
+  "contact": { "whatsapp": "15997778899", "pixKey": "15997778899" },
+  "meta": { "rating": "4.9 (110+)", "etaLabel": "Entrega agendada", "deliveryFee": 9.0, "freeDeliveryThreshold": 180.0, "openHour": "08:00", "closeHour": "18:30" },
+  "scheduleWindows": ["08:30 - 11:30 (Manhã)", "13:30 - 16:30 (Tarde)", "17:00 - 18:30 (Fim de tarde)"],
+  "coupons": [{ "code": "FLORES10", "type": "percent", "value": 10 }],
+  "quickTags": ["Cartão escrito à mão", "Papel kraft rústico", "Entregar com surpresa"],
+  "pitchTip": "Vertical Floricultura: cartão dedicatória, agendamento de entrega e arranjos sazonais.",
+  "items": [
+    { "id": "flo-1", "category": "Buquês", "name": "Buquê 12 Rosas Colombianas", "description": "Rosas frescas envolvidas em papel kraft e laço de cetim.", "yieldLabel": "Com cartão incluso", "price": 149.0 },
+    { "id": "flo-2", "category": "Orquídeas", "name": "Orquídea Phalaenopsis Cachepô", "description": "Duas hastes floridas em vaso cerâmico.", "yieldLabel": "Dura até 60 dias", "price": 119.0 },
+    { "id": "flo-3", "category": "Cestas", "name": "Cesta Girassol + Chocolates", "description": "3 girassóis selecionados + caixa de bombons finos.", "yieldLabel": "Presente completo", "price": 165.0 },
+    { "id": "flo-4", "category": "Plantas", "name": "Jiboia Pendente Vaso Cuia", "description": "Folhagem exuberante de fácil cuidado interno.", "yieldLabel": "Ambiente interno", "price": 59.0 }
+  ]
+}

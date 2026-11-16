@@ -1,5 +1,14 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const {
+  generateBrandTokens,
+  validateBrandConfig,
+  encodeMagicHash,
+  decodeMagicHash,
+  contrastRatio,
+} = require('../src/brand/brand-engine');
 const {
   crc16Ccitt,
   computeAccessibleBrandTokens,
@@ -348,4 +357,137 @@ test('32. searchFipeVehicles retorna frota popular e filtra busca na Oficina sem
   assert.ok(all.length >= 8);
   const onix = await searchFipeVehicles('onix', null);
   assert.ok(onix.some(v => v.toLowerCase().includes('onix')));
+});
+
+// 33-42: VitrineZap v10.0 — Brand Engine v2, 7 Verticais, Contraste WCAG AA, Magic Hash & Geo Configuravel
+test('33. Todos os 7 packs em verticals/*.json passam validateBrandConfig e tem schemaVersion 1.0', () => {
+  const dir = path.resolve(__dirname, '../verticals');
+  const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
+  assert.equal(files.length, 7);
+  for (const f of files) {
+    const raw = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    const res = validateBrandConfig(raw);
+    assert.equal(res.valid, true, `${f} falhou validacao: ${res.errors.join(', ')}`);
+    assert.equal(res.sanitized.schemaVersion, '1.0');
+  }
+});
+
+test('34. generateBrandTokens escurece automaticamente #EA1D2C para atingir >= 4.5:1 WCAG AA com branco e surfaceTint', () => {
+  const tokens = generateBrandTokens({ color: { seed: '#EA1D2C' }, type: { stack: 'geometric' }, shape: { radius: 'soft' } });
+  assert.equal(tokens.primitives.autoAdjusted, true);
+  assert.ok(contrastRatio(tokens.semantics.primary, tokens.semantics.onPrimary) >= 4.5);
+  assert.ok(contrastRatio(tokens.semantics.inkAccent, tokens.semantics.surfaceTint) >= 4.5);
+  assert.equal(tokens.semantics.wcagAA, true);
+});
+
+test('35. generateBrandTokens garante AA em todas as 7 verticais sem fallback para Google Fonts', () => {
+  const keys = ['lanchonete', 'padaria', 'petshop', 'oficina', 'barbearia', 'moda', 'floricultura'];
+  for (const k of keys) {
+    const preset = NICHE_PRESETS[k];
+    assert.ok(preset, `Preset ausente: ${k}`);
+    const t = generateBrandTokens(preset);
+    assert.equal(t.semantics.wcagAA, true, `WCAG AA falhou em ${k}`);
+    assert.ok(!t.vertical.fontHeading.includes('googleapis'), `Font externa detectada em ${k}`);
+  }
+});
+
+test('36. validateBrandConfig rejeita payload invalido, cor ruim ou dataUri > 150KB', () => {
+  assert.equal(validateBrandConfig(null).valid, false);
+  assert.equal(validateBrandConfig({ identity: { name: '' } }).valid, false);
+  assert.equal(validateBrandConfig({ identity: { name: 'Loja' }, color: { seed: 'not-hex' } }).valid, false);
+  const giantUri = 'data:image/png;base64,' + 'A'.repeat(160000);
+  const res = validateBrandConfig({ identity: { name: 'Loja', logo: { dataUri: giantUri } }, color: { seed: '#0F766E' } });
+  assert.equal(res.valid, false);
+});
+
+test('37. encodeMagicHash e decodeMagicHash operam em #brand=... sem expor chave Pix na URL', () => {
+  const cfg = {
+    vertical: 'barbearia',
+    identity: { name: 'Navalha Campolim', tagline: 'Corte e barba' },
+    color: { seed: '#1E293B' },
+    type: { stack: 'serif' },
+    shape: { radius: 'sharp' },
+    layout: { catalog: 'agenda-slots' },
+    contact: { whatsapp: '15999998888', pixKey: 'SEGREDO-PIX-123' },
+  };
+  const url = encodeMagicHash('https://vitrine-zap-local.vercel.app/?a=1', cfg);
+  assert.ok(url.includes('#brand='));
+  assert.ok(!url.includes('?a=1'));
+  assert.ok(!url.includes('SEGREDO-PIX-123'));
+  const decoded = decodeMagicHash(new URL(url).hash);
+  assert.equal(decoded.vertical, 'barbearia');
+  assert.equal(decoded.name, 'Navalha Campolim');
+  assert.equal(decoded.layout, 'agenda-slots');
+  assert.equal(decoded.font, 'serif');
+  assert.equal(decoded.radius, 'sharp');
+});
+
+test('38. index.html nao possui CDN do Google Fonts nem o sufixo Desconto ()', () => {
+  const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+  assert.ok(!html.includes('fonts.googleapis.com'));
+  assert.ok(!html.includes('fonts.gstatic.com'));
+  assert.ok(!html.includes('Desconto (<span'));
+  assert.ok(html.includes('./src/brand/brand-engine.js'));
+});
+
+test('39. lookupBrazilianCep e calculateDynamicFeeByKm respeitam geo configuravel de outras cidades', async () => {
+  const customGeo = {
+    city: 'Campinas',
+    state: 'SP',
+    lat: -22.9056,
+    lon: -47.0608,
+    offlineDictionary: {
+      '13015000': { street: 'Av. Francisco Glicerio', neighborhood: 'Centro', coords: { lat: -22.9051, lng: -47.061 } },
+    },
+    feeTable: [{ upToKm: 2.0, fee: 8.0 }, { perExtraKm: 2.0 }],
+  };
+  const cep = await lookupBrazilianCep('13015-000', null, customGeo);
+  assert.equal(cep.city, 'Campinas');
+  assert.equal(cep.source, 'offline-custom');
+  assert.equal(calculateDynamicFeeByKm(4.0, { geo: customGeo }), 12.0);
+});
+
+test('40. Barbearia, Moda e Floricultura formam mensagens WhatsApp contextualizadas no domainMode correto', () => {
+  const resBarb = buildWhatsAppOrderUrl({
+    domainMode: 'service-booking',
+    storeName: 'Barbearia Navalha',
+    storeWhatsapp: '1533290131',
+    customerName: 'Lucas',
+    scheduleDate: '2026-11-18',
+    scheduleWindow: '14:30',
+    items: [{ name: 'Corte Degrade', qty: 1, price: 55, selectedVariant: 'Horário 14:30' }],
+  });
+  assert.ok(resBarb.message.includes('AGENDAMENTO DE HORARIO'));
+  assert.ok(resBarb.message.includes('Horário 14:30'));
+
+  const resFlor = buildWhatsAppOrderUrl({
+    domainMode: 'floral-scheduled',
+    storeName: 'Flora Jardim',
+    storeWhatsapp: '15997778899',
+    customerName: 'Ana',
+    cakeMessage: 'Parabens pelo dia!',
+    payDeposit50: true,
+    items: [{ name: 'Buque 12 Rosas', qty: 1, price: 149 }],
+  });
+  assert.ok(resFlor.message.includes('ENCOMENDA FLORAL'));
+  assert.ok(resFlor.message.includes('Cartao / Dedicatoria'));
+  assert.ok(resFlor.message.includes('Sinal Pix (50%)'));
+});
+
+test('41. 3 Verticais fora de alimentacao (barbearia, oficina, moda) tem modulos isolados sem vazamento', () => {
+  assert.equal(NICHE_PRESETS.barbearia.modules.freteKm, false);
+  assert.equal(NICHE_PRESETS.barbearia.modules.agendamento, true);
+  assert.equal(NICHE_PRESETS.oficina.modules.osTecnica, true);
+  assert.equal(NICHE_PRESETS.oficina.modules.splitBill, false);
+  assert.equal(NICHE_PRESETS.moda.layout.catalog, 'variant-grid');
+  assert.equal(NICHE_PRESETS.moda.modules.osTecnica, false);
+});
+
+test('42. brand.schema.json existe e define todas as 7 verticais e layouts permitidos', () => {
+  const schema = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../src/brand/brand.schema.json'), 'utf8'));
+  assert.ok(schema.properties.vertical.enum.includes('barbearia'));
+  assert.ok(schema.properties.vertical.enum.includes('moda'));
+  assert.ok(schema.properties.vertical.enum.includes('floricultura'));
+  assert.ok(schema.properties.layout.properties.catalog.enum.includes('agenda-slots'));
+  assert.ok(schema.properties.layout.properties.catalog.enum.includes('variant-grid'));
 });

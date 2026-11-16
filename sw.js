@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vitrine-zap-v9';
+const CACHE_NAME = 'vitrine-zap-v10';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
   './src/integrations.js',
   './src/geo-apis.js',
   './src/qrcode.js',
+  './src/brand/brand-engine.js',
   './src/store.js',
   './src/presets.js',
   './manifest.webmanifest',

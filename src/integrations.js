@@ -283,6 +283,9 @@
       'scheduled-order': `*ENCOMENDA AGENDADA - ${storeName}*`,
       'recurring-pet': `*PEDIDO PET & RECOMPRA - ${storeName}*`,
       'service-quote': `*PRE-ORCAMENTO TECNICO - ${storeName}*`,
+      'service-booking': `*AGENDAMENTO DE HORARIO - ${storeName}*`,
+      'retail-variants': `*RESERVA DE PECAS - ${storeName}*`,
+      'floral-scheduled': `*ENCOMENDA FLORAL - ${storeName}*`,
     };
     const header = isServiceQuote
       ? headerMap['service-quote']
@@ -291,11 +294,11 @@
     const lines = [header, '', `*Cliente:* ${customerName || 'Nao informado'}`];
     if (customerPhone) lines.push(`*Contato:* ${customerPhone}`);
 
-    if (domainMode === 'scheduled-order') {
+    if (domainMode === 'scheduled-order' || domainMode === 'floral-scheduled' || domainMode === 'service-booking') {
       if (scheduleDate || scheduleWindow) {
-        lines.push(`*Retirada/Entrega em:* ${scheduleDate || 'A definir'} (${scheduleWindow || 'Horario comercial'})`);
+        lines.push(`*Data/Horario escolhido:* ${scheduleDate || 'Hoje'} (${scheduleWindow || 'A confirmar'})`);
       }
-      if (cakeMessage) lines.push(`*Topo/Embalagem:* ${cakeMessage}`);
+      if (cakeMessage) lines.push(`*${domainMode === 'floral-scheduled' ? 'Cartao / Dedicatoria' : 'Topo/Embalagem'}:* ${cakeMessage}`);
     }
 
     if (domainMode === 'recurring-pet') {
@@ -346,7 +349,7 @@
       lines.push(`*Divisao da conta (${split.peopleCount} pessoas):* ${split.perPersonFormatted} / pessoa`);
     }
 
-    if (domainMode === 'scheduled-order' && payDeposit50) {
+    if (domainMode === 'scheduled-order' && payDeposit50 || domainMode === 'floral-scheduled' && payDeposit50) {
       const { deposit, balance } = calculateDepositAmount(totals.total, 0.5);
       lines.push(`*Sinal Pix (50%):* ${formatBrl(deposit)}`);
       lines.push(`*Saldo na entrega/retirada:* ${formatBrl(balance)}`);

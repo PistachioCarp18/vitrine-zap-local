@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VitrineZapBrandConfig",
+  "type": "object",
+  "required": ["schemaVersion", "vertical", "identity", "color", "type", "shape", "layout", "vocabulary", "modules"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "vertical": { "enum": ["lanchonete", "padaria", "petshop", "oficina", "barbearia", "moda", "floricultura", "custom"] },
+    "identity": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "tagline": { "type": "string", "maxLength": 140 },
+        "tone": { "enum": ["direto", "caloroso", "premium", "divertido"] },
+        "logo": {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["monogram", "image"] },
+            "initials": { "type": "string", "maxLength": 3 },
+            "dataUri": { "type": ["string", "null"], "maxLength": 150000 }
+          }
+        }
+      }
+    },
+    "color": {
+      "type": "object",
+      "required": ["seed"],
+      "properties": {
+        "seed": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "mode": { "enum": ["auto", "light", "dark"] },
+        "accent": { "enum": ["analogous", "complementary", "mono"] }
+      }
+    },
+    "type": {
+      "type": "object",
+      "properties": {
+        "stack": { "enum": ["system", "humanist", "geometric", "serif", "mono"] },
+        "scale": { "enum": ["compact", "regular", "comfortable"] }
+      }
+    },
+    "shape": {
+      "type": "object",
+      "properties": {
+        "radius": { "enum": ["sharp", "soft", "round"] },
+        "elevation": { "enum": ["flat", "subtle", "raised"] },
+        "density": { "enum": ["compact", "regular", "airy"] }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "required": ["catalog"],
+      "properties": {
+        "catalog": { "enum": ["list-thumb", "editorial-grid", "checklist-table", "agenda-slots", "variant-grid", "pet-packs"] },
+        "nav": { "enum": ["chips", "tabs", "sidebar"] }
+      }
+    },
+    "vocabulary": {
+      "type": "object",
+      "required": ["catalog", "cart", "order", "cta"],
+      "properties": {
+        "catalog": { "type": "string" },
+        "cart": { "type": "string" },
+        "order": { "type": "string" },
+        "cta": { "type": "string" }
+      }
+    },
+    "modules": {
+      "type": "object",
+      "properties": {
+        "freteKm": { "type": "boolean" },
+        "splitBill": { "type": "boolean" },
+        "sinalPix": { "type": "boolean" },
+        "recompra": { "type": "boolean" },
+        "agendamento": { "type": "boolean" },
+        "osTecnica": { "type": "boolean" }
+      }
+    },
+    "geo": {
+      "type": "object",
+      "properties": {
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "neighborhood": { "type": "string" },
+        "lat": { "type": ["number", "null"] },
+        "lon": { "type": ["number", "null"] },
+        "feeTable": { "type": "array" },
+        "offlineDictionary": { "type": ["object", "null"] }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "whatsapp": { "type": "string" },
+        "pixKey": { "type": "string" }
+      }
+    }
+  }
+}

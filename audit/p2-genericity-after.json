@@ -1,0 +1,18 @@
+{
+  "evaluatedAt": "2026-11-16T09:15:00-03:00",
+  "versionEvaluated": "v10.0",
+  "gateThreshold": 80,
+  "minDimensionThreshold": 12,
+  "scores": {
+    "G1_estrutura": { "score": 18, "max": 20, "tag": "[O]", "notes": "6 topologias estruturais autênticas orientadas a dados em verticals/*.json + src/presets.js (list-thumb, editorial-grid, pet-packs, checklist-table, agenda-slots, variant-grid)." },
+    "G2_vocabulario": { "score": 18, "max": 20, "tag": "[O]", "notes": "Zero vazamentos hardcoded '(iFood)', 'Desconto ()' ou 'OSRM / Sorocaba'; header e CTA mudam via state.vocabulary e domainMode." },
+    "G3_identidade": { "score": 19, "max": 20, "tag": "[O]", "notes": "Brand Engine v2 (src/brand/brand-engine.js + brand.schema.json) gera tokens 3 camadas com WCAG AA garantido (axe color-contrast = 0), fontes offline (0 CDN requests) e Magic Hash #brand= sem chave Pix." },
+    "G4_modulos": { "score": 18, "max": 20, "tag": "[O]", "notes": "#vertical-context-slot, #cart-modules-top e #cart-split-slot montam apenas modulos ativos em state.modules (0 vazamentos entre verticais em runtime DOM) e Demos movidas do topo para o rodape/modal isolado." },
+    "G5_prova": { "score": 18, "max": 20, "tag": "[O]", "notes": "7 packs validados (4 originais + 3 novas verticais fora de alimentacao: barbearia, moda, floricultura), todos aprovando validateBrandConfig() e renderizacao Playwright." }
+  },
+  "totalScore": 91,
+  "previousScore": 65,
+  "delta": "+26",
+  "passedGate": true,
+  "verificationRef": "audit/p7-verification.json"
+}

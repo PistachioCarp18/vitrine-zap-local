@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "vertical": "barbearia",
+  "identity": {
+    "name": "Barbearia Navalha Clássica",
+    "tagline": "Agende corte, barba e combo direto no horário livre pelo WhatsApp.",
+    "tone": "premium",
+    "logo": { "type": "monogram", "initials": "NC", "dataUri": null }
+  },
+  "color": { "seed": "#1E293B", "mode": "light", "accent": "mono" },
+  "type": { "stack": "serif", "scale": "regular" },
+  "shape": { "radius": "sharp", "elevation": "subtle", "density": "airy" },
+  "layout": { "catalog": "agenda-slots", "nav": "chips" },
+  "vocabulary": { "catalog": "Serviços & Horários", "cart": "Sua Reserva", "order": "Agendamento", "cta": "Confirmar Horário no WhatsApp" },
+  "modules": { "freteKm": false, "splitBill": false, "sinalPix": false, "recompra": false, "agendamento": true, "osTecnica": false },
+  "geo": {
+    "city": "Sorocaba",
+    "state": "SP",
+    "neighborhood": "Santa Rosália",
+    "lat": -23.495,
+    "lon": -47.448,
+    "feeTable": []
+  },
+  "contact": { "whatsapp": "1533290131", "pixKey": "1533290131" },
+  "meta": { "rating": "5.0 (210+)", "etaLabel": "Atendimento pontual", "deliveryFee": 0.0, "freeDeliveryThreshold": 0.0, "openHour": "09:00", "closeHour": "20:00" },
+  "scheduleWindows": ["09:30", "11:00", "14:30", "16:00", "18:30"],
+  "coupons": [{ "code": "PRIMEIROCORTE", "type": "fixed", "value": 10 }],
+  "quickTags": ["Sem máquina zero", "Toalha quente", "Café expresso"],
+  "pitchTip": "Vertical fora de alimentação (Agenda Slots): escolha do serviço + horário livre e profissional direto no card.",
+  "items": [
+    { "id": "bar-1", "category": "Cortes", "name": "Corte Degradê + Finalização", "description": "Tesoura e máquina com acabamento na navalha e lavagem.", "price": 55.0, "prepTime": "40 min", "slots": ["09:30", "11:00", "14:30", "17:00"], "barber": "Thiago" },
+    { "id": "bar-2", "category": "Combos", "name": "Combo Corte + Barba Terapia", "description": "Toalha quente, óleo essencial de eucalipto e hidratação.", "price": 90.0, "prepTime": "60 min", "slots": ["10:00", "15:00", "18:30"], "barber": "Thiago / Marcos" },
+    { "id": "bar-3", "category": "Barba", "name": "Barba Tradicional na Navalha", "description": "Modelagem completa com balm pós-barba.", "price": 45.0, "prepTime": "30 min", "slots": ["09:00", "13:30", "16:30"], "barber": "Marcos" },
+    { "id": "bar-4", "category": "Sobrancelha", "name": "Design de Sobrancelha Masculina", "description": "Alinhamento discreto na pinça e navalha.", "price": 25.0, "prepTime": "15 min", "slots": ["12:00", "16:00", "19:00"], "barber": "Marcos" }
+  ]
+}
