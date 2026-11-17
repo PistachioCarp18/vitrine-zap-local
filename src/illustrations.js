@@ -48,6 +48,7 @@
     const name = String(item?.name || '').toLowerCase();
     const cat = String(item?.category || '').toLowerCase();
     const tint = options.swatchHex || '#18181B';
+    const view = options.view || 'front';
 
     // Lanchonete
     if (vertical === 'lanchonete') {
@@ -134,8 +135,24 @@
       </svg>`;
     }
 
-    // Moda / Vestuario (tintada ao vivo pelo swatch selecionado!)
+    // Moda / Vestuario (tintada ao vivo pelo swatch selecionado + multiplos angulos PDP!)
     if (vertical === 'moda') {
+      if (view === 'detail') {
+        return `<svg viewBox="0 0 80 80" width="92" height="92" aria-hidden="true">
+          <rect x="8" y="8" width="64" height="64" fill="${tint}"/>
+          <path d="M8 20h64M8 32h64M8 44h64M8 56h64M20 8v64M32 8v64M44 8v64M56 8v64" stroke="#FFFFFF" stroke-width="0.9" opacity="0.28"/>
+          <circle cx="40" cy="40" r="18" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.7"/>
+        </svg>`;
+      }
+      if (view === 'fit') {
+        return `<svg viewBox="0 0 80 80" width="92" height="92" aria-hidden="true">
+          <line x1="12" y1="14" x2="68" y2="14" stroke="#52525B" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <line x1="12" y1="68" x2="68" y2="68" stroke="#52525B" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <line x1="66" y1="14" x2="66" y2="68" stroke="#09090B" stroke-width="1.5"/>
+          <path d="M24 18h32l8 12-7 8-5-4v32H28V34l-5 4-7-8z" fill="${tint}" opacity="0.9"/>
+          <line x1="28" y1="42" x2="52" y2="42" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.7"/>
+        </svg>`;
+      }
       if (id === 'mod-2' || name.includes('calça')) {
         return `<svg viewBox="0 0 80 80" width="68" height="68" aria-hidden="true">
           <path d="M24 14h32l4 54h-14l-6-32-6 32H20z" fill="${tint}"/>
@@ -164,8 +181,26 @@
       </svg>`;
     }
 
-    // Floricultura
+    // Floricultura (suporta multiplos angulos na PDP: bouquet, scale, detail)
     if (vertical === 'floricultura') {
+      if (view === 'scale') {
+        return `<svg viewBox="0 0 80 80" width="92" height="92" aria-hidden="true">
+          <rect x="8" y="58" width="64" height="8" rx="2" fill="#DECBB4"/>
+          <rect x="52" y="42" width="16" height="16" rx="2" fill="#BE123C"/>
+          <path d="M52 48h16M60 42v16" stroke="#FEF2F2" stroke-width="2"/>
+          <polygon points="22,36 46,36 40,58 28,58" fill="#D6C7B2"/>
+          <circle cx="28" cy="28" r="7" fill="#E11D48"/><circle cx="38" cy="24" r="8" fill="#BE123C"/><circle cx="43" cy="31" r="6" fill="#FB7185"/>
+        </svg>`;
+      }
+      if (view === 'detail') {
+        return `<svg viewBox="0 0 80 80" width="92" height="92" aria-hidden="true">
+          <circle cx="40" cy="34" r="22" fill="#BE123C"/>
+          <circle cx="34" cy="30" r="12" fill="#E11D48"/><circle cx="46" cy="36" r="10" fill="#FB7185"/>
+          <circle cx="39" cy="33" r="5" fill="#881337"/>
+          <path d="M22 58c8-6 28-6 36 0" stroke="#D6C7B2" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M34 56l6 10 6-10" fill="#BE123C"/>
+        </svg>`;
+      }
       if (id === 'flo-2' || name.includes('orquídea')) {
         return `<svg viewBox="0 0 80 80" width="66" height="66" aria-hidden="true">
           <path d="M26 48h28l-4 20H30z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1.5"/>
@@ -194,6 +229,50 @@
         <circle cx="30" cy="28" r="8" fill="#BE123C"/><circle cx="40" cy="22" r="9" fill="#E11D48"/>
         <circle cx="50" cy="29" r="8" fill="#9F1239"/><circle cx="36" cy="33" r="7" fill="#FB7185"/>
         <path d="M33 50h14" stroke="#BE123C" stroke-width="3" stroke-linecap="round"/>
+      </svg>`;
+    }
+
+    // Oficina (Diagramas tecnicos)
+    if (vertical === 'oficina') {
+      if (cat.includes('freio') || name.includes('freio')) {
+        return `<svg viewBox="0 0 80 80" width="76" height="76" aria-hidden="true">
+          <circle cx="40" cy="40" r="24" fill="#1E293B" stroke="#7DD3FC" stroke-width="3"/>
+          <circle cx="40" cy="40" r="10" fill="#0F141C" stroke="#38BDF8" stroke-width="2"/>
+          <path d="M52 18a26 26 0 0 1 12 22h-10a16 16 0 0 0-8-14z" fill="#EF4444"/>
+        </svg>`;
+      }
+      if (cat.includes('susp') || name.includes('alinhamento')) {
+        return `<svg viewBox="0 0 80 80" width="76" height="76" aria-hidden="true">
+          <rect x="14" y="20" width="12" height="40" rx="4" fill="#38BDF8"/>
+          <rect x="54" y="20" width="12" height="40" rx="4" fill="#38BDF8"/>
+          <line x1="26" y1="40" x2="54" y2="40" stroke="#7DD3FC" stroke-width="4"/>
+          <circle cx="40" cy="40" r="6" fill="#FBBF24"/>
+        </svg>`;
+      }
+      return `<svg viewBox="0 0 80 80" width="76" height="76" aria-hidden="true">
+        <rect x="22" y="20" width="36" height="44" rx="6" fill="#0369A1"/>
+        <rect x="30" y="14" width="14" height="6" rx="2" fill="#7DD3FC"/>
+        <circle cx="40" cy="42" r="10" fill="#0F141C" stroke="#7DD3FC" stroke-width="2"/>
+        <path d="M36 42h8M40 38v8" stroke="#6EE7B7" stroke-width="2"/>
+      </svg>`;
+    }
+
+    // Barbearia
+    if (vertical === 'barbearia') {
+      return `<svg viewBox="0 0 80 80" width="72" height="72" aria-hidden="true">
+        <circle cx="28" cy="54" r="9" fill="none" stroke="#FBBF24" stroke-width="3"/>
+        <circle cx="52" cy="54" r="9" fill="none" stroke="#FBBF24" stroke-width="3"/>
+        <path d="M32 46L52 16M48 46L28 16" stroke="#F5EFE6" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>`;
+    }
+
+    // Pet Shop
+    if (vertical === 'petshop') {
+      return `<svg viewBox="0 0 80 80" width="72" height="72" aria-hidden="true">
+        <rect x="20" y="18" width="40" height="48" rx="10" fill="#0F766E"/>
+        <path d="M24 18h32l-4-6H28z" fill="#0D9488"/>
+        <circle cx="40" cy="44" r="10" fill="#CCFBF1"/>
+        <circle cx="34" cy="34" r="3.5" fill="#CCFBF1"/><circle cx="46" cy="34" r="3.5" fill="#CCFBF1"/>
       </svg>`;
     }
 

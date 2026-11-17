@@ -348,10 +348,11 @@
     </div>
   </section>
 
-  <!-- Modal Detalhes do Item (Bottom Sheet) -->
+  <!-- Modal / Página de Detalhe do Produto por Categoria -->
   <div id="item-modal-backdrop" class="sheet-backdrop hidden no-print" aria-hidden="true"></div>
   <section id="item-modal" class="item-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="modal-item-title">
-    <div class="sheet-handle" aria-hidden="true"></div>
+    <div id="pdp-sheet-handle" class="sheet-handle" aria-hidden="true"></div>
+    <button id="pdp-full-back-btn" class="btn btn-ghost btn-sm pdp-back-bar hidden" type="button">← Voltar para a loja</button>
     <div class="modal-head">
       <div>
         <span id="modal-item-cat" class="section-eyebrow">Categoria</span>
@@ -359,8 +360,10 @@
       </div>
       <button id="close-item-modal-btn" class="btn btn-secondary btn-icon" type="button" aria-label="Fechar detalhes">✕</button>
     </div>
+    <div id="pdp-gallery-slot" class="pdp-gallery-slot hidden"></div>
     <div id="modal-item-photo" class="modal-photo-wrap hidden"></div>
     <p id="modal-item-desc" class="modal-desc"></p>
+    <div id="pdp-dynamic-slot" class="pdp-dynamic-slot hidden"></div>
     <div id="modal-variants-wrap" class="modal-extras hidden">
       <h3 id="modal-variant-label" class="modal-sub-h">Opção</h3>
       <div id="modal-variants-list" class="variant-pills"></div>
@@ -369,10 +372,14 @@
       <h3 class="modal-sub-h">Adicionais opcionais</h3>
       <div id="modal-extras-list" class="extras-list"></div>
     </div>
-    <label class="field-label modal-note-field">Observação neste item
-      <input type="text" id="modal-item-note" class="text-input" placeholder="Ex: Sem cebola..." />
-    </label>
-    <div class="modal-footer">
+    <details id="modal-note-accordion" class="pdp-note-accordion">
+      <summary id="modal-note-summary" class="pdp-note-summary">Observação neste item (opcional)</summary>
+      <label class="field-label modal-note-field" style="margin-top:6px;">
+        <span class="sr-only">Observação neste item</span>
+        <input type="text" id="modal-item-note" class="text-input" placeholder="Ex: Detalhe ou pedido especial..." />
+      </label>
+    </details>
+    <div class="modal-footer pdp-sticky-footer">
       <div class="qty-inline modal-qty">
         <button type="button" id="modal-dec-btn" aria-label="Diminuir quantidade">-</button>
         <span id="modal-qty-val" class="mono">1</span>
@@ -446,6 +453,7 @@
   <script src="./src/geo-apis.js"></script>
   <script src="./src/category-apis.js"></script>
   <script src="./src/illustrations.js"></script>
+  <script src="./src/pdp.js"></script>
   <script src="./src/qrcode.js"></script>
   <script src="./src/brand/design-systems.js"></script>
   <script src="./src/brand/brand-engine.js"></script>

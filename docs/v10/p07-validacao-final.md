@@ -20,7 +20,7 @@
 
 ## Evidências Geradas
 - Script de verificação executada: `audit/p7-verification.json` e `audit/p2-genericity-after.json`
-- Capturas visuais v10: [`evidence/p7/home-360x800.png`](file:///C:/Users/JUNIOR_2025/.gemini/antigravity/scratch/vitrine-zap-local/evidence/p7/home-360x800.png), `evidence/p7/cart-step1-360x800.png`, `evidence/p7/cart-step2-pix-360x800.png` e `evidence/p7/vertical-*.png` (7 verticais).
+- Capturas visuais v10: [`evidence/p7/home-360x800.png`](file:///C:/Users/JUNIOR_2025/Projetos/vitrine-zap-local/evidence/p7/home-360x800.png), `evidence/p7/cart-step1-360x800.png`, `evidence/p7/cart-step2-pix-360x800.png` e `evidence/p7/vertical-*.png` (7 verticais).
 - Nota explícita de lacuna `[L]`: WebKit real (iOS físico) e Lighthouse CLI global não estão instalados neste ambiente Windows; a simulação responsiva e `axe-core` rodaram em Chromium real headless via Playwright (`C:/Program Files/Google/Chrome/Application/chrome.exe`).
 
 ## Checkpoint Humano 2 (`before_deploy`)

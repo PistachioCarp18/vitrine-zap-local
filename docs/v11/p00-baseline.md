@@ -1,6 +1,6 @@
 # VitrineZap v11.0 — P0: Baseline Real em Produção (`https://vitrine-zap-local.vercel.app/`)
 
-**Squad Lead:** `optimization-qa-squad` | **Data:** `2026-11-16` | **Dados brutos:** [`audit/p0-metrics-by-vertical.json`](file:///C:/Users/JUNIOR_2025/.gemini/antigravity/scratch/vitrine-zap-local/audit/p0-metrics-by-vertical.json)
+**Squad Lead:** `optimization-qa-squad` | **Data:** `2026-11-16` | **Dados brutos:** [`audit/p0-metrics-by-vertical.json`](file:///C:/Users/JUNIOR_2025/Projetos/vitrine-zap-local/audit/p0-metrics-by-vertical.json)
 
 ---
 

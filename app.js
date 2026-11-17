@@ -35,6 +35,12 @@
     getItemSwatches: () => [],
     renderRichItemArt: () => '',
   };
+  const { getPdpMode, getItemGallerySlides, getFloralTiers, getCategoryPdpSpec } = window.VitrinePdp || {
+    getPdpMode: () => 'craving-sheet',
+    getItemGallerySlides: () => [],
+    getFloralTiers: () => [],
+    getCategoryPdpSpec: () => ({ mode: 'craving-sheet', requiresNote: true }),
+  };
   const {
     generateBrandTokens,
     validateBrandConfig,
@@ -83,7 +89,7 @@
   const selectedSlotMap = {};
   const selectedSizeMap = {};
   const osApprovedMap = {};
-  let modalState = { item: null, qty: 1, selectedExtras: [], selectedVariant: '', packOverride: null };
+  let modalState = { item: null, qty: 1, selectedExtras: [], selectedVariant: '', packOverride: null, activeSlide: 0, customPriceOverride: null, customPackLabel: '' };
 
   const NICHE_EMBLEMS = {
     lanchonete: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11h18"/><path d="M5 11a7 7 0 0 1 14 0"/><path d="M4 15h16a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1a1 1 0 0 1 1-1z"/></svg>',
@@ -420,38 +426,247 @@
     renderCart();
   }
 
+  function renderPdpGallery(vKey, item) {
+    const galleryEl = document.getElementById('pdp-gallery-slot');
+    const photoWrap = document.getElementById('modal-item-photo');
+    photoWrap.classList.add('hidden');
+    photoWrap.innerHTML = '';
+
+    const swatches = vKey === 'moda' ? getItemSwatches(item) : [];
+    const currSwatch = swatches.length ? (selectedSwatchMap[item.id] || swatches[0]) : null;
+    const slides = getItemGallerySlides(vKey, item, { swatchHex: currSwatch?.hex });
+    if (!slides.length) {
+      galleryEl.classList.add('hidden');
+      galleryEl.innerHTML = '';
+      return;
+    }
+
+    const activeIdx = Math.min(modalState.activeSlide || 0, slides.length - 1);
+    const activeSlide = slides[activeIdx];
+    const thumbsHtml = slides.length > 1
+      ? `<div class="pdp-thumbs-row" role="tablist" aria-label="Fotos e ângulos do produto">${slides.map((sl, idx) =>
+          `<button type="button" role="tab" aria-selected="${idx === activeIdx ? 'true' : 'false'}" class="pdp-thumb-btn ${idx === activeIdx ? 'active' : ''}" data-slide="${idx}" aria-label="${sl.caption}">${sl.artHtml}</button>`
+        ).join('')}</div>`
+      : '';
+
+    galleryEl.classList.remove('hidden');
+    galleryEl.innerHTML = `
+      <div class="pdp-gallery-stage card-art-svg">
+        ${activeSlide.artHtml}
+        <span class="pdp-gallery-caption">${activeSlide.caption}${slides.length > 1 ? ` (${activeIdx + 1}/${slides.length})` : ''}</span>
+      </div>
+      ${thumbsHtml}`;
+
+    galleryEl.querySelectorAll('.pdp-thumb-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modalState.activeSlide = Number(btn.dataset.slide);
+        renderPdpGallery(vKey, item);
+      });
+    });
+  }
+
+  function renderPdpDynamicArea(vKey, item, spec) {
+    const dyn = document.getElementById('pdp-dynamic-slot');
+    const petMod = window.VitrineMechanics['autoship-reminder'];
+    const inspMod = window.VitrineMechanics['inspection-checklist'];
+    const parts = [];
+
+    if (Array.isArray(spec.benefits) && spec.benefits.length) {
+      parts.push(`<div class="pdp-benefits-row">${spec.benefits.map(b => `<span class="pdp-benefit-pill">${b}</span>`).join('')}</div>`);
+    }
+
+    if (vKey === 'moda') {
+      const swatches = getItemSwatches(item);
+      const currSwatch = swatches.length ? (selectedSwatchMap[item.id] || swatches[0]) : null;
+      if (swatches.length) {
+        parts.push(`<div class="modal-extras"><h3 class="modal-sub-h">Cor: ${currSwatch.name}</h3>
+          <div class="swatch-dots-row" role="radiogroup" aria-label="Cores disponíveis">${swatches.map(sw =>
+            `<button type="button" role="radio" aria-checked="${sw.name === currSwatch.name ? 'true' : 'false'}" class="swatch-dot-btn pdp-sw-btn ${sw.name === currSwatch.name ? 'active' : ''}" data-sw="${sw.name}" aria-label="${sw.name}"><span class="swatch-circle" style="background:${sw.hex}"></span></button>`
+          ).join('')}</div></div>`);
+      }
+      parts.push(`<button type="button" id="pdp-open-size-guide" class="btn btn-secondary btn-sm full-width">Provador Virtual (Altura × Peso) &amp; Tabela cm</button>`);
+    }
+
+    if (spec.supportsFloralTiers) {
+      const tiers = getFloralTiers(item.price);
+      const activeId = modalState.floralTierId || 'classic';
+      parts.push(`<div><h3 class="modal-sub-h">Tamanho &amp; Complemento</h3>
+        <div class="pdp-tiers-grid" role="radiogroup" aria-label="Tamanho do arranjo">
+          ${tiers.map(t => `<button type="button" role="radio" aria-checked="${t.id === activeId ? 'true' : 'false'}" class="pdp-tier-card ${t.id === activeId ? 'active' : ''}" data-tier="${t.id}" data-price="${t.finalPrice}" data-label="${t.label}">
+            <div><strong>${t.label}</strong><div class="cart-row-sub">${t.sub}</div></div>
+            <strong class="mono">${formatBrl(t.finalPrice)}</strong>
+          </button>`).join('')}
+        </div></div>`);
+    }
+
+    if (spec.supportsInlineFloralCard) {
+      parts.push(`<div class="field-label">
+        <label for="pdp-floral-msg" class="field-label-text">Mensagem do Cartão Dedicatória (Grátis)</label>
+        <input type="text" id="pdp-floral-msg" maxlength="160" class="text-input" value="${modalState.floralMsg || ''}" placeholder="Escreva sua mensagem para ir no cartão..." />
+        <div id="pdp-card-preview" class="floral-card-preview">${modalState.floralMsg ? `"${modalState.floralMsg}"` : 'Preview do cartão impresso aparecerá aqui.'}</div>
+      </div>`);
+    }
+
+    if (vKey === 'oficina') {
+      const sevKey = inspMod ? inspMod.getItemSeverity(item) : 'rotina';
+      const sevMeta = inspMod ? inspMod.SEVERITY_MAP[sevKey] : { label: 'Rotina', badgeClass: 'sev-ok' };
+      parts.push(`<div class="dvi-predict-chip">${spec.vehicleHint} • <span class="sev-badge ${sevMeta.badgeClass}">${sevMeta.label}</span></div>`);
+      parts.push(`<div class="quick-tags">${(spec.techFlags || []).map(f => `<button type="button" class="quick-tag-btn pdp-flag-btn" data-flag="${f}">+ ${f}</button>`).join('')}</div>`);
+    }
+
+    if (vKey === 'barbearia') {
+      parts.push(`<div class="ds-badge-chip">${item.prepTime || '40 min'} • ${item.barber || 'Equipe'}</div>`);
+      parts.push(`<ol class="pdp-steps-list">${(spec.groomingSteps || []).map(s => `<li>${s}</li>`).join('')}</ol>`);
+      parts.push(`<div class="quick-tags">${(spec.groomingTags || []).map(t => `<button type="button" class="quick-tag-btn pdp-flag-btn" data-flag="${t}">+ ${t}</button>`).join('')}</div>`);
+    }
+
+    if (vKey === 'petshop') {
+      const profile = store.loadCustomerProfile();
+      const petSize = profile.petSize || 'Médio';
+      const packs = Array.isArray(item.packOptions) ? item.packOptions : [];
+      if (packs.length) {
+        const pIdx = selectedPackIdxMap[item.id] ?? item.defaultPackIdx ?? 0;
+        parts.push(`<div class="pet-pack-chips" role="radiogroup" aria-label="Peso / Porte">${packs.map((pk, idx) => {
+          const kg = petMod ? petMod.extractKgFromLabel(pk.label) : null;
+          const dBadge = kg && petMod ? ` (${petMod.calculateFoodDurationDays(kg, petSize)}d)` : '';
+          return `<button type="button" role="radio" aria-checked="${idx === pIdx ? 'true' : 'false'}" class="pack-chip pdp-pack-btn ${idx === pIdx ? 'active' : ''}" data-idx="${idx}">${pk.label}${dBadge}</button>`;
+        }).join('')}</div>`);
+      }
+      parts.push(`<button type="button" id="pdp-pet-club-btn" role="switch" aria-checked="${petClubActive ? 'true' : 'false'}" class="pet-club-toggle ${petClubActive ? 'active' : ''}">Clube Recorrente -10% OFF ${petClubActive ? '(Ativo)' : ''}</button>`);
+      parts.push(`<p class="cart-row-sub">${spec.nutritionNote}</p>`);
+    }
+
+    if (vKey === 'padaria' && spec.bakeBadge) {
+      parts.push(`<div class="ds-badge-chip">${spec.bakeBadge}</div>`);
+    }
+
+    if (Array.isArray(spec.accordions) && spec.accordions.length) {
+      parts.push(spec.accordions.map(a => `<details class="pdp-accordion"><summary>${a.title}<span>+</span></summary><p>${a.body}</p></details>`).join(''));
+    }
+
+    if (!parts.length) {
+      dyn.classList.add('hidden');
+      dyn.innerHTML = '';
+      return;
+    }
+    dyn.classList.remove('hidden');
+    dyn.innerHTML = parts.join('');
+
+    dyn.querySelectorAll('.pdp-sw-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const chosen = getItemSwatches(item).find(s => s.name === btn.dataset.sw);
+        if (chosen) {
+          selectedSwatchMap[item.id] = chosen;
+          const sz = selectedSizeMap[item.id] || (item.sizes || ['M'])[0];
+          modalState.selectedVariant = `Cor ${chosen.name} • Tam. ${sz}`;
+          renderPdpGallery(vKey, item);
+          renderPdpDynamicArea(vKey, item, spec);
+        }
+      });
+    });
+    const fitBtn = dyn.querySelector('#pdp-open-size-guide');
+    if (fitBtn) fitBtn.addEventListener('click', openSizeGuideModal);
+
+    dyn.querySelectorAll('.pdp-tier-card').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modalState.floralTierId = btn.dataset.tier;
+        modalState.customPriceOverride = Number(btn.dataset.price);
+        modalState.customPackLabel = btn.dataset.label;
+        updateModalCta();
+        renderPdpDynamicArea(vKey, item, spec);
+      });
+    });
+    const flMsg = dyn.querySelector('#pdp-floral-msg');
+    const flPrev = dyn.querySelector('#pdp-card-preview');
+    if (flMsg && flPrev) {
+      flMsg.addEventListener('input', () => {
+        modalState.floralMsg = flMsg.value;
+        flPrev.textContent = flMsg.value.trim() ? `"${flMsg.value.trim()}"` : 'Preview do cartão impresso aparecerá aqui.';
+      });
+    }
+    dyn.querySelectorAll('.pdp-flag-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const noteEl = document.getElementById('modal-item-note');
+        const curr = noteEl.value.trim();
+        noteEl.value = curr ? `${curr}, ${btn.dataset.flag}` : btn.dataset.flag;
+        document.getElementById('modal-note-accordion').open = true;
+      });
+    });
+    dyn.querySelectorAll('.pdp-pack-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.idx);
+        selectedPackIdxMap[item.id] = idx;
+        modalState.packOverride = item.packOptions[idx];
+        renderCatalog();
+        updateModalCta();
+        renderPdpDynamicArea(vKey, item, spec);
+      });
+    });
+    const pClubBtn = dyn.querySelector('#pdp-pet-club-btn');
+    if (pClubBtn) {
+      pClubBtn.addEventListener('click', () => {
+        petClubActive = !petClubActive;
+        renderVerticalContextSlot();
+        renderCatalog();
+        updateModalCta();
+        renderPdpDynamicArea(vKey, item, spec);
+      });
+    }
+  }
+
   function openItemModal(item) {
+    const vKey = state.vertical || state.id || 'lanchonete';
+    const profile = store.loadCustomerProfile();
+    const spec = getCategoryPdpSpec(vKey, item, {
+      vehicleName: selectedFipeVehicle ? `${selectedFipeVehicle.brand} ${selectedFipeVehicle.model}` : '',
+      mileageKm: cockpitMileageKm,
+      petSize: profile.petSize || 'Médio',
+    });
+
     let variants = Array.isArray(item.variants) ? [...item.variants] : [];
     let variantLabel = item.variantLabel || 'Selecione uma opção';
     let defaultVariant = variants[0] || '';
     if (!variants.length && Array.isArray(item.slots) && item.slots.length) {
       variants = item.slots.map(s => `Horário ${s}`);
-      variantLabel = 'Horário livre';
+      variantLabel = 'Escolha o horário';
       defaultVariant = `Horário ${selectedSlotMap[item.id] || item.slots[0]}`;
     } else if (!variants.length && Array.isArray(item.sizes) && item.sizes.length) {
-      variants = item.sizes.map(sz => `Tamanho ${sz}`);
+      variants = item.sizes.map(sz => `Tam. ${sz}`);
       variantLabel = 'Tamanho';
-      defaultVariant = `Tamanho ${selectedSizeMap[item.id] || item.sizes[0]}`;
+      const sz = selectedSizeMap[item.id] || item.sizes[0];
+      const sw = vKey === 'moda' ? (selectedSwatchMap[item.id] || getItemSwatches(item)[0]) : null;
+      defaultVariant = sw ? `Cor ${sw.name} • Tam. ${sz}` : `Tam. ${sz}`;
     }
 
     const packIdx = selectedPackIdxMap[item.id] ?? item.defaultPackIdx ?? 0;
     const chosenPack = Array.isArray(item.packOptions) ? item.packOptions[packIdx] : null;
-    modalState = { item, qty: 1, selectedExtras: [], selectedVariant: defaultVariant, packOverride: chosenPack };
+    modalState = {
+      item, qty: 1, selectedExtras: [], selectedVariant: defaultVariant, packOverride: chosenPack,
+      activeSlide: 0, customPriceOverride: null, customPackLabel: '', floralTierId: 'classic', floralMsg: '',
+    };
+
+    const modalEl = document.getElementById('item-modal');
+    const isFull = spec.mode === 'full-page';
+    modalEl.classList.toggle('pdp-fullpage', isFull);
+    document.getElementById('pdp-sheet-handle').classList.toggle('hidden', isFull);
+    const backBtn = document.getElementById('pdp-full-back-btn');
+    backBtn.classList.toggle('hidden', !isFull);
+    backBtn.textContent = `← ${spec.backLabel || 'Voltar'}`;
 
     document.getElementById('modal-item-cat').textContent = item.sku ? `${item.sku} • ${item.category}` : item.category;
     document.getElementById('modal-item-title').textContent = item.name;
     document.getElementById('modal-item-desc').textContent = item.description || '';
     document.getElementById('modal-item-note').value = '';
+    document.getElementById('modal-item-note').placeholder = spec.notePlaceholder || 'Ex: Detalhe...';
     document.getElementById('modal-qty-val').textContent = '1';
 
-    const photoWrap = document.getElementById('modal-item-photo');
-    if (item.photoDataUrl) {
-      photoWrap.innerHTML = `<img src="${item.photoDataUrl}" alt="${item.name}" />`;
-      photoWrap.classList.remove('hidden');
-    } else {
-      photoWrap.classList.add('hidden');
-      photoWrap.innerHTML = '';
-    }
+    const noteAcc = document.getElementById('modal-note-accordion');
+    noteAcc.classList.toggle('hidden', Boolean(spec.supportsInlineFloralCard));
+    noteAcc.open = Boolean(spec.requiresNote);
+    document.getElementById('modal-note-summary').textContent = spec.optionalNoteSummary || 'Observação neste item';
+
+    renderPdpGallery(vKey, item);
+    renderPdpDynamicArea(vKey, item, spec);
 
     const varWrap = document.getElementById('modal-variants-wrap');
     const varList = document.getElementById('modal-variants-list');
@@ -459,15 +674,22 @@
       varWrap.classList.remove('hidden');
       document.getElementById('modal-variant-label').textContent = variantLabel;
       varList.setAttribute('role', 'radiogroup');
-      varList.innerHTML = variants.map(v =>
-        `<button type="button" role="radio" aria-checked="${v === defaultVariant ? 'true' : 'false'}" class="variant-pill ${v === defaultVariant ? 'active' : ''}" data-var="${v}">${v}</button>`
-      ).join('');
+      varList.innerHTML = variants.map(v => {
+        const isChecked = defaultVariant.includes(v);
+        return `<button type="button" role="radio" aria-checked="${isChecked ? 'true' : 'false'}" class="variant-pill ${isChecked ? 'active' : ''}" data-var="${v}">${v}</button>`;
+      }).join('');
       varList.querySelectorAll('.variant-pill').forEach(btn => {
         btn.addEventListener('click', () => {
           varList.querySelectorAll('.variant-pill').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-checked', 'false'); });
           btn.classList.add('active');
           btn.setAttribute('aria-checked', 'true');
-          modalState.selectedVariant = btn.dataset.var;
+          if (vKey === 'moda') {
+            selectedSizeMap[item.id] = btn.dataset.var.replace('Tam. ', '');
+            const sw = selectedSwatchMap[item.id] || getItemSwatches(item)[0];
+            modalState.selectedVariant = sw ? `Cor ${sw.name} • ${btn.dataset.var}` : btn.dataset.var;
+          } else {
+            modalState.selectedVariant = btn.dataset.var;
+          }
         });
       });
     } else {
@@ -497,27 +719,34 @@
 
     updateModalCta();
     document.getElementById('item-modal-backdrop').classList.remove('hidden');
-    document.getElementById('item-modal').classList.remove('hidden');
+    modalEl.classList.remove('hidden');
     syncBodyScrollLock();
     pushOverlayHistory('item');
   }
 
   function closeItemModal() {
     document.getElementById('item-modal-backdrop').classList.add('hidden');
-    document.getElementById('item-modal').classList.add('hidden');
+    const modalEl = document.getElementById('item-modal');
+    modalEl.classList.add('hidden');
+    modalEl.classList.remove('pdp-fullpage');
     syncBodyScrollLock();
   }
 
   function updateModalCta() {
     if (!modalState.item) return;
-    const base = modalState.packOverride ? Number(modalState.packOverride.price) : Number(modalState.item.price || 0);
+    const vKey = state.vertical || state.id || 'lanchonete';
+    let base = modalState.customPriceOverride != null
+      ? Number(modalState.customPriceOverride)
+      : (modalState.packOverride ? Number(modalState.packOverride.price) : Number(modalState.item.price || 0));
+    if (petClubActive && vKey === 'petshop') base = Number((base * 0.9).toFixed(2));
     const sheetMod = window.VitrineMechanics['item-sheet-addons'];
     const unit = sheetMod
       ? sheetMod.calculateModalUnitTotal(base, modalState.selectedExtras)
       : (base + modalState.selectedExtras.reduce((s, e) => s + Number(e.price || 0), 0));
     const total = unit * modalState.qty;
     document.getElementById('modal-qty-val').textContent = String(modalState.qty);
-    document.getElementById('modal-add-btn').textContent = `Adicionar • ${formatBrl(total)}`;
+    const ctaPrefix = vKey === 'barbearia' ? 'Confirmar Horário' : (vKey === 'oficina' ? 'Incluir na OS' : 'Adicionar');
+    document.getElementById('modal-add-btn').textContent = `${ctaPrefix} • ${formatBrl(total)}`;
   }
 
   function updateCockpitPrediction() {
@@ -2048,16 +2277,33 @@
     document.getElementById('close-cart-drawer-btn').addEventListener('click', closeCartDrawer);
     document.getElementById('cart-backdrop').addEventListener('click', closeCartDrawer);
 
+    document.getElementById('pdp-full-back-btn').addEventListener('click', closeItemModal);
     document.getElementById('close-item-modal-btn').addEventListener('click', closeItemModal);
     document.getElementById('item-modal-backdrop').addEventListener('click', closeItemModal);
     document.getElementById('modal-dec-btn').addEventListener('click', () => { if (modalState.qty > 1) { modalState.qty -= 1; updateModalCta(); } });
     document.getElementById('modal-inc-btn').addEventListener('click', () => { modalState.qty += 1; updateModalCta(); });
     document.getElementById('modal-add-btn').addEventListener('click', () => {
       if (!modalState.item) return;
-      addItemToCart(modalState.item, modalState.qty, modalState.selectedExtras, document.getElementById('modal-item-note').value, modalState.selectedVariant, modalState.packOverride);
+      const vKey = state.vertical || state.id || 'lanchonete';
+      let itemToAdd = modalState.item;
+      let chosenPack = modalState.packOverride;
+      if (modalState.customPriceOverride != null) {
+        chosenPack = { label: modalState.customPackLabel || 'Personalizado', price: modalState.customPriceOverride };
+      }
+      if (petClubActive && vKey === 'petshop') {
+        if (chosenPack) chosenPack = { ...chosenPack, label: `${chosenPack.label} (Clube -10%)`, price: Number((chosenPack.price * 0.9).toFixed(2)) };
+        else itemToAdd = { ...itemToAdd, price: Number((itemToAdd.price * 0.9).toFixed(2)) };
+      }
+      const noteVal = modalState.floralMsg ? `Cartão: ${modalState.floralMsg}` : document.getElementById('modal-item-note').value;
+      addItemToCart(itemToAdd, modalState.qty, modalState.selectedExtras, noteVal, modalState.selectedVariant, chosenPack);
+      const savedFloralMsg = modalState.floralMsg;
       closeItemModal();
+      if (savedFloralMsg) {
+        const cakeEl = document.getElementById('cake-message');
+        if (cakeEl) cakeEl.value = savedFloralMsg;
+      }
       if (hasMech('slot-picker')) openCartDrawer(2);
-      else showToast(`${modalState.item.name} adicionado!`);
+      else showToast(`${itemToAdd.name} adicionado!`);
     });
 
     document.getElementById('send-wa-btn').addEventListener('click', handleSendWhatsApp);

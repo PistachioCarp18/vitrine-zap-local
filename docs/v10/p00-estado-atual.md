@@ -8,7 +8,7 @@ status: concluido
 # p00 — Estado Atual Verificado (VitrineZap Local v9 → Base v10)
 
 ## 1. Resumo (Baseline Real `[O]`)
-O repositório em `C:\Users\JUNIOR_2025\.gemini\antigravity\scratch\vitrine-zap-local` está no commit `f688bbd` (v9.0), com **32/32 testes Node passando** e **8 squads AIOX validados (`0 errors, 0 warnings`)** em `Conselho_Buffet\squads\`. Em produção (`https://vitrine-zap-local.vercel.app/`), o Service Worker `vitrine-zap-v9` responde e suporta reload offline.
+O repositório em `C:\Users\JUNIOR_2025\Projetos\vitrine-zap-local` está no commit `f688bbd` (v9.0), com **32/32 testes Node passando** e **8 squads AIOX validados (`0 errors, 0 warnings`)** em `Conselho_Buffet\squads\`. Em produção (`https://vitrine-zap-local.vercel.app/`), o Service Worker `vitrine-zap-v9` responde e suporta reload offline.
 
 ## 2. Histórico Git (`git log -10 --oneline` `[O]`)
 - `f688bbd` — `feat(v9.0): 8o squad open-apis-geo-squad, BrasilAPI/ViaCEP, OSRM+Haversine x1.32, frete/km, Maps/Waze, FIPE e Open-Meteo`

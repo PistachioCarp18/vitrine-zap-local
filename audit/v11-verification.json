@@ -1,5 +1,5 @@
 {
-  "auditedAt": "2026-11-16T21:50:42.631Z",
+  "auditedAt": "2026-11-17T00:02:05.888Z",
   "chromiumViewportsHome": [
     {
       "vertical": "lanchonete",
@@ -8,7 +8,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.7,
+      "initialTransferKB": 92.3,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -37,7 +37,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.7,
+      "initialTransferKB": 92.3,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -66,7 +66,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.7,
+      "initialTransferKB": 92.3,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -95,7 +95,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.7,
+      "initialTransferKB": 92.3,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -124,7 +124,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.7,
+      "initialTransferKB": 92.3,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -155,7 +155,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.9,
+      "initialTransferKB": 93.5,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -184,7 +184,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.9,
+      "initialTransferKB": 93.5,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -213,7 +213,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.9,
+      "initialTransferKB": 93.5,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -242,12 +242,12 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.9,
+      "initialTransferKB": 93.5,
       "loadedMechScripts": [
         "registry.js",
-        "item-sheet-addons.js",
         "free-shipping-progress.js",
-        "reorder-1-tap.js"
+        "reorder-1-tap.js",
+        "item-sheet-addons.js"
       ],
       "dsSignature": {
         "dsId": "express-craving",
@@ -271,7 +271,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.9,
+      "initialTransferKB": 93.5,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -302,7 +302,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.7,
+      "initialTransferKB": 92.3,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -331,7 +331,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.9,
+      "initialTransferKB": 92.5,
       "loadedMechScripts": [
         "registry.js",
         "pickup-window.js",
@@ -362,7 +362,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.3,
+      "initialTransferKB": 91.9,
       "loadedMechScripts": [
         "registry.js",
         "autoship-reminder.js",
@@ -392,7 +392,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 83.7,
+      "initialTransferKB": 91.3,
       "loadedMechScripts": [
         "registry.js",
         "inspection-checklist.js"
@@ -423,7 +423,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 83.8,
+      "initialTransferKB": 91.4,
       "loadedMechScripts": [
         "registry.js",
         "slot-picker.js"
@@ -453,7 +453,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 83.6,
+      "initialTransferKB": 91.2,
       "loadedMechScripts": [
         "registry.js",
         "variant-picker.js"
@@ -483,7 +483,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.2,
+      "initialTransferKB": 92.8,
       "loadedMechScripts": [
         "registry.js",
         "occasion-card-message.js",
@@ -518,7 +518,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.9,
+      "initialTransferKB": 93.5,
       "loadedMechScripts": [
         "registry.js",
         "item-sheet-addons.js",
@@ -547,7 +547,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 86.1,
+      "initialTransferKB": 93.7,
       "loadedMechScripts": [
         "registry.js",
         "pickup-window.js",
@@ -578,7 +578,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85.6,
+      "initialTransferKB": 93.2,
       "loadedMechScripts": [
         "registry.js",
         "autoship-reminder.js",
@@ -608,7 +608,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85,
+      "initialTransferKB": 92.6,
       "loadedMechScripts": [
         "registry.js",
         "inspection-checklist.js"
@@ -638,7 +638,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 85,
+      "initialTransferKB": 92.6,
       "loadedMechScripts": [
         "registry.js",
         "slot-picker.js"
@@ -668,7 +668,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 84.8,
+      "initialTransferKB": 92.4,
       "loadedMechScripts": [
         "registry.js",
         "variant-picker.js"
@@ -698,7 +698,7 @@
       "docOverflow": false,
       "smallTargetsCount": 0,
       "smallTargetsSample": [],
-      "initialTransferKB": 86.4,
+      "initialTransferKB": 94,
       "loadedMechScripts": [
         "registry.js",
         "occasion-card-message.js",
@@ -773,6 +773,42 @@
       "violationsTotal": 0,
       "criticalSeriousCount": 0,
       "criticalSeriousDetails": []
+    },
+    {
+      "label": "pdp-moda",
+      "violationsTotal": 0,
+      "criticalSeriousCount": 0,
+      "criticalSeriousDetails": []
+    },
+    {
+      "label": "pdp-floricultura",
+      "violationsTotal": 0,
+      "criticalSeriousCount": 0,
+      "criticalSeriousDetails": []
+    },
+    {
+      "label": "pdp-oficina",
+      "violationsTotal": 0,
+      "criticalSeriousCount": 0,
+      "criticalSeriousDetails": []
+    },
+    {
+      "label": "pdp-barbearia",
+      "violationsTotal": 0,
+      "criticalSeriousCount": 0,
+      "criticalSeriousDetails": []
+    },
+    {
+      "label": "pdp-petshop",
+      "violationsTotal": 0,
+      "criticalSeriousCount": 0,
+      "criticalSeriousDetails": []
+    },
+    {
+      "label": "pdp-padaria",
+      "violationsTotal": 0,
+      "criticalSeriousCount": 0,
+      "criticalSeriousDetails": []
     }
   ],
   "distinctTapsSet": [
@@ -780,8 +816,62 @@
     3
   ],
   "distinctTapsSetSize": 2,
-  "initialTransferKB": 86.4,
+  "initialTransferKB": 94,
   "axeCriticalSerious": 0,
   "blindDistinctScorePct": 100,
+  "pdpChecks": [
+    {
+      "vertical": "moda",
+      "isFull": true,
+      "thumbs": 3,
+      "smallCount": 0,
+      "small": [],
+      "gallerySwitched": true,
+      "axeCritSer": 0
+    },
+    {
+      "vertical": "floricultura",
+      "isFull": true,
+      "thumbs": 3,
+      "smallCount": 0,
+      "small": [],
+      "gallerySwitched": true,
+      "tierChangedPrice": true,
+      "previewSynced": true,
+      "axeCritSer": 0
+    },
+    {
+      "vertical": "oficina",
+      "isFull": false,
+      "thumbs": 0,
+      "smallCount": 0,
+      "small": [],
+      "axeCritSer": 0
+    },
+    {
+      "vertical": "barbearia",
+      "isFull": false,
+      "thumbs": 0,
+      "smallCount": 0,
+      "small": [],
+      "axeCritSer": 0
+    },
+    {
+      "vertical": "petshop",
+      "isFull": false,
+      "thumbs": 0,
+      "smallCount": 0,
+      "small": [],
+      "axeCritSer": 0
+    },
+    {
+      "vertical": "padaria",
+      "isFull": false,
+      "thumbs": 0,
+      "smallCount": 0,
+      "small": [],
+      "axeCritSer": 0
+    }
+  ],
   "uniqueDesignSystemsRendered": 7
 }
