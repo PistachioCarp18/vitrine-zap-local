@@ -72,7 +72,23 @@
   let splitPeople = 1;
   let payDeposit50Flag = false;
   let surpriseGiftFlag = false;
-  let selectedBookingDayIso = new Date().toISOString().slice(0, 10);
+  function toLocalIsoDate(dateObj = new Date()) {
+    const d = dateObj instanceof Date ? dateObj : new Date(dateObj);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
+  function isDemoModeActive() {
+    const params = new URLSearchParams(window.location.search);
+    const explicit = params.get('demo');
+    if (explicit === '0') return false;
+    if (explicit === '1') return true;
+    return state?.isDemo !== false;
+  }
+
+  let selectedBookingDayIso = toLocalIsoDate(new Date());
   let selectedBarberFilter = 'Todos';
   let pendingPhotoDataUrl = '';
   let routeInfo = null;
@@ -781,7 +797,7 @@
         <div class="dvi-cockpit-stage">
           <div class="container">
             <div class="auto-vehicle-grid-v12" style="margin-bottom:4px;">
-              <input type="text" id="quick-veh-model" list="fipe-vehicles-list" class="text-input compact-input" value="${selectedFipeVehicle ? `${selectedFipeVehicle.brand} ${selectedFipeVehicle.model}` : ''}" placeholder="Veículo (Ex: Onix 1.0)" aria-label="Modelo do veículo" />
+              <input type="text" id="quick-veh-model" list="fipe-vehicles-list" class="text-input compact-input" value="${selectedFipeVehicle ? `${selectedFipeVehicle.brand} ${selectedFipeVehicle.model}` : ''}" placeholder="Modelo (Ex: Onix 1.0)" aria-label="Modelo do veículo" />
               <input type="text" id="quick-veh-plate" class="text-input compact-input mono" placeholder="Placa / KM" aria-label="Placa ou quilometragem" />
               <button type="button" id="open-fipe-est-btn" class="btn btn-primary fipe-open-btn">FIPE + KM</button>
             </div>
@@ -1022,7 +1038,7 @@
     if (hasMech('occasion-card-message')) {
       const occMod = window.VitrineMechanics['occasion-card-message'];
       const pkMod = window.VitrineMechanics['pickup-window'];
-      const tmr = pkMod ? pkMod.getTomorrowIso() : new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      const tmr = pkMod ? pkMod.getTomorrowIso() : toLocalIsoDate(new Date(Date.now() + 86400000));
       const wins = pkMod ? pkMod.resolveAvailableWindows(state.scheduleWindows) : ['08:30 - 11:30', '13:30 - 16:30'];
       const templates = occMod ? occMod.CARD_TEMPLATES : [];
       box.classList.remove('hidden');
@@ -1069,7 +1085,7 @@
 
     if (hasMech('pickup-window') || dm === 'scheduled-order') {
       const pkMod = window.VitrineMechanics['pickup-window'];
-      const tmr = pkMod ? pkMod.getTomorrowIso() : new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      const tmr = pkMod ? pkMod.getTomorrowIso() : toLocalIsoDate(new Date(Date.now() + 86400000));
       const wins = pkMod ? pkMod.resolveAvailableWindows(state.scheduleWindows) : (state.scheduleWindows || ['08:00 - 10:00', '16:00 - 18:30']);
       box.classList.remove('hidden');
       box.innerHTML = `
@@ -1208,6 +1224,11 @@
     root.style.setProperty('--radius-md', ds.cardRadius || tokens.vertical.radii.md || '12px');
     root.style.setProperty('--radius-lg', tokens.vertical.radii.lg || '18px');
 
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) {
+      themeMeta.setAttribute('content', surf.primaryOverride || tokens.semantics.primary);
+    }
+
     const wcagBadge = document.getElementById('wcag-badge');
     if (wcagBadge) {
       wcagBadge.textContent = `${ds.label} • WCAG AA ${tokens.semantics.contrastWithSurface}:1`;
@@ -1224,10 +1245,15 @@
     document.getElementById('footer-store-info').textContent = `${name} • ${cityLabel}`;
 
     const hoursStr = `${state.openHour || '08:00'} - ${state.closeHour || '22:00'}`;
-    const openEval = evaluateStoreOpenStatus(hoursStr);
+    const demoMode = isDemoModeActive();
+    const openH = Number(String(state.openHour || '08:00').split(':')[0]) || 8;
+    const demoHour = String(Math.min(23, openH + 1)).padStart(2, '0');
+    const openEval = demoMode
+      ? evaluateStoreOpenStatus(hoursStr, new Date(`2026-11-16T${demoHour}:30:00`))
+      : evaluateStoreOpenStatus(hoursStr);
     const statusPill = document.getElementById('store-status-pill');
     statusPill.classList.toggle('closed', !openEval.isOpen);
-    document.getElementById('store-status-text').textContent = openEval.statusLabel;
+    document.getElementById('store-status-text').textContent = demoMode && openEval.isOpen ? 'Aberto • Demo' : openEval.statusLabel;
 
     const modules = state.modules || {};
     const freeTxt = Number(state.freeDeliveryThreshold || 0) > 0 ? ` (Grátis > ${formatBrl(state.freeDeliveryThreshold)})` : '';
@@ -1908,7 +1934,7 @@
   }
 
   function renderStudioPanel() {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = toLocalIsoDate(new Date());
     const summary = store.getDailySummary(today);
     document.getElementById('stat-today-count').textContent = String(summary.count);
     document.getElementById('stat-today-total').textContent = formatBrl(summary.totalRevenue);
@@ -1916,6 +1942,11 @@
 
     const city = state.geo?.city || 'Local';
     document.getElementById('studio-weather-badge').textContent = weatherInfo ? `${weatherInfo.label}` : `Clima ${city} (Open-Meteo)`;
+    const stampEl = document.getElementById('studio-build-stamp');
+    const buildMeta = document.querySelector('meta[name="build"]');
+    if (stampEl) {
+      stampEl.textContent = `Build ${buildMeta ? buildMeta.getAttribute('content') : 'v15-p0'} • ${(buildMeta && buildMeta.getAttribute('data-repo')) || 'vitrine-zap-local'}`;
+    }
     document.getElementById('studio-pitch-callout').textContent = state.pitchTip || '';
 
     document.getElementById('cfg-name').value = state.identity?.name || state.storeName || '';

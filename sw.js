@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vitrine-zap-v14';
+const CACHE_NAME = 'vitrine-zap-v15-p0';
 const ASSETS = [
   './',
   './index.html',
@@ -15,6 +15,25 @@ const ASSETS = [
   './src/store.js',
   './src/presets.js',
   './src/mechanics/registry.js',
+  './src/mechanics/autoship-reminder.js',
+  './src/mechanics/deposit-pix.js',
+  './src/mechanics/free-shipping-progress.js',
+  './src/mechanics/inspection-checklist.js',
+  './src/mechanics/item-sheet-addons.js',
+  './src/mechanics/occasion-card-message.js',
+  './src/mechanics/pickup-window.js',
+  './src/mechanics/reorder-1-tap.js',
+  './src/mechanics/slot-picker.js',
+  './src/mechanics/variant-picker.js',
+  './verticals/barbearia.json',
+  './verticals/floricultura.json',
+  './verticals/lanchonete.json',
+  './verticals/moda.json',
+  './verticals/oficina.json',
+  './verticals/padaria.json',
+  './verticals/petshop.json',
+  './assets/icons/icon-192.png',
+  './assets/icons/icon-512.png',
   './manifest.webmanifest',
 ];
 

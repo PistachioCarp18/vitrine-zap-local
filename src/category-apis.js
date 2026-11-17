@@ -328,7 +328,7 @@
       }
     } catch { /* fallback */ }
 
-    const todayIso = nowDate.toISOString().slice(0, 10);
+    const todayIso = `${nowDate.getFullYear()}-${String(nowDate.getMonth() + 1).padStart(2, '0')}-${String(nowDate.getDate()).padStart(2, '0')}`;
     const upcoming = list.filter(h => String(h.date || '') >= todayIso).sort((a, b) => a.date.localeCompare(b.date));
     return {
       nextHoliday: upcoming[0] || list[list.length - 1],

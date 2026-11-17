@@ -1,0 +1,245 @@
+{
+  "measuredAt": "2026-11-17T00:46:44.022Z",
+  "viewport": "390x844",
+  "metrics": [
+    {
+      "vertical": "lanchonete",
+      "storeName": "Empório Lanches",
+      "statusText": "Aberto • Demo",
+      "statusClosed": false,
+      "themeColor": "#D92D20",
+      "buildMeta": "v15-p0",
+      "firstItemTop": 308,
+      "controlsAboveFirstItem": 12,
+      "controlsInFirstScreen": 17,
+      "cardHeightMin": 121,
+      "cardHeightMax": 169,
+      "headingFontFirst": "\"Segoe UI\"",
+      "priceFontFirst": "ui-monospace",
+      "vehPlaceholder": null,
+      "truncations": [],
+      "skeletonSequence": "header.topbar > .store-meta-strip > #vertical-context-slot > .sticky-filter-bar > #catalog-grid > .mobile-cart-bar"
+    },
+    {
+      "vertical": "padaria",
+      "storeName": "União Padaria & Atelier",
+      "statusText": "Aberto • Demo",
+      "statusClosed": false,
+      "themeColor": "#9A4204",
+      "buildMeta": "v15-p0",
+      "firstItemTop": 309,
+      "controlsAboveFirstItem": 11,
+      "controlsInFirstScreen": 16,
+      "cardHeightMin": 257,
+      "cardHeightMax": 257,
+      "headingFontFirst": "Georgia",
+      "priceFontFirst": "ui-monospace",
+      "vehPlaceholder": null,
+      "truncations": [],
+      "skeletonSequence": "header.topbar > .store-meta-strip > #vertical-context-slot > .sticky-filter-bar > #catalog-grid > .mobile-cart-bar"
+    },
+    {
+      "vertical": "petshop",
+      "storeName": "Amigo Fiel Pet",
+      "statusText": "Aberto • Demo",
+      "statusClosed": false,
+      "themeColor": "#0F766E",
+      "buildMeta": "v15-p0",
+      "firstItemTop": 269,
+      "controlsAboveFirstItem": 13,
+      "controlsInFirstScreen": 22,
+      "cardHeightMin": 179,
+      "cardHeightMax": 233,
+      "headingFontFirst": "\"Trebuchet MS\"",
+      "priceFontFirst": "ui-monospace",
+      "vehPlaceholder": null,
+      "truncations": [],
+      "skeletonSequence": "header.topbar > .store-meta-strip > #vertical-context-slot > .sticky-filter-bar > #catalog-grid > .mobile-cart-bar"
+    },
+    {
+      "vertical": "oficina",
+      "storeName": "Fort Center Auto",
+      "statusText": "Aberto • Demo",
+      "statusClosed": false,
+      "themeColor": "#0369A1",
+      "buildMeta": "v15-p0",
+      "firstItemTop": 273,
+      "controlsAboveFirstItem": 11,
+      "controlsInFirstScreen": 14,
+      "cardHeightMin": 252,
+      "cardHeightMax": 271,
+      "headingFontFirst": "ui-monospace",
+      "priceFontFirst": "ui-monospace",
+      "vehPlaceholder": "Modelo (Ex: Onix 1.0)",
+      "truncations": [],
+      "skeletonSequence": "header.topbar > #vertical-context-slot > .sticky-filter-bar > #catalog-grid > .mobile-cart-bar"
+    },
+    {
+      "vertical": "barbearia",
+      "storeName": "Barbearia Navalha Clássica",
+      "statusText": "Aberto • Demo",
+      "statusClosed": false,
+      "themeColor": "#D97706",
+      "buildMeta": "v15-p0",
+      "firstItemTop": 334,
+      "controlsAboveFirstItem": 13,
+      "controlsInFirstScreen": 23,
+      "cardHeightMin": 199,
+      "cardHeightMax": 240,
+      "headingFontFirst": "Georgia",
+      "priceFontFirst": "ui-monospace",
+      "vehPlaceholder": null,
+      "truncations": [],
+      "skeletonSequence": "header.topbar > .store-meta-strip > #vertical-context-slot > .sticky-filter-bar > #catalog-grid > .mobile-cart-bar"
+    },
+    {
+      "vertical": "moda",
+      "storeName": "Studio Urbano Vestuário",
+      "statusText": "Aberto • Demo",
+      "statusClosed": false,
+      "themeColor": "#09090B",
+      "buildMeta": "v15-p0",
+      "firstItemTop": 242,
+      "controlsAboveFirstItem": 8,
+      "controlsInFirstScreen": 26,
+      "cardHeightMin": 412,
+      "cardHeightMax": 504,
+      "headingFontFirst": "Georgia",
+      "priceFontFirst": "ui-monospace",
+      "vehPlaceholder": null,
+      "truncations": [],
+      "skeletonSequence": "header.topbar > #vertical-context-slot > .sticky-filter-bar > #catalog-grid > .mobile-cart-bar"
+    },
+    {
+      "vertical": "floricultura",
+      "storeName": "Flora & Jardim Botânico",
+      "statusText": "Aberto • Demo",
+      "statusClosed": false,
+      "themeColor": "#166534",
+      "buildMeta": "v15-p0",
+      "firstItemTop": 300,
+      "controlsAboveFirstItem": 12,
+      "controlsInFirstScreen": 17,
+      "cardHeightMin": 257,
+      "cardHeightMax": 257,
+      "headingFontFirst": "\"Palatino Linotype\"",
+      "priceFontFirst": "ui-monospace",
+      "vehPlaceholder": null,
+      "truncations": [],
+      "skeletonSequence": "header.topbar > .store-meta-strip > #vertical-context-slot > .sticky-filter-bar > #catalog-grid > .mobile-cart-bar"
+    }
+  ],
+  "silhouettePairs": [
+    {
+      "a": "padaria",
+      "b": "floricultura",
+      "silhouetteCorr": 0.278
+    },
+    {
+      "a": "lanchonete",
+      "b": "padaria",
+      "silhouetteCorr": 0.244
+    },
+    {
+      "a": "oficina",
+      "b": "barbearia",
+      "silhouetteCorr": 0.193
+    },
+    {
+      "a": "lanchonete",
+      "b": "moda",
+      "silhouetteCorr": 0.174
+    },
+    {
+      "a": "petshop",
+      "b": "moda",
+      "silhouetteCorr": 0.162
+    },
+    {
+      "a": "lanchonete",
+      "b": "petshop",
+      "silhouetteCorr": 0.16
+    },
+    {
+      "a": "lanchonete",
+      "b": "barbearia",
+      "silhouetteCorr": 0.158
+    },
+    {
+      "a": "petshop",
+      "b": "barbearia",
+      "silhouetteCorr": 0.143
+    },
+    {
+      "a": "moda",
+      "b": "floricultura",
+      "silhouetteCorr": 0.141
+    },
+    {
+      "a": "padaria",
+      "b": "moda",
+      "silhouetteCorr": 0.135
+    },
+    {
+      "a": "petshop",
+      "b": "oficina",
+      "silhouetteCorr": 0.125
+    },
+    {
+      "a": "barbearia",
+      "b": "moda",
+      "silhouetteCorr": 0.125
+    },
+    {
+      "a": "lanchonete",
+      "b": "floricultura",
+      "silhouetteCorr": 0.122
+    },
+    {
+      "a": "padaria",
+      "b": "barbearia",
+      "silhouetteCorr": 0.119
+    },
+    {
+      "a": "petshop",
+      "b": "floricultura",
+      "silhouetteCorr": 0.116
+    },
+    {
+      "a": "padaria",
+      "b": "petshop",
+      "silhouetteCorr": 0.092
+    },
+    {
+      "a": "barbearia",
+      "b": "floricultura",
+      "silhouetteCorr": 0.085
+    },
+    {
+      "a": "oficina",
+      "b": "moda",
+      "silhouetteCorr": 0.08
+    },
+    {
+      "a": "lanchonete",
+      "b": "oficina",
+      "silhouetteCorr": 0.073
+    },
+    {
+      "a": "padaria",
+      "b": "oficina",
+      "silhouetteCorr": 0.071
+    },
+    {
+      "a": "oficina",
+      "b": "floricultura",
+      "silhouetteCorr": 0.02
+    }
+  ],
+  "avgSilhouetteCorr": 0.134,
+  "maxSilhouettePair": {
+    "a": "padaria",
+    "b": "floricultura",
+    "silhouetteCorr": 0.278
+  }
+}

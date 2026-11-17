@@ -80,17 +80,17 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn, .pack-chip, .slot-chip, 
   background: var(--surface-card);
   border-bottom: 1px solid var(--hairline);
 }
-.topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 50px; }
+.topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 54px; height: auto; padding: 4px 0; }
 .brand-cluster { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
 .brand-mark {
   width: 34px; height: 34px; border-radius: var(--radius-sm);
   background: var(--brand-primary); color: var(--brand-on-primary);
   display: grid; place-items: center; flex-shrink: 0; font-weight: 800; font-size: 0.82rem;
 }
-.brand-text { min-width: 0; display: flex; align-items: center; gap: 6px; flex: 1; }
+.brand-text { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; flex: 1; }
 .brand-name {
-  margin: 0; font-size: 0.96rem; font-weight: 700;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin: 0; font-size: clamp(0.84rem, 3.8vw, 0.96rem); font-weight: 700;
+  line-height: 1.15; white-space: normal;
 }
 .status-pill {
   display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;
@@ -110,7 +110,7 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn, .pack-chip, .slot-chip, 
 /* 2. Store Meta Strip Única */
 .store-meta-strip { background: var(--surface-card); border-bottom: 1px solid var(--hairline); }
 .store-meta-inner { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 12px; min-height: 30px; }
-.store-meta-text { font-size: 0.76rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.store-meta-text { font-size: 0.74rem; font-weight: 600; color: var(--text-muted); line-height: 1.25; }
 .coupon-chip {
   flex-shrink: 0; min-height: 44px; min-width: 44px;
   border: 1px dashed var(--brand-ink-accent); background: var(--brand-surface-tint);

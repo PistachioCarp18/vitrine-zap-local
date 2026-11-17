@@ -4,12 +4,20 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
+  function toLocalIsoDate(d) {
+    const dt = d instanceof Date ? d : new Date(d);
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth() + 1).padStart(2, '0');
+    const day = String(dt.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
   function getUpcomingDays(count = 4, baseDate = new Date()) {
     const labels = ['Hoje', 'Amanhã'];
     const days = [];
     for (let i = 0; i < count; i += 1) {
-      const d = new Date(baseDate.getTime() + i * 86400000);
-      const iso = d.toISOString().slice(0, 10);
+      const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() + i);
+      const iso = toLocalIsoDate(d);
       const dayLabel = labels[i] || `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
       days.push({ iso, label: dayLabel });
     }
@@ -17,7 +25,7 @@
   }
 
   function buildBookingIcsEvent({ storeName, serviceName, professional, dateIso, timeSlot }) {
-    const cleanDate = String(dateIso || new Date().toISOString().slice(0, 10)).replace(/-/g, '');
+    const cleanDate = String(dateIso || toLocalIsoDate(new Date())).replace(/-/g, '');
     const [hh, mm] = String(timeSlot || '10:00').split(':');
     const dtStart = `${cleanDate}T${(hh || '10').padStart(2, '0')}${(mm || '00').padStart(2, '0')}00`;
     return [
