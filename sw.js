@@ -1,17 +1,10 @@
-const CACHE_NAME = 'vitrine-zap-v15-p2';
+const CACHE_NAME = 'vitrine-zap-v15';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './styles/home-oficina.css',
-  './styles/home-barbearia.css',
   './app.js',
   './src/home/loader.js',
-  './src/home/oficina.js',
-  './src/home/barbearia.js',
-  './assets/fonts/barlow-condensed-700.woff2',
-  './assets/fonts/playfair-700.woff2',
-  './assets/fonts/jakarta-400.woff2',
   './src/integrations.js',
   './src/geo-apis.js',
   './src/category-apis.js',
@@ -23,6 +16,36 @@ const ASSETS = [
   './src/store.js',
   './src/presets.js',
   './src/mechanics/registry.js',
+  './assets/icons/icon-192.png',
+  './manifest.webmanifest',
+];
+
+const LAZY_OFFLINE_ASSETS = [
+  './styles/home-oficina.css',
+  './styles/home-barbearia.css',
+  './styles/home-padaria.css',
+  './styles/home-moda.css',
+  './styles/home-lanchonete.css',
+  './styles/home-petshop.css',
+  './styles/home-floricultura.css',
+  './src/home/oficina.js',
+  './src/home/barbearia.js',
+  './src/home/padaria.js',
+  './src/home/moda.js',
+  './src/home/lanchonete.js',
+  './src/home/petshop.js',
+  './src/home/floricultura.js',
+  './assets/fonts/barlow-condensed-700.woff2',
+  './assets/fonts/playfair-700.woff2',
+  './assets/fonts/fraunces-700.woff2',
+  './assets/fonts/archivo-700.woff2',
+  './assets/fonts/bodoni-italic-600.woff2',
+  './assets/fonts/bricolage-700.woff2',
+  './assets/fonts/nunito-700.woff2',
+  './assets/fonts/cormorant-700.woff2',
+  './assets/fonts/dm-sans-400.woff2',
+  './assets/fonts/jakarta-400.woff2',
+  './assets/fonts/jakarta-700.woff2',
   './src/mechanics/autoship-reminder.js',
   './src/mechanics/deposit-pix.js',
   './src/mechanics/free-shipping-progress.js',
@@ -40,9 +63,7 @@ const ASSETS = [
   './verticals/oficina.json',
   './verticals/padaria.json',
   './verticals/petshop.json',
-  './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
-  './manifest.webmanifest',
 ];
 
 self.addEventListener('install', (e) => {
@@ -56,6 +77,12 @@ self.addEventListener('activate', (e) => {
       Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
+});
+
+self.addEventListener('message', (e) => {
+  if (e.data === 'WARM_OFFLINE') {
+    caches.open(CACHE_NAME).then((c) => c.addAll(LAZY_OFFLINE_ASSETS).catch(() => {}));
+  }
 });
 
 self.addEventListener('fetch', (e) => {

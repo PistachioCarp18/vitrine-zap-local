@@ -7,7 +7,7 @@
 }(typeof self !== 'undefined' ? self : this, function (root) {
   'use strict';
 
-  const REGISTERED_HOMES = ['oficina', 'barbearia'];
+  const REGISTERED_HOMES = ['oficina', 'barbearia', 'padaria', 'moda', 'lanchonete', 'petshop', 'floricultura'];
   const scriptPromises = {};
 
   function hasCustomHome(vertical) {

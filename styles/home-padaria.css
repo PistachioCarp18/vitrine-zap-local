@@ -1,0 +1,175 @@
+@font-face {
+  font-family: 'Fraunces';
+  src: url('../assets/fonts/fraunces-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('../assets/fonts/jakarta-400.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* PADARIA — Opcao A: Balcao Lousa (Fornada ao Vivo) + Encomenda Date-First */
+[data-ds="artisanal-atelier"] .topbar {
+  background: #F7EFE2;
+  border-bottom: 2px solid #C8B194;
+}
+[data-ds="artisanal-atelier"] .brand-mark {
+  background: #7C2D12;
+  color: #FFFDF9;
+  border-radius: 9999px;
+}
+[data-ds="artisanal-atelier"] .store-meta-strip,
+[data-ds="artisanal-atelier"] .sticky-filter-bar {
+  display: none !important;
+}
+[data-ds="artisanal-atelier"] .vertical-context-slot {
+  background: #EFE4D2;
+  border-bottom: 1px solid #D4BFA4;
+  padding: 10px 0;
+}
+
+.pad-oven-stage {
+  background: #2B2118;
+  color: #FDF8F0;
+  border: 1px solid #594330;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 14px rgba(45, 30, 20, 0.14);
+}
+.pad-oven-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.pad-oven-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #FCD34D;
+}
+.pad-steam-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F59E0B;
+  animation: padSteam 2.2s ease-in-out infinite;
+}
+@keyframes padSteam {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(-3px); opacity: 0.45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pad-steam-dot { animation: none; }
+}
+.pad-oven-title {
+  margin: 2px 0;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #FFFDF9;
+}
+.pad-oven-sub {
+  font-size: 0.74rem;
+  color: #E5D4BE;
+}
+.pad-oven-progress {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 99px;
+  margin: 8px 0 10px;
+  overflow: hidden;
+}
+.pad-oven-fill {
+  height: 100%;
+  background: #F59E0B;
+  width: 74%;
+}
+.pad-mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: #1C150F;
+  padding: 4px;
+  border-radius: 9999px;
+}
+.pad-mode-btn {
+  min-height: 44px;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: #E5D4BE;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.pad-mode-btn.active {
+  background: #FFFDF9;
+  color: #2D1E14;
+}
+
+[data-layout="bakery-editorial"] .catalog-grid.pad-lousa-list,
+.pad-lousa-list {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+  background: #FFFDF9;
+  border: 1px solid #DECBB4;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.pad-lousa-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px;
+  border-bottom: 1px dashed #DECBB4;
+  cursor: pointer;
+}
+.pad-lousa-row:last-child { border-bottom: 0; }
+.pad-lousa-info { min-width: 0; flex: 1; }
+.pad-lousa-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #9A3412;
+  background: #FFEDD5;
+  padding: 1px 7px;
+  border-radius: 99px;
+  margin-bottom: 3px;
+}
+.pad-lousa-row h3 {
+  margin: 0 0 2px;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #2D1E14;
+}
+.pad-lousa-yield {
+  font-size: 0.76rem;
+  color: #5E4636;
+}
+.pad-lousa-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.pad-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #2D1E14;
+}

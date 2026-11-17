@@ -1,0 +1,167 @@
+@font-face {
+  font-family: 'Nunito';
+  src: url('../assets/fonts/nunito-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('../assets/fonts/jakarta-400.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* PET SHOP — Opcao A: Carteirinha do Pet Primeiro + Contador "dura ~N dias" */
+[data-ds="playful-club"] .topbar {
+  background: #0F766E;
+  border-bottom: 0;
+}
+[data-ds="playful-club"] .topbar .brand-name { color: #FFFFFF; }
+[data-ds="playful-club"] .topbar .brand-mark { background: #FFFFFF; color: #0F766E; border-radius: 9999px; }
+[data-ds="playful-club"] .store-meta-strip,
+[data-ds="playful-club"] .sticky-filter-bar {
+  display: none !important;
+}
+[data-ds="playful-club"] .vertical-context-slot {
+  background: #D1FAE5;
+  border-bottom: 2px solid #99F6E4;
+  padding: 10px 0;
+}
+
+.pet-passport-card {
+  background: #FFFFFF;
+  border: 2px solid #14B8A6;
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 6px 16px rgba(15, 118, 110, 0.1);
+}
+.pet-passport-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.pet-passport-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0F766E;
+}
+.pet-passport-card h2 {
+  margin: 2px 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.06rem;
+  color: #0F2E28;
+}
+.pet-supply-forecast {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #115E59;
+  background: #ECFDF6;
+  padding: 4px 10px;
+  border-radius: 99px;
+  display: inline-block;
+  margin-top: 2px;
+}
+.pet-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+.pet-porte-group {
+  display: flex;
+  gap: 5px;
+}
+.pet-porte-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 2px solid #99F6E4;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #0F2E28;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.pet-porte-btn.active {
+  background: #0F766E;
+  color: #FFFFFF;
+  border-color: #0F766E;
+}
+.pet-club-switch {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 2px solid #0F766E;
+  border-radius: 9999px;
+  background: #F0FDF9;
+  color: #0F766E;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.pet-club-switch.active {
+  background: #0F766E;
+  color: #FFFFFF;
+}
+
+.pet-club-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pet-club-card {
+  background: #FFFFFF;
+  border: 2px solid #CCFBF1;
+  border-radius: 20px;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.06);
+}
+.pet-club-main { min-width: 0; flex: 1; }
+.pet-duration-pill {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #0F766E;
+  background: #ECFDF6;
+  border: 1px solid #99F6E4;
+  padding: 2px 9px;
+  border-radius: 99px;
+  margin-bottom: 4px;
+}
+.pet-club-card h3 {
+  margin: 0 0 2px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  color: #0F2E28;
+}
+.pet-club-sub {
+  font-size: 0.76rem;
+  color: #28594E;
+}
+.pet-club-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.pet-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #0F2E28;
+}

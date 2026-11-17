@@ -337,6 +337,67 @@
     };
   }
 
+  function calibrateMaintenanceEstimate(estimate, closedOrders = [], minSamples = 8) {
+    const orders = (Array.isArray(closedOrders) ? closedOrders : []).filter((o) => Number(o?.total || 0) > 0);
+    if (orders.length < minSamples) {
+      return {
+        ...estimate,
+        calibrated: false,
+        sampleSize: orders.length,
+        calibrationNote: `Estimativa ilustrativa (base tabela FIPE + KM • calibra após ${minSamples} OS fechadas)`,
+      };
+    }
+    const avgReal = orders.reduce((s, o) => s + Number(o.total), 0) / orders.length;
+    const ratio = Math.max(0.7, Math.min(1.45, avgReal / Math.max(100, estimate.totalAvg || 300)));
+    return {
+      ...estimate,
+      totalMin: Math.round(estimate.totalMin * ratio),
+      totalAvg: Math.round(estimate.totalAvg * ratio),
+      totalMax: Math.round(estimate.totalMax * ratio),
+      calibrated: true,
+      sampleSize: orders.length,
+      calibrationNote: `Calibrado com ${orders.length} OS locais (${(ratio * 100 - 100).toFixed(0)}%)`,
+    };
+  }
+
+  async function fetchProductNutritionOrAllergens(ean = '7891000100103', fetchImpl = (typeof fetch === 'function' ? fetch : null)) {
+    const cleanEan = String(ean || '').replace(/\D/g, '');
+    if (cleanEan.length >= 8) {
+      try {
+        const data = await fetchJsonSafe(fetchImpl, `https://world.openfoodfacts.org/api/v2/product/${cleanEan}.json?fields=product_name,allergens`, 2200);
+        if (data?.status === 1 && data.product) {
+          return {
+            name: data.product.product_name || 'Produto Embalado',
+            allergens: data.product.allergens || 'Consultar rótulo',
+            source: 'openfoodfacts-api',
+          };
+        }
+      } catch { /* fallback offline */ }
+    }
+    return { name: 'Item Artesanal Local', allergens: 'Contém trigo/lácteos (consulta balcão)', source: 'offline-padaria' };
+  }
+
+  async function fetchBotanicalTaxonomy(genus = 'Rosa', fetchImpl = (typeof fetch === 'function' ? fetch : null)) {
+    const q = encodeURIComponent(String(genus || 'Rosa').trim());
+    try {
+      const data = await fetchJsonSafe(fetchImpl, `https://api.gbif.org/v1/species/match?name=${q}`, 2200);
+      if (data && data.scientificName) {
+        return {
+          scientificName: data.scientificName,
+          family: data.family || 'Rosaceae',
+          careTip: 'Cortar 1cm da haste em diagonal e trocar água a cada 2 dias',
+          source: 'gbif-api',
+        };
+      }
+    } catch { /* fallback offline */ }
+    return {
+      scientificName: `${genus} spp.`,
+      family: 'Botânica Ornamental',
+      careTip: 'Manter em ambiente arejado longe de sol direto e trocar água a cada 2 dias',
+      source: 'offline-botanica',
+    };
+  }
+
   return {
     OFFLINE_FIPE_BRANDS,
     OFFLINE_FIPE_MODELS,
@@ -347,8 +408,11 @@
     fetchFipeVehicleDetail,
     classifyVehicleTier,
     estimateMaintenanceByVehicleAndMileage,
+    calibrateMaintenanceEstimate,
     inferPetSizeFromBreed,
     fetchDogBreedsCatalog,
     fetchUpcomingHolidaysBR,
+    fetchProductNutritionOrAllergens,
+    fetchBotanicalTaxonomy,
   };
 }));

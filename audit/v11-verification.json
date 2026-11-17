@@ -1,877 +1,319 @@
 {
-  "auditedAt": "2026-11-17T00:02:05.888Z",
-  "chromiumViewportsHome": [
-    {
-      "vertical": "lanchonete",
-      "viewport": "320x568",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.3,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "\"Segoe UI\", system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "360x800",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.3,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "\"Segoe UI\", system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "390x844",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.3,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "\"Segoe UI\", system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "412x915",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.3,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "\"Segoe UI\", system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "800x360",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.3,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "\"Segoe UI\", system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    }
-  ],
-  "webkitViewportsHome": [
-    {
-      "vertical": "lanchonete",
-      "viewport": "320x568",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.5,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "Segoe UI, system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "360x800",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.5,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "Segoe UI, system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "390x844",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.5,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "Segoe UI, system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "412x915",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.5,
-      "loadedMechScripts": [
-        "registry.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js",
-        "item-sheet-addons.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "Segoe UI, system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "lanchonete",
-      "viewport": "800x360",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.5,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "Segoe UI, system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    }
-  ],
+  "auditedAt": "2026-11-17T11:29:14.514Z",
   "chromiumVerticals": [
     {
-      "vertical": "lanchonete",
+      "engine": "chromium",
       "viewport": "390x844",
-      "firstProductTop": 304,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.3,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "\"Segoe UI\", system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {},
-      "errors": []
-    },
-    {
-      "vertical": "padaria",
-      "viewport": "390x844",
-      "firstProductTop": 305,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.5,
-      "loadedMechScripts": [
-        "registry.js",
-        "pickup-window.js",
-        "deposit-pix.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "artisanal-atelier",
-        "theme": "light",
-        "bodyBg": "rgb(251, 246, 238)",
-        "topbarBg": "rgb(247, 239, 226)",
-        "h1Font": "Georgia, \"Times New Roman\", Cambria, serif",
-        "cardBg": "rgb(255, 253, 249)",
-        "cardRadius": "10px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "depositSwitchOk": true
-      },
-      "errors": []
-    },
-    {
-      "vertical": "petshop",
-      "viewport": "390x844",
-      "firstProductTop": 265,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 91.9,
-      "loadedMechScripts": [
-        "registry.js",
-        "autoship-reminder.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "playful-club",
-        "theme": "light",
-        "bodyBg": "rgb(236, 253, 246)",
-        "topbarBg": "rgb(15, 118, 110)",
-        "h1Font": "\"Trebuchet MS\", \"Segoe UI\", system-ui, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "22px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "durationBadgeVisible": true
-      },
-      "errors": []
-    },
-    {
       "vertical": "oficina",
-      "viewport": "390x844",
-      "firstProductTop": 269,
-      "docOverflow": false,
+      "firstItemTop": 308,
+      "controlsAboveFirstItem": 2,
+      "controlsInFirstScreen": 8,
       "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 91.3,
-      "loadedMechScripts": [
-        "registry.js",
-        "inspection-checklist.js"
-      ],
-      "dsSignature": {
-        "dsId": "precision-telemetry",
-        "theme": "dark",
-        "bodyBg": "rgb(8, 9, 10)",
-        "topbarBg": "rgb(15, 20, 28)",
-        "h1Font": "ui-monospace, \"Cascadia Mono\", Consolas, monospace",
-        "cardBg": "rgb(17, 22, 31)",
-        "cardRadius": "4px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid ofi-dvi-list",
+      "headingFont": "\"Barlow Condensed\", sans-serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
       "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "fipeEstimatorOk": true,
-        "osSwitchVisible": true,
-        "osToggleChangedTotal": true
-      },
+      "axeCritSer": 0,
+      "initialTransferKB": 127.6,
       "errors": []
     },
     {
+      "engine": "chromium",
+      "viewport": "390x844",
       "vertical": "barbearia",
-      "viewport": "390x844",
-      "firstProductTop": 300,
-      "docOverflow": false,
+      "firstItemTop": 270,
+      "controlsAboveFirstItem": 6,
+      "controlsInFirstScreen": 12,
       "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 91.4,
-      "loadedMechScripts": [
-        "registry.js",
-        "slot-picker.js"
-      ],
-      "dsSignature": {
-        "dsId": "heritage-grooming",
-        "theme": "dark",
-        "bodyBg": "rgb(20, 18, 16)",
-        "topbarBg": "rgb(25, 22, 19)",
-        "h1Font": "Georgia, \"Times New Roman\", serif",
-        "cardBg": "rgb(29, 25, 22)",
-        "cardRadius": "2px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 3,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid barb-ledger",
+      "headingFont": "\"Playfair Display\", Georgia, serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
       "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "expressOpenedStep2": true,
-        "bookingIcsBtnVisible": true
-      },
+      "axeCritSer": 0,
+      "initialTransferKB": 128,
       "errors": []
     },
     {
+      "engine": "chromium",
+      "viewport": "390x844",
+      "vertical": "padaria",
+      "firstItemTop": 266,
+      "controlsAboveFirstItem": 2,
+      "controlsInFirstScreen": 8,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid pad-lousa-list",
+      "headingFont": "Fraunces, Georgia, serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
+      "firstOrderFlowOk": true,
+      "axeCritSer": 0,
+      "initialTransferKB": 123.4,
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "viewport": "390x844",
       "vertical": "moda",
-      "viewport": "390x844",
-      "firstProductTop": 238,
-      "docOverflow": false,
+      "firstItemTop": 166,
+      "controlsAboveFirstItem": 6,
+      "controlsInFirstScreen": 12,
       "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 91.2,
-      "loadedMechScripts": [
-        "registry.js",
-        "variant-picker.js"
-      ],
-      "dsSignature": {
-        "dsId": "minimal-runway",
-        "theme": "light",
-        "bodyBg": "rgb(255, 255, 255)",
-        "topbarBg": "rgb(255, 255, 255)",
-        "h1Font": "Georgia, \"Times New Roman\", serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "0px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid moda-lookbook-grid",
+      "headingFont": "Archivo, sans-serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
       "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "hasRadiogroup": true,
-        "sizeGuideTableVisible": true
-      },
+      "axeCritSer": 0,
+      "initialTransferKB": 135.1,
       "errors": []
     },
     {
-      "vertical": "floricultura",
+      "engine": "chromium",
       "viewport": "390x844",
-      "firstProductTop": 295,
-      "docOverflow": false,
+      "vertical": "lanchonete",
+      "firstItemTop": 254,
+      "controlsAboveFirstItem": 4,
+      "controlsInFirstScreen": 8,
       "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.8,
-      "loadedMechScripts": [
-        "registry.js",
-        "occasion-card-message.js",
-        "pickup-window.js",
-        "deposit-pix.js"
-      ],
-      "dsSignature": {
-        "dsId": "botanical-conservatory",
-        "theme": "light",
-        "bodyBg": "rgb(242, 247, 243)",
-        "topbarBg": "rgb(237, 245, 239)",
-        "h1Font": "\"Palatino Linotype\", Georgia, \"Book Antiqua\", serif",
-        "cardBg": "rgb(252, 253, 251)",
-        "cardRadius": "18px 4px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid lanch-stream-grid",
+      "headingFont": "\"Bricolage Grotesque\", sans-serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
       "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "depositSwitchOk": true,
-        "surpriseSwitchVisible": true,
-        "cardCounterUpdated": true
-      },
+      "axeCritSer": 0,
+      "initialTransferKB": 126.7,
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "viewport": "390x844",
+      "vertical": "petshop",
+      "firstItemTop": 230,
+      "controlsAboveFirstItem": 5,
+      "controlsInFirstScreen": 10,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid pet-club-grid",
+      "headingFont": "Nunito, sans-serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
+      "firstOrderFlowOk": true,
+      "axeCritSer": 0,
+      "initialTransferKB": 121.1,
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "viewport": "390x844",
+      "vertical": "floricultura",
+      "firstItemTop": 220,
+      "controlsAboveFirstItem": 4,
+      "controlsInFirstScreen": 9,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid flo-gallery-grid",
+      "headingFont": "\"Cormorant Garamond\", Georgia, serif",
+      "priceFont": "\"DM Sans\", sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
+      "firstOrderFlowOk": true,
+      "axeCritSer": 0,
+      "initialTransferKB": 129.4,
       "errors": []
     }
   ],
   "webkitVerticals": [
     {
+      "engine": "webkit",
+      "viewport": "390x844",
+      "vertical": "oficina",
+      "firstItemTop": 308,
+      "controlsAboveFirstItem": 2,
+      "controlsInFirstScreen": 8,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid ofi-dvi-list",
+      "headingFont": "Barlow Condensed, sans-serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
+      "firstOrderFlowOk": true,
+      "axeCritSer": 0,
+      "initialTransferKB": 128.8,
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "viewport": "390x844",
+      "vertical": "barbearia",
+      "firstItemTop": 270,
+      "controlsAboveFirstItem": 6,
+      "controlsInFirstScreen": 12,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid barb-ledger",
+      "headingFont": "Playfair Display, Georgia, serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
+      "firstOrderFlowOk": true,
+      "axeCritSer": 0,
+      "initialTransferKB": 129.2,
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "viewport": "390x844",
+      "vertical": "padaria",
+      "firstItemTop": 266,
+      "controlsAboveFirstItem": 2,
+      "controlsInFirstScreen": 8,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid pad-lousa-list",
+      "headingFont": "Fraunces, Georgia, serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
+      "firstOrderFlowOk": true,
+      "axeCritSer": 0,
+      "initialTransferKB": 124.6,
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "viewport": "390x844",
+      "vertical": "moda",
+      "firstItemTop": 166,
+      "controlsAboveFirstItem": 6,
+      "controlsInFirstScreen": 12,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid moda-lookbook-grid",
+      "headingFont": "Archivo, sans-serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
+      "firstOrderFlowOk": true,
+      "axeCritSer": 0,
+      "initialTransferKB": 136.3,
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "viewport": "390x844",
       "vertical": "lanchonete",
-      "viewport": "390x844",
-      "firstProductTop": 304,
-      "docOverflow": false,
+      "firstItemTop": 254,
+      "controlsAboveFirstItem": 4,
+      "controlsInFirstScreen": 8,
       "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.5,
-      "loadedMechScripts": [
-        "registry.js",
-        "item-sheet-addons.js",
-        "free-shipping-progress.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "express-craving",
-        "theme": "light",
-        "bodyBg": "rgb(255, 248, 246)",
-        "topbarBg": "rgb(180, 35, 24)",
-        "h1Font": "Segoe UI, system-ui, -apple-system, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "14px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid lanch-stream-grid",
+      "headingFont": "Bricolage Grotesque, sans-serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
       "firstOrderFlowOk": true,
-      "mechanicCheck": {},
+      "axeCritSer": 0,
+      "initialTransferKB": 127.9,
       "errors": []
     },
     {
-      "vertical": "padaria",
+      "engine": "webkit",
       "viewport": "390x844",
-      "firstProductTop": 305,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.7,
-      "loadedMechScripts": [
-        "registry.js",
-        "pickup-window.js",
-        "deposit-pix.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "artisanal-atelier",
-        "theme": "light",
-        "bodyBg": "rgb(251, 246, 238)",
-        "topbarBg": "rgb(247, 239, 226)",
-        "h1Font": "Georgia, Times New Roman, Cambria, serif",
-        "cardBg": "rgb(255, 253, 249)",
-        "cardRadius": "10px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "depositSwitchOk": true
-      },
-      "errors": []
-    },
-    {
       "vertical": "petshop",
-      "viewport": "390x844",
-      "firstProductTop": 265,
-      "docOverflow": false,
+      "firstItemTop": 230,
+      "controlsAboveFirstItem": 5,
+      "controlsInFirstScreen": 10,
       "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 93.2,
-      "loadedMechScripts": [
-        "registry.js",
-        "autoship-reminder.js",
-        "reorder-1-tap.js"
-      ],
-      "dsSignature": {
-        "dsId": "playful-club",
-        "theme": "light",
-        "bodyBg": "rgb(236, 253, 246)",
-        "topbarBg": "rgb(15, 118, 110)",
-        "h1Font": "Trebuchet MS, Segoe UI, system-ui, sans-serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "22px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid pet-club-grid",
+      "headingFont": "Nunito, sans-serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
       "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "durationBadgeVisible": true
-      },
+      "axeCritSer": 0,
+      "initialTransferKB": 122.3,
       "errors": []
     },
     {
-      "vertical": "oficina",
+      "engine": "webkit",
       "viewport": "390x844",
-      "firstProductTop": 269,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.6,
-      "loadedMechScripts": [
-        "registry.js",
-        "inspection-checklist.js"
-      ],
-      "dsSignature": {
-        "dsId": "precision-telemetry",
-        "theme": "dark",
-        "bodyBg": "rgb(8, 9, 10)",
-        "topbarBg": "rgb(15, 20, 28)",
-        "h1Font": "ui-monospace, Cascadia Mono, Consolas, monospace",
-        "cardBg": "rgb(17, 22, 31)",
-        "cardRadius": "4px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "osSwitchVisible": true,
-        "osToggleChangedTotal": true
-      },
-      "errors": []
-    },
-    {
-      "vertical": "barbearia",
-      "viewport": "390x844",
-      "firstProductTop": 300,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.6,
-      "loadedMechScripts": [
-        "registry.js",
-        "slot-picker.js"
-      ],
-      "dsSignature": {
-        "dsId": "heritage-grooming",
-        "theme": "dark",
-        "bodyBg": "rgb(20, 18, 16)",
-        "topbarBg": "rgb(25, 22, 19)",
-        "h1Font": "Georgia, Times New Roman, serif",
-        "cardBg": "rgb(29, 25, 22)",
-        "cardRadius": "2px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 3,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "expressOpenedStep2": true,
-        "bookingIcsBtnVisible": true
-      },
-      "errors": []
-    },
-    {
-      "vertical": "moda",
-      "viewport": "390x844",
-      "firstProductTop": 238,
-      "docOverflow": false,
-      "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 92.4,
-      "loadedMechScripts": [
-        "registry.js",
-        "variant-picker.js"
-      ],
-      "dsSignature": {
-        "dsId": "minimal-runway",
-        "theme": "light",
-        "bodyBg": "rgb(255, 255, 255)",
-        "topbarBg": "rgb(255, 255, 255)",
-        "h1Font": "Georgia, Times New Roman, serif",
-        "cardBg": "rgb(255, 255, 255)",
-        "cardRadius": "0px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
-      "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "hasRadiogroup": true,
-        "sizeGuideTableVisible": true
-      },
-      "errors": []
-    },
-    {
       "vertical": "floricultura",
-      "viewport": "390x844",
-      "firstProductTop": 295,
-      "docOverflow": false,
+      "firstItemTop": 220,
+      "controlsAboveFirstItem": 4,
+      "controlsInFirstScreen": 9,
       "smallTargetsCount": 0,
-      "smallTargetsSample": [],
-      "initialTransferKB": 94,
-      "loadedMechScripts": [
-        "registry.js",
-        "occasion-card-message.js",
-        "pickup-window.js",
-        "deposit-pix.js"
-      ],
-      "dsSignature": {
-        "dsId": "botanical-conservatory",
-        "theme": "light",
-        "bodyBg": "rgb(242, 247, 243)",
-        "topbarBg": "rgb(237, 245, 239)",
-        "h1Font": "Palatino Linotype, Georgia, Book Antiqua, serif",
-        "cardBg": "rgb(252, 253, 251)",
-        "cardRadius": "18px 4px"
-      },
-      "step2SmallTargets": [],
-      "tapsToFirstOrder": 5,
+      "small": [],
+      "docOverflow": false,
+      "gridClass": "catalog-grid flo-gallery-grid",
+      "headingFont": "Cormorant Garamond, Georgia, serif",
+      "priceFont": "DM Sans, sans-serif",
+      "priceIsNotMono": true,
+      "fontLoadedOk": true,
+      "statusText": "Aberto • Demo",
+      "truncationsCount": 0,
       "firstOrderFlowOk": true,
-      "mechanicCheck": {
-        "depositSwitchOk": true,
-        "surpriseSwitchVisible": true,
-        "cardCounterUpdated": true
-      },
+      "axeCritSer": 0,
+      "initialTransferKB": 130.6,
       "errors": []
     }
   ],
-  "axeChecks": [
-    {
-      "label": "ds-home-lanchonete",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "ds-home-padaria",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "ds-home-petshop",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "ds-home-oficina",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "ds-home-barbearia",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "ds-home-moda",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "ds-home-floricultura",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "oficina-fipe-modal",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "pdp-moda",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "pdp-floricultura",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "pdp-oficina",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "pdp-barbearia",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "pdp-petshop",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    },
-    {
-      "label": "pdp-padaria",
-      "violationsTotal": 0,
-      "criticalSeriousCount": 0,
-      "criticalSeriousDetails": []
-    }
-  ],
-  "distinctTapsSet": [
-    5,
-    3
-  ],
-  "distinctTapsSetSize": 2,
-  "initialTransferKB": 94,
+  "distinctTapsSetSize": 3,
+  "initialTransferKB": 136.3,
   "axeCriticalSerious": 0,
-  "blindDistinctScorePct": 100,
-  "pdpChecks": [
-    {
-      "vertical": "moda",
-      "isFull": true,
-      "thumbs": 3,
-      "smallCount": 0,
-      "small": [],
-      "gallerySwitched": true,
-      "axeCritSer": 0
-    },
-    {
-      "vertical": "floricultura",
-      "isFull": true,
-      "thumbs": 3,
-      "smallCount": 0,
-      "small": [],
-      "gallerySwitched": true,
-      "tierChangedPrice": true,
-      "previewSynced": true,
-      "axeCritSer": 0
-    },
-    {
-      "vertical": "oficina",
-      "isFull": false,
-      "thumbs": 0,
-      "smallCount": 0,
-      "small": [],
-      "axeCritSer": 0
-    },
-    {
-      "vertical": "barbearia",
-      "isFull": false,
-      "thumbs": 0,
-      "smallCount": 0,
-      "small": [],
-      "axeCritSer": 0
-    },
-    {
-      "vertical": "petshop",
-      "isFull": false,
-      "thumbs": 0,
-      "smallCount": 0,
-      "small": [],
-      "axeCritSer": 0
-    },
-    {
-      "vertical": "padaria",
-      "isFull": false,
-      "thumbs": 0,
-      "smallCount": 0,
-      "small": [],
-      "axeCritSer": 0
-    }
-  ],
-  "uniqueDesignSystemsRendered": 7
+  "blindDistinctScorePct": 100
 }

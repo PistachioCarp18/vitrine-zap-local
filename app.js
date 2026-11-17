@@ -94,6 +94,10 @@
   let selectedBookingDayIso = toLocalIsoDate(new Date());
   let selectedBarberFilter = 'Todos';
   let globalBookingSlot = '';
+  let padariaMode = 'agora';
+  let modaSizeFilter = 'Todos';
+  let activeSpySec = '';
+  let petGroomingOnly = false;
   let pendingPhotoDataUrl = '';
   let routeInfo = null;
   let weatherInfo = null;
@@ -781,13 +785,16 @@
       fuel: 'Flex',
       fipePriceNumber: 76500,
     };
-    const est = estimateMaintenanceByVehicleAndMileage({
+    const rawEst = estimateMaintenanceByVehicleAndMileage({
       vehicleName: `${veh.brand} ${veh.model}`.trim(),
       fipePriceNumber: veh.fipePriceNumber,
       fuel: veh.fuel,
       year: veh.year,
       mileageKm: cockpitMileageKm,
     });
+    const closedOs = store.loadHistory().filter(o => o.domainMode === 'service-quote');
+    const calFn = window.VitrineCategoryApis?.calibrateMaintenanceEstimate;
+    const est = calFn ? calFn(rawEst, closedOs) : rawEst;
     const chip = document.getElementById('cockpit-predict-chip');
     if (chip) {
       chip.textContent = `${(cockpitMileageKm / 1000).toFixed(0)}k km • Est. ${formatBrl(est.totalMin)}–${formatBrl(est.totalMax)}`;
@@ -812,10 +819,19 @@
         estimate: est,
         formatBrl,
         holidayInfo,
+        weatherInfo,
         selectedBarber: selectedBarberFilter,
         selectedDayIso: selectedBookingDayIso,
         globalSelectedSlot: globalBookingSlot,
+        padariaMode,
+        modaSizeFilter,
+        activeSpySec,
+        petProfile: store.loadCustomerProfile(),
+        petClubActive,
+        petGroomingOnly,
+        activeOccasion,
         openFipeModal: openFipeEstimatorModal,
+        openSizeGuide: openSizeGuideModal,
         onMileageChange: (km) => {
           cockpitMileageKm = Number(km || 40000);
           const fKm = document.getElementById('fipe-km-input');
@@ -833,6 +849,50 @@
           renderCatalog();
         },
         setGlobalSlot: (sl) => { globalBookingSlot = sl; },
+        onPadariaModeChange: (m) => {
+          padariaMode = m;
+          renderVerticalContextSlot();
+          renderCatalog();
+        },
+        onModaSizeChange: (sz) => {
+          modaSizeFilter = sz;
+          renderVerticalContextSlot();
+          renderCatalog();
+        },
+        onQuickAddCombo: (comboItem) => {
+          addItemToCart(comboItem, 1, [], '', '', null);
+          showToast(`${comboItem.name} adicionado!`);
+        },
+        onScrollSpySelect: (cat) => {
+          activeSpySec = cat;
+          renderVerticalContextSlot();
+          const secEl = document.querySelector(`[data-sec-heading="${cat}"]`);
+          if (secEl) secEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        },
+        onPetSizeChange: (sz) => {
+          const prev = store.loadCustomerProfile();
+          store.saveCustomerProfile({ ...prev, petSize: sz });
+          renderVerticalContextSlot();
+          renderCatalog();
+          showToast(`Cálculo ajustado para Porte ${sz}`);
+        },
+        onTogglePetClub: () => {
+          petClubActive = !petClubActive;
+          renderVerticalContextSlot();
+          renderCatalog();
+          renderCart();
+          showToast(petClubActive ? 'Clube Pet ativo: 10% OFF!' : 'Preços avulsos restaurados.');
+        },
+        onTogglePetGrooming: () => {
+          petGroomingOnly = !petGroomingOnly;
+          renderVerticalContextSlot();
+          renderCatalog();
+        },
+        onOccasionChange: (occ) => {
+          activeOccasion = occ;
+          renderVerticalContextSlot();
+          renderCatalog();
+        },
       });
       return;
     }
@@ -1468,6 +1528,14 @@
         formatBrl,
         mechanics: window.VitrineMechanics || {},
         osApprovedMap,
+        padariaMode,
+        modaSizeFilter,
+        petProfile: store.loadCustomerProfile(),
+        petClubActive,
+        petGroomingOnly,
+        selectedPackIdxMap,
+        getItemSwatches,
+        renderRichItemArt,
         hasInCart: (id) => cart.some(c => c.id === id),
       });
     } else {
@@ -1699,7 +1767,11 @@
         let variant = '';
         if (verticalKey === 'barbearia' && globalBookingSlot) variant = `Horário ${globalBookingSlot}`;
         else if (selectedSlotMap[item.id]) variant = `Horário ${selectedSlotMap[item.id]}`;
-        else if (selectedSizeMap[item.id]) {
+        else if (verticalKey === 'moda') {
+          const chosenSz = selectedSizeMap[item.id] || (modaSizeFilter !== 'Todos' ? modaSizeFilter : (item.sizes || ['M'])[0]);
+          const sw = selectedSwatchMap[item.id] || getItemSwatches(item)[0];
+          variant = sw ? `Cor ${sw.name} • Tam. ${chosenSz}` : `Tam. ${chosenSz}`;
+        } else if (selectedSizeMap[item.id]) {
           const sw = selectedSwatchMap[item.id];
           variant = sw ? `Cor ${sw.name} • Tam. ${selectedSizeMap[item.id]}` : `Tam. ${selectedSizeMap[item.id]}`;
         }

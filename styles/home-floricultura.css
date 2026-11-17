@@ -1,0 +1,162 @@
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../assets/fonts/cormorant-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('../assets/fonts/dm-sans-400.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* FLORICULTURA — Opcao B: Galeria Botanica Minimalista Clara (Branco Puro + Linhas Musgo) */
+[data-ds="botanical-conservatory"] .topbar {
+  background: #FFFFFF;
+  border-bottom: 1px solid #9FC2A7;
+}
+[data-ds="botanical-conservatory"] .brand-mark {
+  background: #14532D;
+  color: #FFFFFF;
+  border-radius: 12px 2px 12px 2px;
+}
+[data-ds="botanical-conservatory"] .store-meta-strip,
+[data-ds="botanical-conservatory"] .sticky-filter-bar {
+  display: none !important;
+}
+[data-ds="botanical-conservatory"] .vertical-context-slot {
+  background: #FFFFFF;
+  border-bottom: 1px solid #CFE4D2;
+  padding: 10px 0;
+}
+
+.flo-concierge {
+  border: 1px solid #9FC2A7;
+  border-radius: 18px 4px 18px 4px;
+  padding: 10px 12px;
+  background: #FCFDFB;
+}
+.flo-cutoff-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.74rem;
+  color: #14532D;
+  font-weight: 700;
+}
+.flo-cutoff-pill {
+  background: #ECFDF3;
+  border: 1px solid #86EFAC;
+  color: #14532D;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+.flo-concierge h2 {
+  margin: 4px 0 8px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #132A1C;
+}
+.flo-occasions-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+.flo-occ-btn {
+  min-height: 44px;
+  padding: 0 4px;
+  border: 1px solid #9FC2A7;
+  border-radius: 14px 3px 14px 3px;
+  background: #FFFFFF;
+  color: #132A1C;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.flo-occ-btn.active {
+  background: #14532D;
+  color: #FFFFFF;
+  border-color: #14532D;
+}
+
+.flo-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.flo-card {
+  background: #FFFFFF;
+  border: 1px solid #BFD8C4;
+  border-radius: 18px 4px 18px 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.flo-card.is-hero {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 144px 1fr;
+  align-items: stretch;
+  border-color: #14532D;
+}
+.flo-art-stage {
+  height: 112px;
+  background: #F4FBF6;
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid #E2EFE4;
+}
+.flo-card.is-hero .flo-art-stage {
+  height: 100%;
+  min-height: 146px;
+  border-bottom: 0;
+  border-right: 1px solid #E2EFE4;
+}
+.flo-art-stage svg { width: 88px; height: 88px; }
+.flo-card.is-hero .flo-art-stage svg { width: 110px; height: 110px; }
+.flo-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+}
+.flo-kicker {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #14532D;
+}
+.flo-body h3 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.04rem;
+  line-height: 1.18;
+  color: #132A1C;
+}
+.flo-card.is-hero h3 {
+  font-size: 1.18rem;
+}
+.flo-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+.flo-price {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.94rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #132A1C;
+}

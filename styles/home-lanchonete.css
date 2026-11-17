@@ -1,0 +1,145 @@
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('../assets/fonts/bricolage-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('../assets/fonts/jakarta-400.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* LANCHONETE — Opcao A: Pagina Unica Scroll-Spy + Hero "Monte seu Combo" */
+[data-ds="express-craving"] .store-meta-strip,
+[data-ds="express-craving"] .sticky-filter-bar {
+  display: none !important;
+}
+[data-ds="express-craving"] .vertical-context-slot {
+  background: #FFF1EF;
+  border-bottom: 1px solid rgba(180, 35, 24, 0.18);
+  padding: 10px 0 8px;
+}
+
+.lanch-combo-hero {
+  background: linear-gradient(135deg, #B42318 0%, #7F1D1D 100%);
+  color: #FFFFFF;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(180, 35, 24, 0.22);
+}
+.lanch-combo-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #FDE68A;
+}
+.lanch-combo-hero h2 {
+  margin: 2px 0;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.08rem;
+  color: #FFFFFF;
+}
+.lanch-combo-sub {
+  font-size: 0.74rem;
+  color: #FEE2E2;
+}
+.lanch-combo-btn {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #991B1B;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lanch-scrollspy-rail {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lanch-scrollspy-rail::-webkit-scrollbar { display: none; }
+.lanch-spy-pill {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(180, 35, 24, 0.24);
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #111827;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.lanch-spy-pill.active {
+  background: #B42318;
+  color: #FFFFFF;
+  border-color: #B42318;
+}
+
+.lanch-stream-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lanch-sec-title {
+  margin: 4px 0 0;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #7F1D1D;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(180, 35, 24, 0.16);
+}
+.lanch-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(180, 35, 24, 0.14);
+  border-radius: 14px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1fr 108px;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(180, 35, 24, 0.06);
+  cursor: pointer;
+}
+.lanch-card h3 {
+  margin: 0 0 3px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+.lanch-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #111827;
+}
+.lanch-thumb-box {
+  position: relative;
+  width: 108px;
+  height: 92px;
+  border-radius: 12px;
+  background: #FFF1EF;
+  display: grid;
+  place-items: center;
+}

@@ -48,7 +48,7 @@ test('v15-p0 B04/B01/B15: manifest PWA completo com icones 192/512, carimbo de b
   }
 
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<meta name="build" content="v15-/);
+  assert.match(html, /<meta name="build" content="v15/);
   assert.match(html, /id="studio-build-stamp"/);
 
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
