@@ -1,0 +1,167 @@
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('../assets/fonts/playfair-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('../assets/fonts/jakarta-400.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* BARBEARIA — Opcao A: Obsidiana & Latao Editorial + Agenda Unica em 3 Passos */
+[data-ds="heritage-grooming"] .topbar {
+  background: #141210;
+  border-bottom: 1px solid #57442B;
+}
+[data-ds="heritage-grooming"] .brand-mark {
+  background: #D97706;
+  color: #141210;
+}
+[data-ds="heritage-grooming"] .store-meta-strip,
+[data-ds="heritage-grooming"] .sticky-filter-bar,
+[data-ds="heritage-grooming"] #hero-coupon-pill {
+  display: none !important;
+}
+[data-ds="heritage-grooming"] .vertical-context-slot {
+  background: #1B1713;
+  border-bottom: 1px solid #44382C;
+  padding: 10px 0 12px;
+}
+
+.barb-scheduler {
+  background: linear-gradient(180deg, #241E18 0%, #191512 100%);
+  border: 1px solid #6B502B;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+.barb-agenda-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.barb-agenda-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #F5EFE6;
+  margin: 0;
+}
+.barb-demo-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #FCD34D;
+  border: 1px solid #785626;
+  background: rgba(217, 119, 6, 0.14);
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.barb-selects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.barb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #D6CBC0;
+}
+.barb-select {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid #57442B;
+  border-radius: 4px;
+  background: #141210;
+  color: #F5EFE6;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.barb-next-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.74rem;
+  color: #D6CBC0;
+  margin-bottom: 6px;
+}
+.barb-next-highlight {
+  color: #FBBF24;
+  font-weight: 700;
+}
+.barb-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.barb-slot-btn {
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid #57442B;
+  border-radius: 4px;
+  background: #141210;
+  color: #F5EFE6;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.barb-slot-btn.active {
+  background: #D97706;
+  color: #141210;
+  border-color: #FBBF24;
+}
+
+.barb-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.barb-row-card {
+  background: #1D1916;
+  border: 1px solid #44382C;
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+.barb-row-info { min-width: 0; flex: 1; }
+.barb-row-info h3 {
+  margin: 0 0 3px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.04rem;
+  font-weight: 700;
+  color: #F5EFE6;
+}
+.barb-row-meta {
+  font-size: 0.76rem;
+  color: #D6CBC0;
+}
+.barb-row-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.barb-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #FBBF24;
+}

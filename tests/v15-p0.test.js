@@ -52,7 +52,7 @@ test('v15-p0 B04/B01/B15: manifest PWA completo com icones 192/512, carimbo de b
   assert.match(html, /id="studio-build-stamp"/);
 
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  assert.match(sw, /vitrine-zap-v15-p0/);
+  assert.match(sw, /vitrine-zap-v15/);
   assert.match(sw, /slot-picker\.js/);
   assert.match(sw, /verticals\/barbearia\.json/);
   assert.match(sw, /icon-192\.png/);

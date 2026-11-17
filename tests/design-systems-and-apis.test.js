@@ -24,7 +24,7 @@ test('design-systems: all 7 categories have distinct dsId, aestheticMood and sur
   assert.equal(moods.size, 7);
   assert.ok(canvases.size >= 6);
 
-  assert.equal(CATEGORY_DESIGN_SYSTEMS.oficina.colorScheme, 'dark');
+  assert.equal(CATEGORY_DESIGN_SYSTEMS.oficina.colorScheme, 'light');
   assert.equal(CATEGORY_DESIGN_SYSTEMS.barbearia.colorScheme, 'dark');
   assert.equal(CATEGORY_DESIGN_SYSTEMS.moda.cardRadius, '0px');
   assert.ok(CATEGORY_DESIGN_SYSTEMS.floricultura.cardRadius.includes('18px 4px'));

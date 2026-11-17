@@ -35,3 +35,19 @@ As referências listadas abaixo nos dossiês REA da pasta `30-Conhecimento/Dossi
 - Transversal Checkout: WhatsApp Business Catalog / Mercado Pago UX
 
 **Nenhum código-fonte, ícone, imagem, fonte proprietária, texto literal ou marca externa foi copiado.**
+
+---
+
+## Fontes Self-Hosted (`assets/fonts/*.woff2`) — SIL Open Font License 1.1 (OFL)
+
+Subsets `latin` auto-hospedados via `@fontsource/*` (carregamento lazy por categoria, zero requisições externas em runtime):
+- **Barlow Condensed** (`barlow-condensed-700.woff2`, 21.9 KB) — Jeremy Tribby, SIL OFL 1.1
+- **Plus Jakarta Sans** (`jakarta-400.woff2` 11.5 KB, `jakarta-700.woff2` 12.0 KB) — Tokotype, SIL OFL 1.1
+- **Playfair Display** (`playfair-700.woff2`, 22.7 KB) — Claus Eggers Sørensen, SIL OFL 1.1
+- **Fraunces** (`fraunces-700.woff2`, 17.8 KB) — Undercase Type, SIL OFL 1.1
+- **Archivo** (`archivo-700.woff2`, 14.2 KB) — Omnibus-Type, SIL OFL 1.1
+- **Bodoni Moda** (`bodoni-italic-600.woff2`, 16.7 KB) — Owen Earl (indestructible type*), SIL OFL 1.1
+- **Bricolage Grotesque** (`bricolage-700.woff2`, 21.9 KB) — Mathieu Triay, SIL OFL 1.1
+- **Nunito** (`nunito-700.woff2`, 15.8 KB) — Vernon Adams / Cyreal, SIL OFL 1.1
+- **Cormorant Garamond** (`cormorant-700.woff2`, 21.8 KB) — Christian Thalmann (Catharsis Fonts), SIL OFL 1.1
+- **DM Sans** (`dm-sans-400.woff2`, 13.9 KB) — Colophon Foundry, SIL OFL 1.1

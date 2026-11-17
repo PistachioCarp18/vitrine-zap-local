@@ -1,0 +1,73 @@
+{
+  "auditedAt": "2026-11-17T01:08:06.449Z",
+  "results": [
+    {
+      "engine": "chromium",
+      "vertical": "oficina",
+      "firstItemTop": 308,
+      "controlsAboveFirstItem": 2,
+      "controlsInFirstScreen": 8,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "headingFont": "\"Barlow Condensed\", sans-serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "fontLoadedOk": true,
+      "pdpStepperHidden": true,
+      "axeCritSer": 0,
+      "transferKB": 126.2,
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "vertical": "oficina",
+      "firstItemTop": 308,
+      "controlsAboveFirstItem": 2,
+      "controlsInFirstScreen": 8,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "headingFont": "Barlow Condensed, sans-serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "fontLoadedOk": true,
+      "pdpStepperHidden": true,
+      "axeCritSer": 0,
+      "transferKB": 127.2,
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "vertical": "barbearia",
+      "firstItemTop": 270,
+      "controlsAboveFirstItem": 6,
+      "controlsInFirstScreen": 12,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "headingFont": "\"Playfair Display\", Georgia, serif",
+      "priceFont": "\"Plus Jakarta Sans\", sans-serif",
+      "fontLoadedOk": true,
+      "pdpStepperHidden": true,
+      "axeCritSer": 0,
+      "transferKB": 126.6,
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "vertical": "barbearia",
+      "firstItemTop": 270,
+      "controlsAboveFirstItem": 6,
+      "controlsInFirstScreen": 12,
+      "smallTargetsCount": 0,
+      "small": [],
+      "docOverflow": false,
+      "headingFont": "Playfair Display, Georgia, serif",
+      "priceFont": "Plus Jakarta Sans, sans-serif",
+      "fontLoadedOk": true,
+      "pdpStepperHidden": true,
+      "axeCritSer": 0,
+      "transferKB": 127.6,
+      "errors": []
+    }
+  ]
+}

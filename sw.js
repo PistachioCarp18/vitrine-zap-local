@@ -1,9 +1,17 @@
-const CACHE_NAME = 'vitrine-zap-v15-p0';
+const CACHE_NAME = 'vitrine-zap-v15-p2';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
+  './styles/home-oficina.css',
+  './styles/home-barbearia.css',
   './app.js',
+  './src/home/loader.js',
+  './src/home/oficina.js',
+  './src/home/barbearia.js',
+  './assets/fonts/barlow-condensed-700.woff2',
+  './assets/fonts/playfair-700.woff2',
+  './assets/fonts/jakarta-400.woff2',
   './src/integrations.js',
   './src/geo-apis.js',
   './src/category-apis.js',

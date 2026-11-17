@@ -1,0 +1,237 @@
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../assets/fonts/barlow-condensed-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('../assets/fonts/jakarta-400.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* OFICINA — Opcao A: Diagnostico Claro de Concessionaria (Steel & Sapphire) */
+[data-ds="precision-telemetry"] .topbar {
+  background: #FFFFFF;
+  border-bottom: 2px solid #CBD5E1;
+}
+[data-ds="precision-telemetry"] .brand-mark {
+  background: #0F172A;
+  color: #FFFFFF;
+}
+[data-ds="precision-telemetry"] .store-meta-strip,
+[data-ds="precision-telemetry"] .sticky-filter-bar {
+  display: none !important;
+}
+[data-ds="precision-telemetry"] .vertical-context-slot {
+  background: #E8EEF5;
+  border-bottom: 1px solid #CBD5E1;
+  padding: 10px 0 8px;
+}
+
+.ofi-car-card {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-left: 4px solid #0369A1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+.ofi-car-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ofi-car-trigger {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #BAE6FD;
+  border-radius: 8px;
+  background: #F0F9FF;
+  color: #0F172A;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+.ofi-mercosul-plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1.5px solid #1E293B;
+  border-top: 4px solid #1D4ED8;
+  border-radius: 4px;
+  padding: 2px 6px;
+  flex-shrink: 0;
+}
+.ofi-car-title {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #0F172A;
+  line-height: 1.1;
+}
+.ofi-car-sub {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #0369A1;
+}
+.ofi-bay-scene {
+  width: 126px;
+  height: 54px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ofi-timeline-box {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #E2E8F0;
+}
+.ofi-km-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+.ofi-range-pill {
+  background: #EFF6FF;
+  color: #075985;
+  border: 1px solid #BAE6FD;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ofi-milestones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 2px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748B;
+  text-align: center;
+}
+.ofi-milestones span.active {
+  color: #0369A1;
+  font-weight: 800;
+}
+.ofi-journey-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #475569;
+  text-align: center;
+}
+.ofi-journey-step {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+.ofi-journey-step.is-active {
+  background: #0369A1;
+  color: #FFFFFF;
+  border-color: #0369A1;
+}
+
+.ofi-dvi-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ofi-service-card {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-left: 5px solid #0369A1;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+.ofi-service-card.is-crit { border-left-color: #DC2626; }
+.ofi-service-card.is-warn { border-left-color: #D97706; }
+.ofi-service-card.is-ok { border-left-color: #059669; }
+.ofi-service-main { min-width: 0; flex: 1; }
+.ofi-service-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+.ofi-traffic-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.is-crit .ofi-traffic-dot { background: #DC2626; }
+.is-warn .ofi-traffic-dot { background: #D97706; }
+.is-ok .ofi-traffic-dot { background: #059669; }
+.ofi-sev-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #334155;
+}
+.ofi-service-card h3 {
+  margin: 0 0 2px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #0F172A;
+}
+.ofi-service-sub {
+  margin: 0;
+  font-size: 0.76rem;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+.ofi-service-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.ofi-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #0F172A;
+}

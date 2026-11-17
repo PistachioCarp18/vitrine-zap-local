@@ -41,6 +41,9 @@
     getFloralTiers: () => [],
     getCategoryPdpSpec: () => ({ mode: 'craving-sheet', requiresNote: true }),
   };
+  const { loadCategoryHome } = window.VitrineHomeLoader || {
+    loadCategoryHome: () => Promise.resolve(null),
+  };
   const {
     generateBrandTokens,
     validateBrandConfig,
@@ -90,6 +93,7 @@
 
   let selectedBookingDayIso = toLocalIsoDate(new Date());
   let selectedBarberFilter = 'Todos';
+  let globalBookingSlot = '';
   let pendingPhotoDataUrl = '';
   let routeInfo = null;
   let weatherInfo = null;
@@ -675,6 +679,10 @@
     document.getElementById('modal-item-note').value = '';
     document.getElementById('modal-item-note').placeholder = spec.notePlaceholder || 'Ex: Detalhe...';
     document.getElementById('modal-qty-val').textContent = '1';
+    const qtyStepper = document.querySelector('#pdp-sticky-footer .qty-inline');
+    if (qtyStepper) {
+      qtyStepper.classList.toggle('hidden', spec.mode === 'technical-sheet' || spec.mode === 'booking-sheet');
+    }
 
     const noteAcc = document.getElementById('modal-note-accordion');
     noteAcc.classList.toggle('hidden', Boolean(spec.supportsInlineFloralCard));
@@ -790,6 +798,44 @@
   function renderVerticalContextSlot() {
     const slot = document.getElementById('vertical-context-slot');
     const vKey = state.vertical || state.id || 'lanchonete';
+    const customHome = window.VitrineHomes && window.VitrineHomes[vKey];
+    if (customHome && typeof customHome.renderContext === 'function') {
+      const { est } = updateCockpitPrediction();
+      customHome.renderContext(slot, {
+        state,
+        items: state.items || [],
+        mechanics: window.VitrineMechanics || {},
+        demoMode: isDemoModeActive(),
+        selectedVehicle: selectedFipeVehicle,
+        selectedPlate: document.getElementById('cust-plate')?.value || '',
+        mileageKm: cockpitMileageKm,
+        estimate: est,
+        formatBrl,
+        holidayInfo,
+        selectedBarber: selectedBarberFilter,
+        selectedDayIso: selectedBookingDayIso,
+        globalSelectedSlot: globalBookingSlot,
+        openFipeModal: openFipeEstimatorModal,
+        onMileageChange: (km) => {
+          cockpitMileageKm = Number(km || 40000);
+          const fKm = document.getElementById('fipe-km-input');
+          if (fKm) fKm.value = String(cockpitMileageKm);
+          updateCockpitPrediction();
+        },
+        onBarberChange: (b) => {
+          selectedBarberFilter = b;
+          renderVerticalContextSlot();
+          renderCatalog();
+        },
+        onDayChange: (dayIso) => {
+          selectedBookingDayIso = dayIso;
+          renderVerticalContextSlot();
+          renderCatalog();
+        },
+        setGlobalSlot: (sl) => { globalBookingSlot = sl; },
+      });
+      return;
+    }
 
     if (hasMech('inspection-checklist')) {
       slot.classList.remove('hidden');
@@ -1408,12 +1454,23 @@
     if (sortMode === 'az') list = [...list].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
 
     const grid = document.getElementById('catalog-grid');
+    grid.className = 'catalog-grid';
     if (!list.length) {
       grid.innerHTML = '<div class="cart-empty">Nenhum item encontrado para este filtro.</div>';
       return;
     }
 
     const layoutMode = state.layout?.catalog || state.layoutMode || 'list-thumb';
+    const customHome = window.VitrineHomes && window.VitrineHomes[verticalKey];
+    if (customHome && typeof customHome.renderCatalog === 'function') {
+      customHome.renderCatalog(grid, list, {
+        state,
+        formatBrl,
+        mechanics: window.VitrineMechanics || {},
+        osApprovedMap,
+        hasInCart: (id) => cart.some(c => c.id === id),
+      });
+    } else {
     const emblem = NICHE_EMBLEMS[verticalKey] || NICHE_EMBLEMS.lanchonete;
     const petMod = window.VitrineMechanics['autoship-reminder'];
     const inspMod = window.VitrineMechanics['inspection-checklist'];
@@ -1561,6 +1618,25 @@
         </div>
       </article>`;
     }).join('');
+    }
+
+    grid.querySelectorAll('.os-approve-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const item = (state.items || []).find(i => i.id === btn.dataset.approveId && !i.paused);
+        if (!item) return;
+        const existing = cart.find(c => c.id === item.id);
+        if (existing) {
+          cart = cart.filter(c => c.id !== item.id);
+          delete osApprovedMap[item.id];
+        } else {
+          osApprovedMap[item.id] = true;
+          addItemToCart(item, 1, [], '', '', null);
+        }
+        renderCatalog();
+        renderCart();
+      });
+    });
 
     grid.querySelectorAll('[data-open-id]').forEach(card => {
       card.addEventListener('click', (e) => {
@@ -1621,7 +1697,8 @@
           else itemToAdd = { ...item, price: Number((item.price * 0.9).toFixed(2)) };
         }
         let variant = '';
-        if (selectedSlotMap[item.id]) variant = `Horário ${selectedSlotMap[item.id]}`;
+        if (verticalKey === 'barbearia' && globalBookingSlot) variant = `Horário ${globalBookingSlot}`;
+        else if (selectedSlotMap[item.id]) variant = `Horário ${selectedSlotMap[item.id]}`;
         else if (selectedSizeMap[item.id]) {
           const sw = selectedSwatchMap[item.id];
           variant = sw ? `Cor ${sw.name} • Tam. ${selectedSizeMap[item.id]}` : `Tam. ${selectedSizeMap[item.id]}`;
@@ -2032,6 +2109,13 @@
 
   function renderAll() {
     activeMechanics = resolveActiveMechanics(state);
+    const vKey = state.vertical || state.id || 'lanchonete';
+    loadCategoryHome(vKey).then((mod) => {
+      if (mod && (state.vertical || state.id) === vKey) {
+        renderVerticalContextSlot();
+        renderCatalog();
+      }
+    });
     applyTheme();
     renderCategories();
     renderCatalog();
@@ -2469,6 +2553,7 @@
     initTheme();
     hydrateCustomerProfile();
     await loadMechanicsOnDemand(activeMechanics);
+    await loadCategoryHome(state.vertical || state.id || 'lanchonete');
     initSwitcher();
     bindEvents();
     renderAll();

@@ -597,23 +597,15 @@ button, .btn, .pill-btn, .seg-btn, .pay-pill, .qty-btn, .pack-chip, .slot-chip, 
 
 /* 4. Oficina — Carbon Precision Telemetry (Dark Blueprint) */
 [data-ds="precision-telemetry"] { --success-ink: #6EE7B7; }
-[data-ds="precision-telemetry"] .topbar {
-  background: #0F141C; border-bottom: 2px solid #0284C7;
-}
 [data-ds="precision-telemetry"] .topbar .brand-name { text-transform: uppercase; letter-spacing: 0.04em; }
-[data-ds="precision-telemetry"] .auto-card {
-  background: #11161F; border: 1px solid #2A3950; border-left: 4px solid #0284C7;
-  border-radius: 4px; box-shadow: none;
-}
-[data-ds="precision-telemetry"] .auto-vehicle-bar { background: #0B1018; border-bottom-color: #2A3950; }
 [data-ds="precision-telemetry"] .btn,
 [data-ds="precision-telemetry"] .pill-btn,
 [data-ds="precision-telemetry"] .text-input,
 [data-ds="precision-telemetry"] .select-input,
-[data-ds="precision-telemetry"] .select-compact { border-radius: 4px; }
-[data-ds="precision-telemetry"] .sev-crit { background: #450A0A; color: #FECACA; }
-[data-ds="precision-telemetry"] .sev-warn { background: #451A03; color: #FDE68A; }
-[data-ds="precision-telemetry"] .sev-ok { background: #064E3B; color: #A7F3D0; }
+[data-ds="precision-telemetry"] .select-compact { border-radius: 6px; }
+[data-ds="precision-telemetry"] .sev-crit { background: #FEE2E2; color: #991B1B; }
+[data-ds="precision-telemetry"] .sev-warn { background: #FEF3C7; color: #92400E; }
+[data-ds="precision-telemetry"] .sev-ok { background: #DCFCE7; color: #065F46; }
 
 /* 5. Barbearia — Obsidian & Brass Heritage Ledger */
 [data-ds="heritage-grooming"] { --success-ink: #6EE7B7; }
